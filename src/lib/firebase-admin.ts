@@ -9,10 +9,10 @@ function getAdminApp(): App {
 
   return initializeApp({
     credential: cert({
-      projectId: process.env.FIREBASE_ADMIN_PROJECT_ID?.replace(/^"|"$/g, "")!,
-      clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL?.replace(/^"|"$/g, "")!,
+      projectId: process.env.FB_ADMIN_PROJECT_ID?.replace(/^"|"$/g, "")!,
+      clientEmail: process.env.FB_ADMIN_CLIENT_EMAIL?.replace(/^"|"$/g, "")!,
       // Replace escaped newlines and strip surrounding quotes
-      privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n").replace(/^"|"$/g, ""),
+      privateKey: process.env.FB_ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n").replace(/^"|"$/g, ""),
     }),
   });
 }
