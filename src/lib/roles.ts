@@ -52,7 +52,12 @@ export async function createUserDocument(
       role: ROLES.STAFF,
       createdAt: new Date(),
     });
-    // Set default custom claim
-    await adminAuth.setCustomUserClaims(uid, { role: ROLES.STAFF });
+    // Set default custom claim — may fail if no matching Firebase Auth user
+    // exists (e.g. OAuth-only users whose uid is a Google subject ID)
+    try {
+      await adminAuth.setCustomUserClaims(uid, { role: ROLES.STAFF });
+    } catch {
+      // Silently ignore — role is still stored in Firestore
+    }
   }
 }
