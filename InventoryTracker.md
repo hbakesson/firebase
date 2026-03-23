@@ -1,9 +1,9 @@
 # Inventory Tracker (Antigravity Build Spec)
 
 ## Persona
-You are an expert full-stack engineer and live-demo builder.
+You are an expert full-stack engineer.
 
-You build small, polished apps that are easy to explain on YouTube.  
+You build small, polished apps
 You prioritize:
 - Clear scope
 - Predictable outcomes
@@ -17,13 +17,14 @@ You write readable code and avoid unnecessary abstractions.
 ## Objective
 Build an **Inventory Tracker** web app that allows a user to:
 
+- Authenticate securely via Google OAuth or Email/Password.
 - Add products with a quantity  
 - View all products in a table  
 - Update product quantity  
-- Delete a product  
+- Delete a product (Admins only)
 - Search by name or SKU  
 
-**Requirement:** Data must persist locally.
+**Requirement:** Data must persist securely in the cloud.
 
 ---
 
@@ -32,13 +33,15 @@ Build an **Inventory Tracker** web app that allows a user to:
 ### ✅ Include
 - Full CRUD for `Product`
 - Search/filter by **name or SKU**
-- Local persistence using **SQLite**
+- Role-based Access Control (RBAC) handling Admins vs standard users
+- Persisted remote data using **Cloud Firestore**
+- Authentication using **NextAuth + Firebase Auth**
+- Server-side rendering and deployment via **Firebase Hosting and Cloud Run**
+- Audit logging of inventory changes
 
 ### ❌ Exclude
-- Authentication
-- External integrations
 - Consumption tracking
-- Reporting, charts, or background jobs
+- Background jobs
 - Over-engineered architecture
 
 ---
@@ -47,161 +50,95 @@ Build an **Inventory Tracker** web app that allows a user to:
 
 ### Preferred
 - **Next.js (App Router) + TypeScript**
-- **Prisma + SQLite**
-
-If the environment provides a similar full-stack TypeScript setup with fast SQLite support, use that instead.
-
----
-
-## Data Model
-
-### Product
-- `id`: uuid (primary key)
-- `name`: string (required)
-- `sku`: string (optional)
-- `quantity`: int (required, minimum 0)
-- `createdAt`: datetime
-- `updatedAt`: datetime
-If you want, I can extend this into a full Antigravity-ready spec (including UI, validation, DoD, and deliverables in the same clean format).
-
-
-yes
-
-Here’s the complete, clean Antigravity-ready Markdown spec, combining everything into one cohesive file:
-
-# Inventory Tracker (Antigravity Build Spec)
-
-## Persona
-You are an expert full-stack engineer and live-demo builder.
-
-You build small, polished apps that are easy to explain on YouTube.  
-You prioritize:
-- Clear scope
-- Predictable outcomes
-- Minimal moving parts
-- Clean UI
-
-You write readable code and avoid unnecessary abstractions.
-
----
-
-## Objective
-Build an **Inventory Tracker** web app that allows a user to:
-
-- Add products with a quantity  
-- View all products in a table  
-- Update product quantity  
-- Delete a product  
-- Search by name or SKU  
-
-**Requirement:** Data must persist locally.
-
----
-
-## Scope
-
-### ✅ Include
-- Full CRUD for `Product`
-- Search/filter by **name or SKU**
-- Local persistence using **SQLite**
-
-### ❌ Exclude
-- Authentication
-- External integrations
-- Consumption tracking
-- Reporting, charts, or background jobs
-- Over-engineered architecture
-
----
-
-## Tech Stack
-
-### Preferred
-- **Next.js (App Router) + TypeScript**
-- **Prisma + SQLite**
-
-If the environment provides a similar full-stack TypeScript setup with fast SQLite support, use that instead.
+- **Firebase/Google Cloud Platform**
+- **Cloud Firestore** (NoSQL Database)
+- **Firebase Admin SDK** (Server actions and DB interactions)
+- **NextAuth.js** (Session management)
 
 ---
 
 ## Data Model
 
-### Product
-- `id`: uuid (primary key)
+### Product (Firestore Collection: `inventory`)
+- `id`: string (Firestore Document ID)
 - `name`: string (required)
 - `sku`: string (optional)
 - `quantity`: int (required, minimum 0)
-- `createdAt`: datetime
-- `updatedAt`: datetime
+- `createdAt`: serverTimestamp
+- `updatedAt`: serverTimestamp
+- `createdBy`: string (User ID of the creator)
+
+### AuditLogs (Firestore Collection: `auditLogs`)
+- `action`: string (CREATE | UPDATE | DELETE)
+- `productId`: string
+- `productName`: string
+- `previousValue`: int (optional)
+- `newValue`: int (optional)
+- `userId`: string
+- `userEmail`: string
+- `timestamp`: serverTimestamp
 
 ---
 
 ## UI
 
 ### Layout
-- Single-page application
+- Single-page application dashboard after authentication
 - Clean, minimal styling
+- Protected routes (redirects unauthorized users to `/login`)
 
 ### Add Product
 - Inputs:
   - Name (required)
   - SKU (optional)
   - Quantity (integer, default 0)
-- Button: **Add**
-- Inline validation messages
+- Button: **Add Product**
+- Inline validation and loading states
 
 ### Inventory Table
 - Search input (filters by name or SKU)
 - Columns:
-  - Name
+  - Product Name (along with creation date)
   - SKU
-  - Quantity
+  - Quantity (features conditional formatting for low stock)
   - Actions
 
 ### Actions
-- Edit quantity (inline or small modal)
-- Delete product (with confirmation)
+- Inline quantity adjustments (+ / -) limits to minimum 0
+- Delete product (only available and permitted for Admin roles)
 
 ### Empty State
-- Show a clear message when no products exist
+- Show a clear message when no products exist or search returns 0 matches.
 
 ---
 
 ## Validation
 - Name cannot be empty
-- Quantity must be an integer
-- Quantity cannot be negative
-- Show short, user-friendly errors near the relevant field
+- SKU need to be unique
+- Quantity must be an integer, cannot be negative
+- Server-side validation of actions via Firebase Admin (e.g., Delete only for Admins)
 
 ---
 
 ## Persistence
-- Use Prisma schema and migrations
-- Include a seed script with **3–5 sample products**
+- Fully relies on Cloud Firestore.
+- Next.js Server Actions execute securely on Google Cloud Run utilizing `adminDb.collection()`.
 
 ---
 
 ## Definition of Done
 
 A user can:
-1. Add a product  
-2. See it in the table  
-3. Update its quantity  
-4. Delete it  
-5. Refresh the page and confirm data persists  
+1. Log in securely using Google or Email/Password.
+2. Add a product securely to the Firestore database.
+3. Access the persistent cloud table of goods.
+4. Scale up/down quantity or successfully execute a deletion as an Admin.
+5. Have complete architecture maps available (e.g. `architecture.svg`).
 
 ---
 
 ## Deliverables
-- Working application
-- Prisma schema and migration files
-- Seed script
-- README with exact commands to:
-  - Install dependencies
-  - Run migrations
-  - Seed the database
-  - Start the development server
-ß
-
----
-
+- Fully working Next.js App Router application
+- Architecture Diagram (SVG) outlining Next.js to Firebase interactions
+- Deployment instructions for Firebase Hosting & Cloud Run
+- A completely modern, SQLite and Prisma-free codebase.
