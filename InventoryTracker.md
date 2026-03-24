@@ -22,7 +22,7 @@ Build an **Inventory Tracker** web app that allows a user to:
 - View all products in a table  
 - Update product quantity  
 - Delete a product (Admins only)
-- Search by name or SKU  
+- Search by name or SKU   
 
 **Requirement:** Data must persist securely in the cloud.
 
