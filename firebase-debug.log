@@ -1499,3 +1499,57 @@ info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/d
 [debug] [2026-03-26T21:56:42.956Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:633478779492:web:49813096ce6e1d7b118571/config [none]
 [debug] [2026-03-26T21:56:43.468Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:633478779492:web:49813096ce6e1d7b118571/config 200
 [debug] [2026-03-26T21:56:43.468Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:633478779492:web:49813096ce6e1d7b118571/config {"projectId":"testapp-4f81d","appId":"1:633478779492:web:49813096ce6e1d7b118571","storageBucket":"testapp-4f81d.firebasestorage.app","apiKey":"AIzaSyD2Y28iVlnepVLLp-b3EA4l7yCF1L9BZtw","authDomain":"testapp-4f81d.firebaseapp.com","messagingSenderId":"633478779492","measurementId":"G-Q1D5TH26Y5","projectNumber":"633478779492","version":"2"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-03-26T21:56:45.740Z] Checked if tokens are valid: true, expires at: 1774565686289
+[debug] [2026-03-26T21:56:45.740Z] Checked if tokens are valid: true, expires at: 1774565686289
+[debug] [2026-03-26T21:56:45.740Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites/testapp-4f81d [none]
+[debug] [2026-03-26T21:56:46.360Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites/testapp-4f81d 200
+[debug] [2026-03-26T21:56:46.360Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites/testapp-4f81d {"name":"projects/testapp-4f81d/sites/testapp-4f81d","defaultUrl":"https://testapp-4f81d.web.app","appId":"1:633478779492:web:49813096ce6e1d7b118571","type":"DEFAULT_SITE"}
+[info]    ▲ Next.js 15.5.14
+
+[info]    - Environments: .env.local, .env.production, .env
+
+
+[info]    Creating an optimized production build ...
+
+[info]  ✓ Compiled successfully in 852ms
+
+[info]    Linting and checking validity of types ...
+
+[info] 
+./src/app/AddProjectForm.tsx
+21:14  Warning: 'e' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/layout.tsx
+26:9  Warning: Custom fonts not added in `pages/_document.js` will only load for a single page. This is discouraged. See: https://nextjs.org/docs/messages/no-page-custom-font  @next/next/no-page-custom-font
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+
+[info]    Collecting page data ...
+
+[info] [Error: Failed to collect configuration for /_not-found] {
+  [cause]: Error [PrismaClientConstructorValidationError]: Using engine type "client" requires either "adapter" or "accelerateUrl" to be provided to PrismaClient constructor.
+  Read more at https://pris.ly/d/client-constructor
+      at 7975 (.next/server/app/_not-found/page.js:2:7773)
+      at c (.next/server/webpack-runtime.js:1:127)
+      at 1121 (.next/server/app/_not-found/page.js:1:1053)
+      at c (.next/server/webpack-runtime.js:1:127)
+      at 1472 (.next/server/app/_not-found/page.js:1:2288)
+      at c (.next/server/webpack-runtime.js:1:127)
+}
+
+[info] 
+> Build error occurred
+
+[info] [Error: Failed to collect page data for /_not-found] { type: 'Error' }
+
