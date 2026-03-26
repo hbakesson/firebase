@@ -349,3 +349,18 @@ info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/d
 [debug] [2026-03-26T23:30:10.758Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/testapp-4f81d/versions/2d02e244edabc485/files/c575febd1023cdae82d8e801a9f7d335716445248015fd0bac76efc92ec0cd7c [stream]
 [debug] [2026-03-26T23:30:10.759Z] [hosting][populate queue][FINAL] {"max":2326,"min":2326,"avg":2326,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":2330}
 [debug] [2026-03-26T23:30:10.759Z] [hosting] uploads queued: 3
+[debug] [2026-03-26T23:30:11.585Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/testapp-4f81d/versions/2d02e244edabc485/files/a13c9e590a38075b531e3b7dbb800107323ca8b7df197a84267b20cf42f8779e 200
+[debug] [2026-03-26T23:30:11.585Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/testapp-4f81d/versions/2d02e244edabc485/files/a13c9e590a38075b531e3b7dbb800107323ca8b7df197a84267b20cf42f8779e [stream]
+[debug] [2026-03-26T23:30:11.654Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/testapp-4f81d/versions/2d02e244edabc485/files/da8587f4436a790e7478ac3fd205fb3567984ac34f9dde87d720dea8860e4cb7 200
+[debug] [2026-03-26T23:30:11.654Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/testapp-4f81d/versions/2d02e244edabc485/files/da8587f4436a790e7478ac3fd205fb3567984ac34f9dde87d720dea8860e4cb7 [stream]
+[debug] [2026-03-26T23:30:11.760Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/testapp-4f81d/versions/2d02e244edabc485/files/c575febd1023cdae82d8e801a9f7d335716445248015fd0bac76efc92ec0cd7c 200
+[debug] [2026-03-26T23:30:11.760Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/testapp-4f81d/versions/2d02e244edabc485/files/c575febd1023cdae82d8e801a9f7d335716445248015fd0bac76efc92ec0cd7c [stream]
+[debug] [2026-03-26T23:30:11.760Z] [hosting][upload queue][FINAL] {"max":1006,"min":831,"avg":914.6666666666666,"active":0,"complete":3,"success":3,"errored":0,"retried":0,"total":3,"elapsed":1013}
+[info] ✔  hosting[testapp-4f81d]: file upload complete 
+[debug] [2026-03-26T23:30:11.762Z] [hosting] deploy completed after 3360ms
+[info] 
+The following functions are found in your project but do not exist in your local source code:
+	firebase-frameworks-testapp-4f81d:ssrtestapp4f81d(us-east1)
+
+If you are renaming a function or changing its region, it is recommended that you create the new function first before deleting the old one to prevent event loss. For more info, visit https://firebase.google.com/docs/functions/manage-functions#modify
+
