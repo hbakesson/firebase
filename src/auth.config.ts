@@ -7,7 +7,6 @@ export const authConfig = {
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      checks: ["none"],
     }),
   ],
   pages: {
@@ -15,17 +14,6 @@ export const authConfig = {
   },
   session: {
     strategy: "jwt",
-  },
-  cookies: {
-    sessionToken: {
-      name: `__session`,
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: process.env.NODE_ENV === "production",
-      },
-    },
   },
   callbacks: {
     authorized({ auth }) {
