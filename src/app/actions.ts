@@ -80,8 +80,8 @@ export async function addProject(formData: FormData) {
 
     revalidatePath("/");
     return { success: true };
-  } catch (error: any) {
-    if (error.code === "P2002") {
+  } catch (error: unknown) {
+    if (error && typeof error === "object" && "code" in error && error.code === "P2002") {
       return { error: "Project name must be unique" };
     }
     return { error: "Failed to create project" };

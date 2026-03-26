@@ -5,9 +5,11 @@ import { auth } from "@/auth";
 import { signOut } from "@/auth";
 
 export const metadata: Metadata = {
-  title: "Inventory Tracker",
-  description: "A polished, glassmorphic inventory management system.",
+  title: "Project Tracker",
+  description: "A polished, glassmorphic project management system.",
 };
+
+export const dynamic = "force-dynamic";
 
 export default async function RootLayout({
   children,
@@ -29,8 +31,8 @@ export default async function RootLayout({
             <header>
               <div className="header-row">
                 <div>
-                  <h1>Inventory Tracker</h1>
-                  <p style={{ color: "var(--text-muted)" }}>Manage your products with ease and style.</p>
+                  <h1>Project Tracker</h1>
+                  <p style={{ color: "var(--text-muted)" }}>Manage your projects with ease and style.</p>
                 </div>
                 {session?.user && (
                   <div className="user-info">
