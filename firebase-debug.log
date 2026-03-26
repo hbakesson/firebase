@@ -111,3 +111,241 @@ info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/d
 [debug] [2026-03-26T23:29:44.785Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites/testapp-4f81d 200
 [debug] [2026-03-26T23:29:44.785Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites/testapp-4f81d {"name":"projects/testapp-4f81d/sites/testapp-4f81d","defaultUrl":"https://testapp-4f81d.web.app","appId":"1:633478779492:web:49813096ce6e1d7b118571","type":"DEFAULT_SITE"}
 [warn] ⚠  This integration expects Node version 20, 22, or 24. You're running version 25, problems may be encountered. 
+[debug] [2026-03-26T23:29:49.410Z] [web frameworks] effective firebase.json:  {
+  "hosting": [
+    {
+      "source": ".",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "frameworksBackend": {
+        "region": "us-central1"
+      },
+      "site": "testapp-4f81d",
+      "rewrites": [
+        {
+          "source": "**",
+          "function": {
+            "functionId": "ssrtestapp4f81d",
+            "region": "us-central1",
+            "pinTag": true
+          }
+        }
+      ],
+      "redirects": [],
+      "headers": [
+        {
+          "source": "/favicon.ico",
+          "headers": [
+            {
+              "key": "cache-control",
+              "value": "public, max-age=0, must-revalidate"
+            },
+            {
+              "key": "content-type",
+              "value": "image/x-icon"
+            },
+            {
+              "key": "x-next-cache-tags",
+              "value": "_N_T_/layout,_N_T_/favicon.ico/layout,_N_T_/favicon.ico/route,_N_T_/favicon.ico"
+            }
+          ]
+        },
+        {
+          "source": "**/*.[jt]s",
+          "headers": [
+            {
+              "key": "Set-Cookie",
+              "value": "__FIREBASE_DEFAULTS__=eyJjb25maWciOnsicHJvamVjdElkIjoidGVzdGFwcC00ZjgxZCIsImFwcElkIjoiMTo2MzM0Nzg3Nzk0OTI6d2ViOjQ5ODEzMDk2Y2U2ZTFkN2IxMTg1NzEiLCJzdG9yYWdlQnVja2V0IjoidGVzdGFwcC00ZjgxZC5maXJlYmFzZXN0b3JhZ2UuYXBwIiwiYXBpS2V5IjoiQUl6YVN5RDJZMjhpVmxuZXBWTExwLWIzRUE0bDd5Q0YxTDlCWnR3IiwiYXV0aERvbWFpbiI6InRlc3RhcHAtNGY4MWQuZmlyZWJhc2VhcHAuY29tIiwibWVzc2FnaW5nU2VuZGVySWQiOiI2MzM0Nzg3Nzk0OTIiLCJtZWFzdXJlbWVudElkIjoiRy1RMUQ1VEgyNlk1IiwicHJvamVjdE51bWJlciI6IjYzMzQ3ODc3OTQ5MiIsInZlcnNpb24iOiIyIn0sIl9hdXRoVG9rZW5TeW5jVVJMIjoiL19fc2Vzc2lvbiJ9; SameSite=Strict; Expires=2028-02-19T10:09:49.409Z; Path=/;"
+            }
+          ]
+        }
+      ],
+      "cleanUrls": true,
+      "trailingSlash": false,
+      "public": ".firebase/testapp-4f81d/hosting",
+      "webFramework": "next_ssr"
+    }
+  ],
+  "functions": [
+    {
+      "source": ".firebase/testapp-4f81d/functions",
+      "codebase": "firebase-frameworks-testapp-4f81d"
+    }
+  ]
+}
+[debug] [2026-03-26T23:29:49.411Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-03-26T23:29:49.411Z] > authorizing via signed-in user (hbakesson@gmail.com)
+[debug] [2026-03-26T23:29:49.411Z] [iam] checking project testapp-4f81d for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2026-03-26T23:29:49.412Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:29:49.412Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:29:49.412Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions [none]
+[debug] [2026-03-26T23:29:49.412Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions  x-goog-user-project=testapp-4f81d
+[debug] [2026-03-26T23:29:49.412Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2026-03-26T23:29:50.199Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions 200
+[debug] [2026-03-26T23:29:50.199Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[info] 
+[info] === Deploying to 'testapp-4f81d'...
+[info] 
+[info] i  deploying functions, hosting 
+[debug] [2026-03-26T23:29:50.210Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:29:50.210Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:29:50.211Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d [none]
+[debug] [2026-03-26T23:29:50.403Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d 200
+[debug] [2026-03-26T23:29:50.403Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d {"projectNumber":"633478779492","projectId":"testapp-4f81d","lifecycleState":"ACTIVE","name":"TestApp","labels":{"firebase":"enabled","firebase-core":"disabled"},"createTime":"2026-03-22T09:58:40.751Z"}
+[info] i  functions: preparing codebase firebase-frameworks-testapp-4f81d for deployment 
+[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
+[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
+[info] i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled... 
+[debug] [2026-03-26T23:29:50.405Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:29:50.405Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:29:50.405Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/testapp-4f81d/adminSdkConfig [none]
+[debug] [2026-03-26T23:29:50.845Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/testapp-4f81d/adminSdkConfig 200
+[debug] [2026-03-26T23:29:50.845Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/testapp-4f81d/adminSdkConfig {"projectId":"testapp-4f81d","storageBucket":"testapp-4f81d.firebasestorage.app"}
+[debug] [2026-03-26T23:29:50.846Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:29:50.846Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:29:50.846Z] >>> [apiv2][query] GET https://runtimeconfig.googleapis.com/v1beta1/projects/testapp-4f81d/configs [none]
+[debug] [2026-03-26T23:29:51.817Z] <<< [apiv2][status] GET https://runtimeconfig.googleapis.com/v1beta1/projects/testapp-4f81d/configs 200
+[debug] [2026-03-26T23:29:51.818Z] <<< [apiv2][body] GET https://runtimeconfig.googleapis.com/v1beta1/projects/testapp-4f81d/configs {}
+[debug] [2026-03-26T23:29:51.820Z] Validating nodejs source
+[warn] ⚠  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] ⚠  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2026-03-26T23:29:52.384Z] > [functions] package.json contents: {
+  "name": "inventory-tracker",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@auth/firebase-adapter": "^2.11.1",
+    "@auth/prisma-adapter": "^2.11.1",
+    "@opentelemetry/api": "^1.9.0",
+    "@prisma/client": "^7.5.0",
+    "bcryptjs": "^3.0.3",
+    "firebase": "^12.11.0",
+    "firebase-admin": "^13.7.0",
+    "next": "15.5.14",
+    "next-auth": "^5.0.0-beta.30",
+    "prisma": "^7.5.0",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
+    "firebase-frameworks": "^0.11.0",
+    "firebase-functions": "^6.0.1"
+  },
+  "main": "server.js",
+  "engines": {
+    "node": "24"
+  }
+}
+[debug] [2026-03-26T23:29:52.385Z] Building nodejs source
+[info] i  functions: Loading and analyzing source code for codebase firebase-frameworks-testapp-4f81d to determine what to deploy 
+[debug] [2026-03-26T23:29:52.385Z] Could not find functions.yaml. Must use http discovery
+[debug] [2026-03-26T23:29:52.389Z] Found firebase-functions binary at '/Users/hbakesson/Coding/Firebase/.firebase/testapp-4f81d/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8454
+
+[debug] [2026-03-26T23:29:52.895Z] Got response from /__/functions.yaml {"endpoints":{"ssrtestapp4f81d":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","region":["us-central1"],"labels":{},"httpsTrigger":{},"entryPoint":"ssrtestapp4f81d"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[info] i  extensions: ensuring required API firebaseextensions.googleapis.com is enabled... 
+[debug] [2026-03-26T23:29:56.916Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-03-26T23:29:56.916Z] > authorizing via signed-in user (hbakesson@gmail.com)
+[debug] [2026-03-26T23:29:56.916Z] [iam] checking project testapp-4f81d for permissions ["firebase.projects.get","firebaseextensions.instances.list"]
+[debug] [2026-03-26T23:29:56.917Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:29:56.917Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:29:56.917Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions [none]
+[debug] [2026-03-26T23:29:56.917Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions  x-goog-user-project=testapp-4f81d
+[debug] [2026-03-26T23:29:56.917Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions {"permissions":["firebase.projects.get","firebaseextensions.instances.list"]}
+[debug] [2026-03-26T23:29:57.675Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions 200
+[debug] [2026-03-26T23:29:57.676Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions {"permissions":["firebase.projects.get","firebaseextensions.instances.list"]}
+[debug] [2026-03-26T23:29:57.677Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:29:57.677Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:29:57.677Z] >>> [apiv2][query] GET https://firebaseextensions.googleapis.com/v1beta/projects/testapp-4f81d/instances pageSize=100&pageToken=
+[debug] [2026-03-26T23:29:58.544Z] <<< [apiv2][status] GET https://firebaseextensions.googleapis.com/v1beta/projects/testapp-4f81d/instances 200
+[debug] [2026-03-26T23:29:58.545Z] <<< [apiv2][body] GET https://firebaseextensions.googleapis.com/v1beta/projects/testapp-4f81d/instances {}
+[info] i  functions: Loaded environment variables from .env. 
+[info] i  functions: preparing .firebase/testapp-4f81d/functions directory for uploading... 
+[info] i  functions: packaged /Users/hbakesson/Coding/Firebase/.firebase/testapp-4f81d/functions (14.46 MB) for uploading 
+[debug] [2026-03-26T23:29:59.240Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:29:59.240Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:29:59.240Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v1/projects/testapp-4f81d/locations/-/functions [none]
+[debug] [2026-03-26T23:29:59.852Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v1/projects/testapp-4f81d/locations/-/functions 200
+[debug] [2026-03-26T23:29:59.852Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v1/projects/testapp-4f81d/locations/-/functions {}
+[debug] [2026-03-26T23:29:59.853Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:29:59.853Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:29:59.853Z] >>> [apiv2][query] GET https://cloudfunctions.googleapis.com/v2/projects/testapp-4f81d/locations/-/functions filter=environment%3D%22GEN_2%22
+[debug] [2026-03-26T23:30:00.957Z] <<< [apiv2][status] GET https://cloudfunctions.googleapis.com/v2/projects/testapp-4f81d/locations/-/functions 200
+[debug] [2026-03-26T23:30:00.959Z] <<< [apiv2][body] GET https://cloudfunctions.googleapis.com/v2/projects/testapp-4f81d/locations/-/functions {"functions":[{"name":"projects/testapp-4f81d/locations/us-central1/functions/ssrtestapp4f81d","buildConfig":{"build":"projects/633478779492/locations/us-central1/builds/a6985ac5-5e1d-4f15-afa2-44eba5e8f609","runtime":"nodejs24","entryPoint":"ssrtestapp4f81d","source":{"storageSource":{"bucket":"gcf-v2-sources-633478779492-us-central1","object":"ssrtestapp4f81d/function-source.zip","generation":"1774562295027652"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"dockerRepository":"projects/testapp-4f81d/locations/us-central1/repositories/gcf-artifacts","sourceProvenance":{"resolvedStorageSource":{"bucket":"gcf-v2-sources-633478779492-us-central1","object":"ssrtestapp4f81d/function-source.zip","generation":"1774562295027652"}},"dockerRegistry":"ARTIFACT_REGISTRY","serviceAccount":"projects/testapp-4f81d/serviceAccounts/633478779492-compute@developer.gserviceaccount.com","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/testapp-4f81d/locations/us-central1/services/ssrtestapp4f81d","timeoutSeconds":60,"environmentVariables":{"NEXT_PUBLIC_FIREBASE_API_KEY":"AIzaSyD2Y28iVlnepVLLp-b3EA4l7yCF1L9BZtw","NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN":"testapp-4f81d.firebaseapp.com","NEXT_PUBLIC_FIREBASE_PROJECT_ID":"testapp-4f81d","NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET":"testapp-4f81d.firebasestorage.app","NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID":"633478779492","NEXT_PUBLIC_FIREBASE_APP_ID":"1:633478779492:web:49813096ce6e1d7b118571","FB_ADMIN_PROJECT_ID":"testapp-4f81d","FB_ADMIN_CLIENT_EMAIL":"firebase-adminsdk-fbsvc@testapp-4f81d.iam.gserviceaccount.com","FB_ADMIN_PRIVATE_KEY":"-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDTkkvCkc0cyg1T\nd1qLnRSc0p4D+eQUgyRKDmfZaN3TU7vOJdxjilOYyjvbNZiyNcKXa8pRB8cRWDQy\nKH2EOVYEEXacl0kHpMn98RcdNMN3VcZo4OHE+NszYNFCfkqDKtSKdjOBE6LN8Jf6\nhEJ+u1kwGNM5zvq2mFzdb1ZXpMiTf/xMoFJgVh2kLN9thApwn2RqfPvveYOUWZy9\n962xh890AYrl0KWkq0TGRz9FZC6DPd7nZXfhJ5TlYD65Ltac0TrC80RBc25txKgi\nCMNLDE68jLOh5xdSVzMN4VNlPeNkIh1pwYQhseSWFwDCbtkQ6HloO71o4Tor/6oV\nQAjoKz4tAgMBAAECggEAZso2jZbpuNl/xPQBZUBRcemwBM2FXuPiHyrFkK6uy0vs\nvDjPzPq5J8vlbdip0bdlzcx8VIb7U/VvEolyhemXXU2gu26S+Cg7TOmzqahnaRSe\n23iap+iiEuGweWZDTFvkPEs2Nbl1CSohpIBakBj0uXXuNbFWRJ1czOaZY+Z23pXX\nKf2eDKcJUI5UxH7zx/i4Y2JOc4WtY++otNb64vT/EpIRsNZG5cxORWO7O86Umcm7\n+n+pTauEphIzZ9rmLiEuwuxy74DOPqsLilhyKRmBcv9DKfjQdsrHWAzpmaIcGrYs\nghF+8yXaZWkjDWa+PcI0P3xz/5QWjfP+cPb426UGjwKBgQDuP1xYmQkLtWaVHCdN\nnTCvM+f4cOoA01WtMtZPt6fQJpfIFWmqKTeppS6EEf3j1FjlZMGV2r61Bay4iJnp\njINLhaDhHDi0OSGNzTKJO/Da6jJ9UIf0zdEqM3uzEjTlUCiOEIGc7N/5ZCH4+5iX\no1KK132TN4UKSdBSSWlX+hXBAwKBgQDjVhUMqqAcutOT9EjZJtYOXV+2msCII9DA\nX1OWbQq9+et6OqHMMaVlySyiKu5MYnymBTKi0sgheNqVQqxpKoEN4Bl3/V1h0j+W\n1Cz2i8+9GEqSrByxMivQ2Opg9cz8zRRJlDUb9MMlDa0RZ4YDtVsYNiIzFbrNNA5+\n/vdW2yqlDwKBgQCN1dq8RB9GgTAZBTHA2xvoshYfqdkltKsE+Ybs3oFhQhiKXXUS\ngIdKz7PpnGxx/jEOH/W/qQJv8njpQymeCLEBfQRR/+MiKAD50neLi8vQCC0WvaKy\n8vTbEttJuEUVX6tFKD6BleOhLSOsftxRKkIxtihkRGFHxrnmwx2b6p6Y0QKBgFnT\nPpf1pzQS4dy5Dju3K6cbX+E//kkMlcQdJmLujOsJn/B40EtlZmv0dE1TVzsZQxU6\nQoqxbGBFZ2DIqmUXZUy9OnL9ynMHZxbKmUWFcrzNp1GS7fdZ0pQ/0UQkey18PsLf\n66gzKxQt9i9FT1+Rvf+wDA1RTbEdG4k0ZziLeqsjAoGAVk6z3IK1H5PGuXTuCBKP\ngWbO2NFUB1BmKttQUqPDhAMGT9ecUBKz4/VdNJ3Mk4uHBp5WwrQtUt/wK03onwp2\nE5xdIvwYb91Mgcb0zr+d2J/eYdfLdvbxqW8ws2qpV53WQEYXkqP4XDzTLeFD3HPK\n9FIR1jEZllHhiXYKBnFStRM=\n-----END PRIVATE KEY-----\n","GOOGLE_CLIENT_ID":"633478779492-0ev0571e7n718bv75doljmab3a0ia9vg.apps.googleusercontent.com","GOOGLE_CLIENT_SECRET":"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","AUTH_SECRET":"8eGGCFoXkGc53uWwM7QdRp547eq1fVAUPY/P85IElVQ=","AUTH_TRUST_HOST":"true","AUTH_URL":"https://testapp-4f81d.web.app","NEXTAUTH_URL":"https://testapp-4f81d.web.app","DATABASE_URL":"prisma+postgres://localhost:51213/?api_key=eyJkYXRhYmFzZVVybCI6InBvc3RncmVzOi8vcG9zdGdyZXM6cG9zdGdyZXNAbG9jYWxob3N0OjUxMjE0L3RlbXBsYXRlMT9zc2xtb2RlPWRpc2FibGUmY29ubmVjdGlvbl9saW1pdD0xJmNvbm5lY3RfdGltZW91dD0wJm1heF9pZGxlX2Nvbm5lY3Rpb25fbGlmZXRpbWU9MCZwb29sX3RpbWVvdXQ9MCZzaW5nbGVfdXNlX2Nvbm5lY3Rpb25zPXRydWUmc29ja2V0X3RpbWVvdXQ9MCIsIm5hbWUiOiJkZWZhdWx0Iiwic2hhZG93RGF0YWJhc2VVcmwiOiJwb3N0Z3JlczovL3Bvc3RncmVzOnBvc3RncmVzQGxvY2FsaG9zdDo1MTIxNS90ZW1wbGF0ZTE_c3NsbW9kZT1kaXNhYmxlJmNvbm5lY3Rpb25fbGltaXQ9MSZjb25uZWN0X3RpbWVvdXQ9MCZtYXhfaWRsZV9jb25uZWN0aW9uX2xpZmV0aW1lPTAmcG9vbF90aW1lb3V0PTAmc2luZ2xlX3VzZV9jb25uZWN0aW9ucz10cnVlJnNvY2tldF90aW1lb3V0PTAifQ","VERCEL_URL":"testapp-4f81d.web.app","__FIREBASE_FRAMEWORKS_ENTRY__":"next.js","__FIREBASE_DEFAULTS__":"{\"config\":{\"projectId\":\"testapp-4f81d\",\"appId\":\"1:633478779492:web:49813096ce6e1d7b118571\",\"storageBucket\":\"testapp-4f81d.firebasestorage.app\",\"apiKey\":\"AIzaSyD2Y28iVlnepVLLp-b3EA4l7yCF1L9BZtw\",\"authDomain\":\"testapp-4f81d.firebaseapp.com\",\"messagingSenderId\":\"633478779492\",\"measurementId\":\"G-Q1D5TH26Y5\",\"projectNumber\":\"633478779492\",\"version\":\"2\"},\"_authTokenSyncURL\":\"/__session\"}","FIREBASE_CONFIG":"{\"projectId\":\"testapp-4f81d\",\"storageBucket\":\"testapp-4f81d.firebasestorage.app\"}","GCLOUD_PROJECT":"testapp-4f81d","EVENTARC_CLOUD_EVENT_SOURCE":"projects/testapp-4f81d/locations/us-central1/services/ssrtestapp4f81d","FUNCTION_TARGET":"ssrtestapp4f81d","LOG_EXECUTION_ID":"true"},"ingressSettings":"ALLOW_ALL","uri":"https://ssrtestapp4f81d-5yz2ooqcha-uc.a.run.app","serviceAccountEmail":"633478779492-compute@developer.gserviceaccount.com","availableMemory":"256Mi","allTrafficOnLatestRevision":true,"revision":"ssrtestapp4f81d-00001-qey","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"state":"ACTIVE","updateTime":"2026-03-26T22:01:08.677930529Z","labels":{"firebase-functions-codebase":"firebase-frameworks-testapp-4f81d","firebase-functions-hash":"d3e34845f9f97fa1eb561193fb1ba256fe99c135","deployment-tool":"cli-firebase"},"environment":"GEN_2","url":"https://us-central1-testapp-4f81d.cloudfunctions.net/ssrtestapp4f81d","createTime":"2026-03-26T21:58:15.327338501Z","satisfiesPzi":true},{"name":"projects/testapp-4f81d/locations/us-east1/functions/ssrtestapp4f81d","buildConfig":{"build":"projects/633478779492/locations/us-east1/builds/ea2ae0f8-9ac8-44c7-bfe3-c083529300ef","runtime":"nodejs24","entryPoint":"ssrtestapp4f81d","source":{"storageSource":{"bucket":"gcf-v2-sources-633478779492-us-east1","object":"ssrtestapp4f81d/function-source.zip","generation":"1774288049217550"}},"environmentVariables":{"GOOGLE_NODE_RUN_SCRIPTS":""},"dockerRepository":"projects/testapp-4f81d/locations/us-east1/repositories/gcf-artifacts","sourceProvenance":{"resolvedStorageSource":{"bucket":"gcf-v2-sources-633478779492-us-east1","object":"ssrtestapp4f81d/function-source.zip","generation":"1774288049217550"}},"dockerRegistry":"ARTIFACT_REGISTRY","serviceAccount":"projects/testapp-4f81d/serviceAccounts/633478779492-compute@developer.gserviceaccount.com","automaticUpdatePolicy":{}},"serviceConfig":{"service":"projects/testapp-4f81d/locations/us-east1/services/ssrtestapp4f81d","timeoutSeconds":60,"environmentVariables":{"NEXT_PUBLIC_FIREBASE_API_KEY":"AIzaSyD2Y28iVlnepVLLp-b3EA4l7yCF1L9BZtw","NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN":"testapp-4f81d.firebaseapp.com","NEXT_PUBLIC_FIREBASE_PROJECT_ID":"testapp-4f81d","NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET":"testapp-4f81d.firebasestorage.app","NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID":"633478779492","NEXT_PUBLIC_FIREBASE_APP_ID":"1:633478779492:web:49813096ce6e1d7b118571","FB_ADMIN_PROJECT_ID":"testapp-4f81d","FB_ADMIN_CLIENT_EMAIL":"firebase-adminsdk-fbsvc@testapp-4f81d.iam.gserviceaccount.com","FB_ADMIN_PRIVATE_KEY":"-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDTkkvCkc0cyg1T\nd1qLnRSc0p4D+eQUgyRKDmfZaN3TU7vOJdxjilOYyjvbNZiyNcKXa8pRB8cRWDQy\nKH2EOVYEEXacl0kHpMn98RcdNMN3VcZo4OHE+NszYNFCfkqDKtSKdjOBE6LN8Jf6\nhEJ+u1kwGNM5zvq2mFzdb1ZXpMiTf/xMoFJgVh2kLN9thApwn2RqfPvveYOUWZy9\n962xh890AYrl0KWkq0TGRz9FZC6DPd7nZXfhJ5TlYD65Ltac0TrC80RBc25txKgi\nCMNLDE68jLOh5xdSVzMN4VNlPeNkIh1pwYQhseSWFwDCbtkQ6HloO71o4Tor/6oV\nQAjoKz4tAgMBAAECggEAZso2jZbpuNl/xPQBZUBRcemwBM2FXuPiHyrFkK6uy0vs\nvDjPzPq5J8vlbdip0bdlzcx8VIb7U/VvEolyhemXXU2gu26S+Cg7TOmzqahnaRSe\n23iap+iiEuGweWZDTFvkPEs2Nbl1CSohpIBakBj0uXXuNbFWRJ1czOaZY+Z23pXX\nKf2eDKcJUI5UxH7zx/i4Y2JOc4WtY++otNb64vT/EpIRsNZG5cxORWO7O86Umcm7\n+n+pTauEphIzZ9rmLiEuwuxy74DOPqsLilhyKRmBcv9DKfjQdsrHWAzpmaIcGrYs\nghF+8yXaZWkjDWa+PcI0P3xz/5QWjfP+cPb426UGjwKBgQDuP1xYmQkLtWaVHCdN\nnTCvM+f4cOoA01WtMtZPt6fQJpfIFWmqKTeppS6EEf3j1FjlZMGV2r61Bay4iJnp\njINLhaDhHDi0OSGNzTKJO/Da6jJ9UIf0zdEqM3uzEjTlUCiOEIGc7N/5ZCH4+5iX\no1KK132TN4UKSdBSSWlX+hXBAwKBgQDjVhUMqqAcutOT9EjZJtYOXV+2msCII9DA\nX1OWbQq9+et6OqHMMaVlySyiKu5MYnymBTKi0sgheNqVQqxpKoEN4Bl3/V1h0j+W\n1Cz2i8+9GEqSrByxMivQ2Opg9cz8zRRJlDUb9MMlDa0RZ4YDtVsYNiIzFbrNNA5+\n/vdW2yqlDwKBgQCN1dq8RB9GgTAZBTHA2xvoshYfqdkltKsE+Ybs3oFhQhiKXXUS\ngIdKz7PpnGxx/jEOH/W/qQJv8njpQymeCLEBfQRR/+MiKAD50neLi8vQCC0WvaKy\n8vTbEttJuEUVX6tFKD6BleOhLSOsftxRKkIxtihkRGFHxrnmwx2b6p6Y0QKBgFnT\nPpf1pzQS4dy5Dju3K6cbX+E//kkMlcQdJmLujOsJn/B40EtlZmv0dE1TVzsZQxU6\nQoqxbGBFZ2DIqmUXZUy9OnL9ynMHZxbKmUWFcrzNp1GS7fdZ0pQ/0UQkey18PsLf\n66gzKxQt9i9FT1+Rvf+wDA1RTbEdG4k0ZziLeqsjAoGAVk6z3IK1H5PGuXTuCBKP\ngWbO2NFUB1BmKttQUqPDhAMGT9ecUBKz4/VdNJ3Mk4uHBp5WwrQtUt/wK03onwp2\nE5xdIvwYb91Mgcb0zr+d2J/eYdfLdvbxqW8ws2qpV53WQEYXkqP4XDzTLeFD3HPK\n9FIR1jEZllHhiXYKBnFStRM=\n-----END PRIVATE KEY-----\n","GOOGLE_CLIENT_ID":"633478779492-0ev0571e7n718bv75doljmab3a0ia9vg.apps.googleusercontent.com","GOOGLE_CLIENT_SECRET":"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","AUTH_SECRET":"8eGGCFoXkGc53uWwM7QdRp547eq1fVAUPY/P85IElVQ=","AUTH_TRUST_HOST":"true","AUTH_URL":"https://testapp-4f81d.web.app","NEXTAUTH_URL":"https://testapp-4f81d.web.app","VERCEL_URL":"testapp-4f81d.web.app","__FIREBASE_FRAMEWORKS_ENTRY__":"next.js","__FIREBASE_DEFAULTS__":"{\"config\":{\"projectId\":\"testapp-4f81d\",\"appId\":\"1:633478779492:web:49813096ce6e1d7b118571\",\"storageBucket\":\"testapp-4f81d.firebasestorage.app\",\"apiKey\":\"AIzaSyD2Y28iVlnepVLLp-b3EA4l7yCF1L9BZtw\",\"authDomain\":\"testapp-4f81d.firebaseapp.com\",\"messagingSenderId\":\"633478779492\",\"measurementId\":\"G-Q1D5TH26Y5\",\"projectNumber\":\"633478779492\",\"version\":\"2\"},\"_authTokenSyncURL\":\"/__session\"}","FIREBASE_CONFIG":"{\"projectId\":\"testapp-4f81d\",\"storageBucket\":\"testapp-4f81d.firebasestorage.app\"}","GCLOUD_PROJECT":"testapp-4f81d","EVENTARC_CLOUD_EVENT_SOURCE":"projects/testapp-4f81d/locations/us-east1/services/ssrtestapp4f81d","FUNCTION_TARGET":"ssrtestapp4f81d","LOG_EXECUTION_ID":"true"},"maxInstanceCount":20,"ingressSettings":"ALLOW_ALL","uri":"https://ssrtestapp4f81d-5yz2ooqcha-ue.a.run.app","serviceAccountEmail":"633478779492-compute@developer.gserviceaccount.com","availableMemory":"256Mi","allTrafficOnLatestRevision":true,"revision":"ssrtestapp4f81d-00027-but","maxInstanceRequestConcurrency":80,"availableCpu":"1"},"state":"ACTIVE","updateTime":"2026-03-23T17:49:06.282526149Z","labels":{"firebase-functions-hash":"573009e84c4045e16c7bf52781de644e99dd22e3","deployment-tool":"cli-firebase","firebase-functions-codebase":"firebase-frameworks-testapp-4f81d"},"environment":"GEN_2","url":"https://us-east1-testapp-4f81d.cloudfunctions.net/ssrtestapp4f81d","createTime":"2026-03-22T22:01:56.788814103Z","satisfiesPzi":true}]}
+[info] i  functions: ensuring required API run.googleapis.com is enabled... 
+[info] i  functions: ensuring required API eventarc.googleapis.com is enabled... 
+[info] i  functions: ensuring required API pubsub.googleapis.com is enabled... 
+[info] i  functions: ensuring required API storage.googleapis.com is enabled... 
+[info] i  functions: generating the service identity for pubsub.googleapis.com... 
+[debug] [2026-03-26T23:30:00.996Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:00.998Z] Checked if tokens are valid: true, expires at: 1774571364886
+[info] i  functions: generating the service identity for eventarc.googleapis.com... 
+[debug] [2026-03-26T23:30:00.999Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:01.002Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:01.003Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1beta1/projects/633478779492/services/pubsub.googleapis.com:generateServiceIdentity [none]
+[debug] [2026-03-26T23:30:01.003Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1beta1/projects/633478779492/services/pubsub.googleapis.com:generateServiceIdentity  x-goog-user-project=633478779492
+[debug] [2026-03-26T23:30:01.003Z] >>> [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/633478779492/services/pubsub.googleapis.com:generateServiceIdentity {}
+[debug] [2026-03-26T23:30:01.009Z] >>> [apiv2][query] POST https://serviceusage.googleapis.com/v1beta1/projects/633478779492/services/eventarc.googleapis.com:generateServiceIdentity [none]
+[debug] [2026-03-26T23:30:01.009Z] >>> [apiv2][(partial)header] POST https://serviceusage.googleapis.com/v1beta1/projects/633478779492/services/eventarc.googleapis.com:generateServiceIdentity  x-goog-user-project=633478779492
+[debug] [2026-03-26T23:30:01.009Z] >>> [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/633478779492/services/eventarc.googleapis.com:generateServiceIdentity {}
+[debug] [2026-03-26T23:30:02.007Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1beta1/projects/633478779492/services/pubsub.googleapis.com:generateServiceIdentity 200
+[debug] [2026-03-26T23:30:02.008Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/633478779492/services/pubsub.googleapis.com:generateServiceIdentity {"name":"operations/finished.DONE_OPERATION","done":true,"response":{"@type":"type.googleapis.com/google.api.serviceusage.v1beta1.ServiceIdentity","email":"service-633478779492@gcp-sa-pubsub.iam.gserviceaccount.com","uniqueId":"104873635549041954298"}}
+[debug] [2026-03-26T23:30:02.010Z] <<< [apiv2][status] POST https://serviceusage.googleapis.com/v1beta1/projects/633478779492/services/eventarc.googleapis.com:generateServiceIdentity 200
+[debug] [2026-03-26T23:30:02.010Z] <<< [apiv2][body] POST https://serviceusage.googleapis.com/v1beta1/projects/633478779492/services/eventarc.googleapis.com:generateServiceIdentity {"name":"operations/finished.DONE_OPERATION","done":true,"response":{"@type":"type.googleapis.com/google.api.serviceusage.v1beta1.ServiceIdentity","email":"service-633478779492@gcp-sa-eventarc.iam.gserviceaccount.com","uniqueId":"111496214114527584520"}}
+[debug] [2026-03-26T23:30:02.014Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:02.014Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:02.014Z] >>> [apiv2][query] GET https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d [none]
+[debug] [2026-03-26T23:30:02.208Z] <<< [apiv2][status] GET https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d 200
+[debug] [2026-03-26T23:30:02.208Z] <<< [apiv2][body] GET https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d {"projectNumber":"633478779492","projectId":"testapp-4f81d","lifecycleState":"ACTIVE","name":"TestApp","labels":{"firebase":"enabled","firebase-core":"disabled"},"createTime":"2026-03-22T09:58:40.751Z"}
+[debug] [2026-03-26T23:30:02.209Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:02.209Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:02.209Z] >>> [apiv2][query] GET https://compute.googleapis.com/compute/v1/projects/633478779492 [none]
+[debug] [2026-03-26T23:30:02.693Z] <<< [apiv2][status] GET https://compute.googleapis.com/compute/v1/projects/633478779492 200
+[debug] [2026-03-26T23:30:02.693Z] <<< [apiv2][body] GET https://compute.googleapis.com/compute/v1/projects/633478779492 {"kind":"compute#project","id":"3380872969997255299","creationTimestamp":"2026-03-26T16:08:28.255-07:00","name":"testapp-4f81d","commonInstanceMetadata":{"kind":"compute#metadata","fingerprint":"UGMulTaAVBo="},"quotas":[{"metric":"SNAPSHOTS","limit":1000,"usage":0},{"metric":"NETWORKS","limit":5,"usage":1},{"metric":"FIREWALLS","limit":100,"usage":4},{"metric":"IMAGES","limit":100,"usage":0},{"metric":"STATIC_ADDRESSES","limit":8,"usage":0},{"metric":"ROUTES","limit":200,"usage":0},{"metric":"FORWARDING_RULES","limit":15,"usage":0},{"metric":"TARGET_POOLS","limit":50,"usage":0},{"metric":"HEALTH_CHECKS","limit":75,"usage":0},{"metric":"IN_USE_ADDRESSES","limit":8,"usage":0},{"metric":"TARGET_INSTANCES","limit":50,"usage":0},{"metric":"TARGET_HTTP_PROXIES","limit":10,"usage":0},{"metric":"URL_MAPS","limit":10,"usage":0},{"metric":"BACKEND_SERVICES","limit":50,"usage":0},{"metric":"INSTANCE_TEMPLATES","limit":100,"usage":0},{"metric":"TARGET_VPN_GATEWAYS","limit":5,"usage":0},{"metric":"VPN_TUNNELS","limit":10,"usage":0},{"metric":"BACKEND_BUCKETS","limit":3,"usage":0},{"metric":"ROUTERS","limit":10,"usage":0},{"metric":"TARGET_SSL_PROXIES","limit":10,"usage":0},{"metric":"TARGET_HTTPS_PROXIES","limit":10,"usage":0},{"metric":"SSL_CERTIFICATES","limit":10,"usage":0},{"metric":"SUBNETWORKS","limit":100,"usage":0},{"metric":"TARGET_TCP_PROXIES","limit":10,"usage":0},{"metric":"CPUS_ALL_REGIONS","limit":32,"usage":0},{"metric":"SECURITY_POLICIES","limit":10,"usage":0},{"metric":"SECURITY_POLICY_RULES","limit":100,"usage":0},{"metric":"XPN_SERVICE_PROJECTS","limit":1000,"usage":0},{"metric":"PACKET_MIRRORINGS","limit":20,"usage":0},{"metric":"NETWORK_ENDPOINT_GROUPS","limit":100,"usage":0},{"metric":"INTERCONNECTS","limit":6,"usage":0},{"metric":"SSL_POLICIES","limit":10,"usage":0},{"metric":"GLOBAL_INTERNAL_ADDRESSES","limit":5000,"usage":0},{"metric":"VPN_GATEWAYS","limit":5,"usage":0},{"metric":"MACHINE_IMAGES","limit":100,"usage":0},{"metric":"SECURITY_POLICY_CEVAL_RULES","limit":20,"usage":0},{"metric":"GPUS_ALL_REGIONS","limit":0,"usage":0},{"metric":"EXTERNAL_VPN_GATEWAYS","limit":5,"usage":0},{"metric":"PUBLIC_ADVERTISED_PREFIXES","limit":1,"usage":0},{"metric":"PUBLIC_DELEGATED_PREFIXES","limit":10,"usage":0},{"metric":"STATIC_BYOIP_ADDRESSES","limit":128,"usage":0},{"metric":"NETWORK_FIREWALL_POLICIES","limit":10,"usage":0},{"metric":"INTERNAL_TRAFFIC_DIRECTOR_FORWARDING_RULES","limit":15,"usage":0},{"metric":"GLOBAL_EXTERNAL_MANAGED_FORWARDING_RULES","limit":15,"usage":0},{"metric":"GLOBAL_INTERNAL_MANAGED_BACKEND_SERVICES","limit":50,"usage":0},{"metric":"GLOBAL_EXTERNAL_MANAGED_BACKEND_SERVICES","limit":50,"usage":0},{"metric":"GLOBAL_EXTERNAL_PROXY_LB_BACKEND_SERVICES","limit":50,"usage":0},{"metric":"GLOBAL_INTERNAL_TRAFFIC_DIRECTOR_BACKEND_SERVICES","limit":250,"usage":0}],"selfLink":"https://www.googleapis.com/compute/v1/projects/testapp-4f81d","defaultServiceAccount":"633478779492-compute@developer.gserviceaccount.com","xpnProjectStatus":"UNSPECIFIED_XPN_PROJECT_STATUS","defaultNetworkTier":"PREMIUM","vmDnsSetting":"ZONAL_ONLY","cloudArmorTier":"CA_STANDARD"}
+[debug] [2026-03-26T23:30:02.701Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:02.701Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:02.701Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/testapp-4f81d/versions [none]
+[debug] [2026-03-26T23:30:02.701Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/testapp-4f81d/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase","firebase-web-framework":"next_ssr"}}
+[debug] [2026-03-26T23:30:04.442Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/testapp-4f81d/versions 200
+[debug] [2026-03-26T23:30:04.442Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/testapp-4f81d/versions {"name":"projects/633478779492/sites/testapp-4f81d/versions/2d02e244edabc485","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase","firebase-web-framework":"next_ssr"}}
+[debug] [2026-03-26T23:30:04.444Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:04.444Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:04.444Z] >>> [apiv2][query] GET https://cloudbilling.googleapis.com/v1/projects/testapp-4f81d/billingInfo [none]
+[debug] [2026-03-26T23:30:05.252Z] <<< [apiv2][status] GET https://cloudbilling.googleapis.com/v1/projects/testapp-4f81d/billingInfo 200
+[debug] [2026-03-26T23:30:05.253Z] <<< [apiv2][body] GET https://cloudbilling.googleapis.com/v1/projects/testapp-4f81d/billingInfo {"name":"projects/testapp-4f81d/billingInfo","projectId":"testapp-4f81d","billingAccountName":"billingAccounts/015F65-A5B99E-05544C","billingEnabled":true}
+[debug] [2026-03-26T23:30:05.257Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:05.257Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:05.257Z] >>> [apiv2][query] POST https://cloudfunctions.googleapis.com/v2/projects/testapp-4f81d/locations/us-central1/functions:generateUploadUrl [none]
+[debug] [2026-03-26T23:30:06.199Z] <<< [apiv2][status] POST https://cloudfunctions.googleapis.com/v2/projects/testapp-4f81d/locations/us-central1/functions:generateUploadUrl 200
+[debug] [2026-03-26T23:30:06.199Z] <<< [apiv2][body] POST https://cloudfunctions.googleapis.com/v2/projects/testapp-4f81d/locations/us-central1/functions:generateUploadUrl {"uploadUrl":"https://storage.googleapis.com/gcf-v2-uploads-633478779492.us-central1.cloudfunctions.appspot.com/fe311bb0-bae1-4c57-90ed-85e4d08ebb44.zip?GoogleAccessId=service-633478779492@gcf-admin-robot.iam.gserviceaccount.com&Expires=1774569606&Signature=dTIgUf13nynyfRfDBwc0Lh1a96Yb1o9OVfP%2F6rAF0nVpyQqw7oWAMkSJgO9sMxkyk%2BkE%2FPu2V9U0EwYOblBHcZHjYZRLsUR5VWLszZ3qSKDhbXGkJvGXkCC63cYXY9eECfrOFFGFgbA4MEkPvTcxOQtm%2FzSLJ%2F2bBOMlKJtvKWb22fKS1AztGMO8U%2BcFbcK59XHT4w7yaPIEnGRzZ0pq69ibo8nzgIPLxS0caIJTodk281j4PtElfmWxgeCI8g0iXL2zKOhJqx1HaMvDgb9vtsSS%2FjGO3nS0%2FWEq0fhmiJjp1nnRe0pEE8LkX%2BQAoxEtfRTmZK7A%2Fhi7gLt7EuuT7w%3D%3D","storageSource":{"bucket":"gcf-v2-uploads-633478779492.us-central1.cloudfunctions.appspot.com","object":"fe311bb0-bae1-4c57-90ed-85e4d08ebb44.zip"}}
+[debug] [2026-03-26T23:30:06.201Z] >>> [apiv2][query] PUT https://storage.googleapis.com/gcf-v2-uploads-633478779492.us-central1.cloudfunctions.appspot.com/fe311bb0-bae1-4c57-90ed-85e4d08ebb44.zip GoogleAccessId=service-633478779492%40gcf-admin-robot.iam.gserviceaccount.com&Expires=1774569606&Signature=dTIgUf13nynyfRfDBwc0Lh1a96Yb1o9OVfP%2F6rAF0nVpyQqw7oWAMkSJgO9sMxkyk%2BkE%2FPu2V9U0EwYOblBHcZHjYZRLsUR5VWLszZ3qSKDhbXGkJvGXkCC63cYXY9eECfrOFFGFgbA4MEkPvTcxOQtm%2FzSLJ%2F2bBOMlKJtvKWb22fKS1AztGMO8U%2BcFbcK59XHT4w7yaPIEnGRzZ0pq69ibo8nzgIPLxS0caIJTodk281j4PtElfmWxgeCI8g0iXL2zKOhJqx1HaMvDgb9vtsSS%2FjGO3nS0%2FWEq0fhmiJjp1nnRe0pEE8LkX%2BQAoxEtfRTmZK7A%2Fhi7gLt7EuuT7w%3D%3D
+[debug] [2026-03-26T23:30:06.201Z] >>> [apiv2][body] PUT https://storage.googleapis.com/gcf-v2-uploads-633478779492.us-central1.cloudfunctions.appspot.com/fe311bb0-bae1-4c57-90ed-85e4d08ebb44.zip [stream]
+[debug] [2026-03-26T23:30:08.400Z] <<< [apiv2][status] PUT https://storage.googleapis.com/gcf-v2-uploads-633478779492.us-central1.cloudfunctions.appspot.com/fe311bb0-bae1-4c57-90ed-85e4d08ebb44.zip 200
+[debug] [2026-03-26T23:30:08.400Z] <<< [apiv2][body] PUT https://storage.googleapis.com/gcf-v2-uploads-633478779492.us-central1.cloudfunctions.appspot.com/fe311bb0-bae1-4c57-90ed-85e4d08ebb44.zip [omitted]
+[info] ✔  functions: .firebase/testapp-4f81d/functions source uploaded successfully 
+[info] i  hosting[testapp-4f81d]: beginning deploy... 
+[info] i  hosting[testapp-4f81d]: found 25 files in .firebase/testapp-4f81d/hosting 
+[debug] [2026-03-26T23:30:08.408Z] [hosting] uploading with 200 concurrency
+[debug] [2026-03-26T23:30:08.429Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:08.429Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:08.430Z] [hosting] hash cache [LmZpcmViYXNlL3Rlc3RhcHAtNGY4MWQvaG9zdGluZw] stored for 25 files
+[debug] [2026-03-26T23:30:08.431Z] [hosting][hash queue][FINAL] {"max":19,"min":8,"avg":9.68,"active":0,"complete":25,"success":25,"errored":0,"retried":0,"total":25,"elapsed":22}
+[debug] [2026-03-26T23:30:08.431Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/633478779492/sites/testapp-4f81d/versions/2d02e244edabc485:populateFiles [none]
+[debug] [2026-03-26T23:30:08.431Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/633478779492/sites/testapp-4f81d/versions/2d02e244edabc485:populateFiles {"files":{"/next.svg":"33c5c6ad1d08bb69d8026289530e377b4d6e2a96f24562e209fd1e1e9ccee64a","/file.svg":"154a8c2948836a88c695a789045bc44cc74c3d8958d5785a531d26324bc42cb1","/window.svg":"11deaca6eadbb148caace8a5fe4a67353112de0afc5da83005d4797e403ab4f1","/_next/static/xVq29A1MgQgp9z6weDQc1/_ssgManifest.js":"02dbc1aeab6ef0a6ff2ff9a1643158cf9bb38929945eaa343a3627dee9ba6778","/globe.svg":"ffe166407c928caa4d1640e2786d3385468043b3b9e6ea2282d4a3e370b3bc23","/vercel.svg":"9a61e768442ba3450026d0d69421315044931cbffaf8f6019f856ea82dd91e4e","/_next/static/chunks/main-app-f69bf281f9955be0.js":"c8e22d03ff9d5eea8b3aca645f2e7e2e30e7d61df529689c5dd84b33ab775e23","/_next/static/chunks/webpack-2eb758dea75faf50.js":"a13c9e590a38075b531e3b7dbb800107323ca8b7df197a84267b20cf42f8779e","/_next/static/xVq29A1MgQgp9z6weDQc1/_buildManifest.js":"5061ed0dead574f8f065befaba23721b5adbf3720b277c31daba0b74adf2e8b1","/_next/static/css/6d86bf46f63abfdb.css":"d92b3a1cda1a983eb1fd124038da56e888f232c03dce2fe9940d3b602e00e4b0","/_next/static/chunks/347-cca971dab7bff678.js":"f5557fe6cb641ff4f27778e9d9eab84e81281b868a555a295ec71f534e6e4132","/_next/static/chunks/app/layout-d36403a1b5c95654.js":"5bdd99c1f8dd559c2c4da355cd2b04a8564f63925593e44a0294f7af7c98de58","/_next/static/chunks/pages/_app-7d307437aca18ad4.js":"c4bc15ba97f2f384acbd8bb73b71549151070ecf35a6937aaae2c2419326ff2b","/_next/static/chunks/pages/_error-cb2a52f75f2162e2.js":"3eb6d0fa875a8425b2c9f78a89810f454a570f40b8781747f8df395fb9ad7ce5","/_next/static/chunks/app/not-found-b1980fdc4f2d2e56.js":"552619a235c3ffd70e07474d847103bdf4dc2d17c796f6f61b1190004a0fc281","/_next/static/chunks/app/login/page-6448b6431b619ba6.js":"c575febd1023cdae82d8e801a9f7d335716445248015fd0bac76efc92ec0cd7c","/_next/static/chunks/app/_not-found/page-b1980fdc4f2d2e56.js":"552619a235c3ffd70e07474d847103bdf4dc2d17c796f6f61b1190004a0fc281","/_next/static/chunks/app/api/auth/[...nextauth]/route-b1980fdc4f2d2e56.js":"552619a235c3ffd70e07474d847103bdf4dc2d17c796f6f61b1190004a0fc281","/_next/static/chunks/app/page-6a1d65059aa10375.js":"da8587f4436a790e7478ac3fd205fb3567984ac34f9dde87d720dea8860e4cb7","/favicon.ico":"04614fc32690cb60b39e472119b7f7aa91d88eaeb8511a7489f8cbe1552e6e59","/_next/static/chunks/polyfills-42372ed130431b0a.js":"bea630d9824beca22855271c757404b58bb7b410c52a5e7d58d69ff26d9ddd0b","/_next/static/chunks/main-909a7cec6345ef55.js":"49e1bc84161a870b11204b2bb539fa353d65390fb7e28301164645cfef0ecbbf","/_next/static/chunks/255-38b49df12a94ee57.js":"84c5212f4b7dd0ab60ca7f7fe7caa1ccc7c34a1dae4011ddd8fe4f6a889573c0","/_next/static/chunks/4bd1b696-c023c6e3521b1417.js":"e02ad821aab68254c769358ee7107737d3c4c9a1e3ed5d2dec4967ee38c7652e","/_next/static/chunks/framework-de98b93a850cfc71.js":"2f4b75c98d2635ec5ff620f9876ec5da35ec2bc5ff77dd775be95a7c7a3d59f2"}}
+[debug] [2026-03-26T23:30:10.744Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/633478779492/sites/testapp-4f81d/versions/2d02e244edabc485:populateFiles 200
+[debug] [2026-03-26T23:30:10.746Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/633478779492/sites/testapp-4f81d/versions/2d02e244edabc485:populateFiles {"uploadRequiredHashes":["da8587f4436a790e7478ac3fd205fb3567984ac34f9dde87d720dea8860e4cb7","a13c9e590a38075b531e3b7dbb800107323ca8b7df197a84267b20cf42f8779e","c575febd1023cdae82d8e801a9f7d335716445248015fd0bac76efc92ec0cd7c"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/testapp-4f81d/versions/2d02e244edabc485/files"}
+[debug] [2026-03-26T23:30:10.753Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:10.754Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:10.754Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:10.754Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:10.755Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:10.755Z] Checked if tokens are valid: true, expires at: 1774571364886
+[debug] [2026-03-26T23:30:10.755Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/testapp-4f81d/versions/2d02e244edabc485/files/da8587f4436a790e7478ac3fd205fb3567984ac34f9dde87d720dea8860e4cb7 [none]
+[debug] [2026-03-26T23:30:10.755Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/testapp-4f81d/versions/2d02e244edabc485/files/da8587f4436a790e7478ac3fd205fb3567984ac34f9dde87d720dea8860e4cb7 [stream]
+[debug] [2026-03-26T23:30:10.757Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/testapp-4f81d/versions/2d02e244edabc485/files/a13c9e590a38075b531e3b7dbb800107323ca8b7df197a84267b20cf42f8779e [none]
+[debug] [2026-03-26T23:30:10.757Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/testapp-4f81d/versions/2d02e244edabc485/files/a13c9e590a38075b531e3b7dbb800107323ca8b7df197a84267b20cf42f8779e [stream]
+[debug] [2026-03-26T23:30:10.758Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/testapp-4f81d/versions/2d02e244edabc485/files/c575febd1023cdae82d8e801a9f7d335716445248015fd0bac76efc92ec0cd7c [none]
+[debug] [2026-03-26T23:30:10.758Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/testapp-4f81d/versions/2d02e244edabc485/files/c575febd1023cdae82d8e801a9f7d335716445248015fd0bac76efc92ec0cd7c [stream]
+[debug] [2026-03-26T23:30:10.759Z] [hosting][populate queue][FINAL] {"max":2326,"min":2326,"avg":2326,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":2330}
+[debug] [2026-03-26T23:30:10.759Z] [hosting] uploads queued: 3
