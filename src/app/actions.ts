@@ -41,8 +41,19 @@ async function writeAuditLog(entry: {
 
 // ─── Server Actions ──────────────────────────────────────────────────────────
 
-export async function getProjects(): Promise<Project[]> {
+export async function getProjects(search?: string, status?: string): Promise<Project[]> {
   return await prisma.project.findMany({
+    where: {
+      AND: [
+        search ? {
+          OR: [
+            { name: { contains: search, mode: "insensitive" } },
+            { description: { contains: search, mode: "insensitive" } },
+          ],
+        } : {},
+        status && status !== "ALL" ? { status } : {},
+      ],
+    },
     orderBy: { createdAt: "desc" },
   });
 }
