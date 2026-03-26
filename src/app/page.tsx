@@ -1,19 +1,19 @@
 import { redirect } from "next/navigation";
 import { auth } from "@/auth";
-import { getProducts } from "./actions";
-import AddProductForm from "./AddProductForm";
-import ProductList from "./ProductList";
+import { getProjects } from "./actions";
+import AddProjectForm from "./AddProjectForm";
+import ProjectList from "./ProjectList";
 
 export default async function Home() {
   const session = await auth();
   if (!session?.user) redirect("/login");
 
-  const products = await getProducts();
+  const projects = await getProjects();
 
   return (
     <>
-      <AddProductForm />
-      <ProductList initialProducts={products} />
+      <AddProjectForm />
+      <ProjectList initialProjects={projects} />
     </>
   );
 }

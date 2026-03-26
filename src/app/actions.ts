@@ -1,16 +1,18 @@
 "use server";
 
-import { adminDb, FieldValue } from "@/lib/firebase-admin";
+import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
-export type Product = {
+export type Project = {
   id: string;
   name: string;
-  sku: string | null;
-  quantity: number;
+  description: string | null;
+  status: string;
+  priority: number;
+  progress: number;
   createdAt: Date;
   updatedAt: Date;
   createdBy: string;
@@ -20,106 +22,132 @@ export type Product = {
 
 async function writeAuditLog(entry: {
   action: "CREATE" | "UPDATE" | "DELETE";
-  productId: string;
-  productName: string;
-  previousValue?: number;
-  newValue?: number;
+  projectId: string;
+  projectName: string;
+  previousValue?: string;
+  newValue?: string;
 }) {
   const session = await auth();
-  await adminDb.collection("auditLogs").add({
-    ...entry,
-    userId: session?.user?.id ?? "unknown",
-    userEmail: session?.user?.email ?? "unknown",
-    timestamp: FieldValue.serverTimestamp(),
+  if (!session?.user?.id) return;
+
+  await prisma.auditLog.create({
+    data: {
+      ...entry,
+      userId: session.user.id,
+      userEmail: session.user.email ?? "unknown",
+    },
   });
 }
 
 // ─── Server Actions ──────────────────────────────────────────────────────────
 
-export async function getProducts(): Promise<Product[]> {
-  const snapshot = await adminDb
-    .collection("inventory")
-    .orderBy("createdAt", "desc")
-    .get();
-
-  return snapshot.docs.map((doc) => ({
-    id: doc.id,
-    name: doc.data().name,
-    sku: doc.data().sku ?? null,
-    quantity: doc.data().quantity,
-    createdAt: doc.data().createdAt?.toDate() ?? new Date(),
-    updatedAt: doc.data().updatedAt?.toDate() ?? new Date(),
-    createdBy: doc.data().createdBy ?? "",
-  }));
+export async function getProjects(): Promise<Project[]> {
+  return await prisma.project.findMany({
+    orderBy: { createdAt: "desc" },
+  });
 }
 
-export async function addProduct(formData: FormData) {
+export async function addProject(formData: FormData) {
   const session = await auth();
+  if (!session?.user?.id) return { error: "Not authenticated" };
+
   const name = formData.get("name") as string;
-  const sku = formData.get("sku") as string;
-  const quantity = parseInt(formData.get("quantity") as string) || 0;
+  const description = formData.get("description") as string;
+  const status = (formData.get("status") as string) || "PLANNED";
+  const priority = parseInt(formData.get("priority") as string) || 1;
+  const progress = parseInt(formData.get("progress") as string) || 0;
 
   if (!name) return { error: "Name is required" };
 
-  const ref = adminDb.collection("inventory").doc();
-  await ref.set({
-    name,
-    sku: sku || null,
-    quantity: Math.max(0, quantity),
-    createdAt: FieldValue.serverTimestamp(),
-    updatedAt: FieldValue.serverTimestamp(),
-    createdBy: session?.user?.id ?? "unknown",
-  });
+  try {
+    const project = await prisma.project.create({
+      data: {
+        name,
+        description: description || null,
+        status,
+        priority: Math.min(5, Math.max(1, priority)),
+        progress: Math.min(100, Math.max(0, progress)),
+        createdBy: session.user.id,
+      },
+    });
 
-  await writeAuditLog({
-    action: "CREATE",
-    productId: ref.id,
-    productName: name,
-    newValue: quantity,
-  });
+    await writeAuditLog({
+      action: "CREATE",
+      projectId: project.id,
+      projectName: name,
+      newValue: JSON.stringify({ status, priority, progress }),
+    });
 
-  revalidatePath("/");
+    revalidatePath("/");
+    return { success: true };
+  } catch (error: any) {
+    if (error.code === "P2002") {
+      return { error: "Project name must be unique" };
+    }
+    return { error: "Failed to create project" };
+  }
 }
 
-export async function deleteProduct(id: string) {
+export async function deleteProject(id: string) {
   const session = await auth();
   if (session?.user?.role !== "admin") {
-    return { error: "Only admins can delete products." };
+    return { error: "Only admins can delete projects." };
   }
 
-  const doc = await adminDb.collection("inventory").doc(id).get();
-  const name = doc.data()?.name ?? "Unknown";
+  try {
+    const project = await prisma.project.findUnique({ where: { id } });
+    if (!project) return { error: "Project not found" };
 
-  await adminDb.collection("inventory").doc(id).delete();
+    await prisma.project.delete({ where: { id } });
 
-  await writeAuditLog({
-    action: "DELETE",
-    productId: id,
-    productName: name,
-  });
+    await writeAuditLog({
+      action: "DELETE",
+      projectId: id,
+      projectName: project.name,
+    });
 
-  revalidatePath("/");
+    revalidatePath("/");
+    return { success: true };
+  } catch {
+    return { error: "Failed to delete project" };
+  }
 }
 
-export async function updateQuantity(id: string, amount: number) {
-  const doc = await adminDb.collection("inventory").doc(id).get();
-  if (!doc.exists) return;
+export async function updateProject(id: string, data: Partial<Project>) {
+  const session = await auth();
+  if (!session?.user?.id) return { error: "Not authenticated" };
 
-  const current: number = doc.data()?.quantity ?? 0;
-  const next = Math.max(0, current + amount);
+  try {
+    const current = await prisma.project.findUnique({ where: { id } });
+    if (!current) return { error: "Project not found" };
 
-  await adminDb.collection("inventory").doc(id).update({
-    quantity: next,
-    updatedAt: FieldValue.serverTimestamp(),
-  });
+    const updated = await prisma.project.update({
+      where: { id },
+      data: {
+        ...data,
+        updatedAt: new Date(),
+      },
+    });
 
-  await writeAuditLog({
-    action: "UPDATE",
-    productId: id,
-    productName: doc.data()?.name ?? "Unknown",
-    previousValue: current,
-    newValue: next,
-  });
+    await writeAuditLog({
+      action: "UPDATE",
+      projectId: id,
+      projectName: current.name,
+      previousValue: JSON.stringify({
+        status: current.status,
+        priority: current.priority,
+        progress: current.progress,
+      }),
+      newValue: JSON.stringify({
+        status: updated.status,
+        priority: updated.priority,
+        progress: updated.progress,
+      }),
+    });
 
-  revalidatePath("/");
+    revalidatePath("/");
+    return { success: true };
+  } catch {
+    return { error: "Failed to update project" };
+  }
 }
