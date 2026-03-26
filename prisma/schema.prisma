@@ -14,13 +14,15 @@ datasource db {
   provider = "postgresql"
 }
 
-// ─── Inventory Tracker Models ──────────────────────────────────────────────────
+// ─── Project Tracker Models ──────────────────────────────────────────────────
 
-model Product {
+model Project {
   id          String   @id @default(cuid())
   name        String   @unique
-  sku         String?
-  quantity    Int      @default(0)
+  description String?
+  status      String   @default("PLANNED") // PLANNED | IN_PROGRESS | COMPLETED | ON_HOLD
+  priority    Int      @default(1) // 1 (Low) to 5 (High)
+  progress    Int      @default(0) // 0-100 percentage
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   createdBy   String   // User ID
@@ -30,14 +32,14 @@ model Product {
 model AuditLog {
   id            String   @id @default(cuid())
   action        String   // CREATE | UPDATE | DELETE
-  productId     String?
-  productName   String
-  previousValue Int?     // Previous quantity
-  newValue      Int?     // New quantity
+  projectId     String?
+  projectName   String
+  previousValue String?  // Stores JSON string of changed values
+  newValue      String?  // Stores JSON string of changed values
   userId        String
   userEmail     String
   timestamp     DateTime @default(now())
-  product       Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  project       Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
 }
 
 // ─── NextAuth Models ─────────────────────────────────────────────────────────

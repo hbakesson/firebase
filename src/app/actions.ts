@@ -53,9 +53,8 @@ export async function addProject(formData: FormData) {
 
   const name = formData.get("name") as string;
   const description = formData.get("description") as string;
-  const status = (formData.get("status") as string) || "PLANNED";
+  const status = formData.get("status") as string || "PLANNED";
   const priority = parseInt(formData.get("priority") as string) || 1;
-  const progress = parseInt(formData.get("progress") as string) || 0;
 
   if (!name) return { error: "Name is required" };
 
@@ -66,7 +65,6 @@ export async function addProject(formData: FormData) {
         description: description || null,
         status,
         priority: Math.min(5, Math.max(1, priority)),
-        progress: Math.min(100, Math.max(0, progress)),
         createdBy: session.user.id,
       },
     });
@@ -75,7 +73,7 @@ export async function addProject(formData: FormData) {
       action: "CREATE",
       projectId: project.id,
       projectName: name,
-      newValue: JSON.stringify({ status, priority, progress }),
+      newValue: JSON.stringify({ status, priority }),
     });
 
     revalidatePath("/");
@@ -113,7 +111,7 @@ export async function deleteProject(id: string) {
   }
 }
 
-export async function updateProject(id: string, data: Partial<Project>) {
+export async function updateProgress(id: string, progress: number) {
   const session = await auth();
   if (!session?.user?.id) return { error: "Not authenticated" };
 
@@ -121,11 +119,12 @@ export async function updateProject(id: string, data: Partial<Project>) {
     const current = await prisma.project.findUnique({ where: { id } });
     if (!current) return { error: "Project not found" };
 
-    const updated = await prisma.project.update({
+    const next = Math.min(100, Math.max(0, progress));
+
+    await prisma.project.update({
       where: { id },
       data: {
-        ...data,
-        updatedAt: new Date(),
+        progress: next,
       },
     });
 
@@ -133,21 +132,13 @@ export async function updateProject(id: string, data: Partial<Project>) {
       action: "UPDATE",
       projectId: id,
       projectName: current.name,
-      previousValue: JSON.stringify({
-        status: current.status,
-        priority: current.priority,
-        progress: current.progress,
-      }),
-      newValue: JSON.stringify({
-        status: updated.status,
-        priority: updated.priority,
-        progress: updated.progress,
-      }),
+      previousValue: JSON.stringify({ progress: current.progress }),
+      newValue: JSON.stringify({ progress: next }),
     });
 
     revalidatePath("/");
     return { success: true };
   } catch {
-    return { error: "Failed to update project" };
+    return { error: "Failed to update progress" };
   }
 }
