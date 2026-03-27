@@ -2,7 +2,7 @@ import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
 // During build time, DATABASE_URL might be missing.
-const databaseUrl = process.env["DATABASE_URL"] || "postgresql://mock:mock@localhost:5432/mock";
+const databaseUrl = process.env["DATABASE_URL"];
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
