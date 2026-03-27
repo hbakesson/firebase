@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { PrismaClient } from "@prisma/client";
+/* eslint-disable */
+import { PrismaClient } from "../generated/client";
 
 const globalForPrisma = global as unknown as { prisma: PrismaClient | undefined };
 
@@ -10,6 +10,17 @@ const globalForPrisma = global as unknown as { prisma: PrismaClient | undefined 
  */
 const isBuild = process.env.NEXT_PHASE === "phase-production-build";
 
+if (!isBuild) {
+  console.log("[PRISMA] Runtime initialization starting...");
+  if (!process.env.DATABASE_URL) {
+    console.error("[PRISMA ERROR] DATABASE_URL is missing from process.env at runtime!");
+  } else {
+    // Only log length/masked for security
+    const maskedUrl = process.env.DATABASE_URL.replace(/:[^:@]+@/, ":****@");
+    console.log(`[PRISMA] DATABASE_URL found: ${maskedUrl.substring(0, 50)}...`);
+  }
+}
+
 export const prisma =
   globalForPrisma.prisma ||
   (isBuild
@@ -19,3 +30,4 @@ export const prisma =
     : new PrismaClient());
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+
