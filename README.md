@@ -6,38 +6,41 @@ A high-performance, glassmorphic Project Management System built with **Next.js*
 
 ## ✨ Core Features
 
--   **Relational Integrity**: Powered by PostgreSQL and Prisma ORM for zero data loss and strict schema enforcement.
--   **Advanced Search & Filtering**: Server-side filtering by project name, description, and status (`PLANNED`, `IN_PROGRESS`, etc.).
--   **Granular Progress Tracking**: Track project completion with precise percentage-based increments and visual feedback.
--   **Transactional Audit Trail**: Every project mutation (Create, Update, Delete) is recorded in a transactional audit log with JSON-based history.
--   **Next-Gen Authentication**: Multi-provider support (Google OAuth, Email/Password, Guest) with Auth.js v5 and Prisma Adapter.
--   **Premium Glass UI**: Modern, responsive design using 100% Vanilla CSS with smooth transitions and glassmorphic aesthetics.
+- **Cloud-Native Database**: Deeply integrated with **Google Cloud SQL** using the official **Node.js Cloud SQL Connector** for secure, serverless-optimized connections.
+- **Relational Integrity**: Powered by PostgreSQL and Prisma ORM for zero data loss and strict schema enforcement.
+- **Advanced Search & Filtering**: Server-side filtering by project name, description, and status (`PLANNED`, `IN_PROGRESS`, etc.).
+- **Granular Progress Tracking**: Track project completion with precise percentage-based increments and visual feedback.
+- **Transactional Audit Trail**: Every project mutation (Create, Update, Delete) is recorded in a transactional audit log with JSON-based history.
+- **Next-Gen Authentication**: Multi-provider support (Google OAuth, Email/Password, Guest) with Auth.js v5 and Prisma Adapter.
+- **Premium Glass UI**: Modern, responsive design using 100% Vanilla CSS with smooth transitions and glassmorphic aesthetics.
 
 ## 🛠️ Tech Stack
 
--   **Framework**: [Next.js 15](https://nextjs.org/) (App Router, Server Actions)
--   **Database**: PostgreSQL
--   **ORM**: [Prisma](https://www.prisma.io/)
--   **Auth**: [Auth.js v5](https://authjs.dev/)
--   **Styling**: Vanilla CSS (CSS Variables + CSS Modules)
+- **Framework**: [Next.js 15](https://nextjs.org/) (App Router, Server Actions)
+- **Database**: [Google Cloud SQL](https://cloud.google.com/sql/) (PostgreSQL)
+- **Connector**: [@google-cloud/cloud-sql-connector](https://github.com/GoogleCloudPlatform/cloud-sql-nodejs-connector)
+- **ORM**: [Prisma](https://www.prisma.io/) with Driver Adapter
+- **Auth**: [Auth.js v5](https://authjs.dev/)
+- **Styling**: Vanilla CSS (CSS Variables + CSS Modules)
 
 ## 🚀 Getting Started
 
 ### 1. Prerequisites
--   Node.js 18+
--   A running PostgreSQL instance (Local, Supabase, or Google Cloud SQL)
+- Node.js 18+
+- A Google Cloud Project with Cloud SQL (PostgreSQL) enabled.
 
 ### 2. Environment Setup
-Create a `.env.local` file in the root directory:
+Create a `.env` file in the root directory:
 
 ```env
-# Database
-DATABASE_URL="postgresql://user:password@localhost:5432/projecttracker"
+# Database (Cloud SQL Format)
+# Use the 'host=' parameter to specify the Instance Connection Name
+DATABASE_URL="postgresql://user:password@/dbname?host=PROJECT:REGION:INSTANCE"
 
 # Authentication
 AUTH_SECRET="..." # Generate with: npx auth secret
-AUTH_URL="http://localhost:3000"
-NEXTAUTH_URL="http://localhost:3000"
+AUTH_URL="https://your-app.web.app"
+NEXTAUTH_URL="https://your-app.web.app"
 AUTH_TRUST_HOST="true"
 
 # Providers
@@ -50,9 +53,8 @@ GOOGLE_CLIENT_SECRET="..."
 # Install dependencies
 npm install
 
-# Generate Prisma Client & Sync Database
+# Generate Prisma Client (uses driverAdapters)
 npx prisma generate
-npx prisma db push
 
 # Run development server
 npm run dev
@@ -60,20 +62,20 @@ npm run dev
 
 ## 🏗️ Deployment
 
-When deploying to environments like **Vercel** or **Firebase Hosting**, the build script automatically handles client generation:
+This project is optimized for deployment to **Firebase Hosting** and **Google Cloud Run** via the Firebase CLI:
 
 ```bash
-# Production Build
-npm run build
+# Deploy to Production (Functions + Hosting)
+firebase deploy
 ```
 
 > [!IMPORTANT]
-> Ensure the `DATABASE_URL` is configured in your production environment variables to avoid runtime errors.
+> **Cloud SQL Connectivity**: In production, the Prisma Client uses the `@prisma/adapter-pg` driver adapter. A `Proxy`-based LazyPool is implemented in `src/lib/prisma.ts` to ensure the Cloud SQL Connector's asynchronous handshake only occurs upon the first query, avoiding cold-start latency issues.
 
 ## ⚡ Performance Metrics
--   **Lighthouse Score**: Optimized for 90+ across all metrics.
--   **Latency**: Sub-100ms response times for core database operations.
--   **Reliability**: 100% relational consistency via Prisma/PostgreSQL.
+- **Optimization**: Uses a lazy-initialized database pool to satisfy Prisma's synchronous requirements in a serverless context.
+- **Reliability**: Leverages the official Google Cloud SQL Connector for secure IAM/SSL handshakes.
+- **Observability**: Detailed diagnostic logging for database pool initialization and connection persistence.
 
 ---
 Developed with precision for the modern web.
