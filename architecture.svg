@@ -45,7 +45,7 @@
   <rect width="100%" height="100%" class="bg" />
 
   <!-- Titles -->
-  <text x="40" y="50" class="title">Inventory Tracker - System Architecture</text>
+  <text x="40" y="50" class="title">Project Tracker - System Architecture</text>
   <text x="40" y="75" class="subtitle">Next.js Frameworks Backend (Postgres + Prisma) on Firebase/GCP</text>
 
   <!-- Zones -->
@@ -56,7 +56,7 @@
   <!-- GCP Zone -->
   <rect x="300" y="120" width="860" height="480" class="zone-bg-gcp" />
   <text x="315" y="150" class="zone-text" fill="#1A73E8">GOOGLE CLOUD PLATFORM &amp; FIREBASE</text>
-  <text x="315" y="170" class="subtitle" font-size="12">us-east1 (Compute) / Cloud SQL (Database)</text>
+  <text x="315" y="170" class="subtitle" font-size="12">europe-north1 (Compute) / Cloud SQL (Database)</text>
 
   <!-- NODES -->
   <!-- Client/Next.js App -->
@@ -108,8 +108,8 @@
 
   <!-- Cloud Run -> Cloud SQL -->
   <path d="M 850 225 C 900 225, 900 325, 930 325" class="conn" />
-  <rect x="850" y="280" width="90" height="18" class="label-bg"/>
-  <text x="895" y="293" class="label-text">Prisma Client</text>
+  <rect x="850" y="310" width="150" height="18" class="label-bg"/>
+  <text x="925" y="323" class="label-text">Prisma + Cloud SQL Connector</text>
 
   <!-- Cloud Run -> Auth -->
   <path d="M 755 270 L 755 410" class="conn" />
