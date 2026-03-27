@@ -116,7 +116,7 @@ function createLazyPool(): pg.Pool {
       }
 
       if (prop === 'on') {
-        return (event: string, listener: any) => {
+        return (event: any, listener: any) => {
           getPool().then(pool => pool.on(event, listener));
           return receiver;
         };
