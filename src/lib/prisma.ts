@@ -8,21 +8,41 @@ const DATABASE_URL = process.env.DATABASE_URL || "";
 
 /**
  * Robustly parses the Cloud SQL instance connection name from the DATABASE_URL.
+ * Supports the standard format: postgresql://user:pass@/db?host=/cloudsql/PROJECT:REGION:INSTANCE
  */
 function getCloudSqlConfig() {
   if (!DATABASE_URL || !DATABASE_URL.includes("host=/cloudsql/")) return null;
 
   try {
+    // 1. Create a valid URL for the native parser by adding a dummy host
     const url = new URL(DATABASE_URL.replace('postgresql://', 'http://localhost/'));
+    
+    // 2. Extract the instance connection name from the 'host' parameter
     let instanceName = url.searchParams.get('host');
-    if (!instanceName) return null;
+    
+    if (!instanceName) {
+      console.warn('[PRISMA] No Cloud SQL host found in DATABASE_URL. Falling back to default TCP connection.');
+      return null;
+    }
 
+    // 3. Strip the '/cloudsql/' prefix if it exists (Connector library needs the raw PROJECT:REGION:INSTANCE name)
     const sanitizedInstanceName = instanceName.replace('/cloudsql/', '');
+
+    // 4. Validate the format (PROJECT:REGION:INSTANCE should have 3 segments)
+    const segments = sanitizedInstanceName.split(':');
+    if (segments.length !== 3) {
+      console.warn(`[PRISMA] WARNING: Cloud SQL instance name format seems unusual: "${sanitizedInstanceName}". Expected "PROJECT:REGION:INSTANCE".`);
+    }
+
+    // 5. Extract database name from the pathname
     const database = url.pathname.replace('/', '');
     const user = url.username;
-    const password = decodeURIComponent(url.password);
 
-    console.log(`[PRISMA] Cloud SQL Parser: instance="${sanitizedInstanceName}", database="${database}", user="${user}"`);
+    // IMPORTANT: URL API automatically decodes username and password.
+    // Double decoding with decodeURIComponent can mangle passwords with actual % or signs.
+    const password = url.password;
+
+    console.log(`[PRISMA] Cloud SQL Config Parsed: instance="${sanitizedInstanceName}", database="${database}", user="${user}"`);
 
     return {
       instanceConnectionName: sanitizedInstanceName,
@@ -32,20 +52,20 @@ function getCloudSqlConfig() {
       ipType: IpAddressTypes.PUBLIC,
     };
   } catch (error: any) {
-    console.error(`[PRISMA] Error parsing Cloud SQL config: ${error.message}`);
+    console.error(`[PRISMA] CRITICAL BUG: Failed to parse DATABASE_URL: ${error.message}`);
     return null;
   }
 }
 
 /**
- * A Proxy-based LazyPool that remains synchronous for Prisma initialization
- * but handles the asynchronous Cloud SQL Connector setup internally.
+ * A Proxy-based LazyPool that only initializes the heavy Cloud SQL Connector
+ * when the first database query is actually performed.
  */
 function createLazyPool(): pg.Pool {
   const config = getCloudSqlConfig();
   
   if (!config) {
-    console.log('[PRISMA] Standard TCP mode detected.');
+    console.log('[PRISMA] Defaulting to TCP connection (Development or non-Cloud SQL URL).');
     return new pg.Pool({ connectionString: DATABASE_URL });
   }
 
@@ -58,24 +78,30 @@ function createLazyPool(): pg.Pool {
     if (initPromise) return initPromise;
 
     initPromise = (async () => {
-      console.log(`[PRISMA] Initializing Cloud SQL Connector for: ${config.instanceConnectionName}`);
+      console.log(`[PRISMA] Finalizing Cloud SQL handshake for: ${config.instanceConnectionName}`);
+      
       connector = new Connector();
       
+      // Fetch connector options for IAM/Auth configuration
       const opts = await connector.getOptions({
         instanceConnectionName: config.instanceConnectionName,
         ipType: config.ipType,
       });
 
+      // DIAGNOSTIC LOG: Let's see what the connector gave us for the pool
+      console.log(`[PRISMA] Connector Handshake Success. Options keys: ${Object.keys(opts).join(', ')}`);
+
       realPool = new pg.Pool({
-        ...opts,
         user: config.user,
         password: config.password,
         database: config.database,
         max: 10,
-      });
+        // Explicitly set the stream factory to use the Google Cloud SQL Connector
+        stream: () => (connector as any).connect(opts),
+      } as any);
 
-      realPool.on('connect', () => console.log('[PRISMA] Successful connection to Cloud SQL.'));
-      realPool.on('error', (err) => console.error('[PRISMA] Database Pool Error:', err));
+      realPool.on('connect', () => console.log('[PRISMA] Database connection stream established.'));
+      realPool.on('error', (err) => console.error('[PRISMA] Database Pool Encountered Error:', err.message));
 
       return realPool;
     })();
@@ -85,10 +111,12 @@ function createLazyPool(): pg.Pool {
 
   const cleanup = async () => {
     if (realPool) {
+      console.log('[PRISMA] Closing database pool...');
       await realPool.end();
       realPool = null;
     }
     if (connector) {
+      console.log('[PRISMA] Closing Cloud SQL Connector...');
       await connector.close();
       connector = null;
     }
@@ -100,18 +128,19 @@ function createLazyPool(): pg.Pool {
     (global as any)._prisma_cleanup_registered = true;
   }
 
-  // Define the core methods Prisma needs
+  // Define a dummy pool for the Proxy target (satisfies TypeScript/pg interfaces initially)
   const dummy = new pg.Pool({ max: 0 });
 
   return new Proxy(dummy, {
     get(target, prop, receiver) {
       if (prop === 'then') return undefined;
 
-      // Handle the main async methods used by the Driver Adapter
+      // Wrap the async methods that Prisma Driver Adapter relies on
       if (prop === 'query' || prop === 'connect') {
         return async (...args: any[]) => {
           const pool = await getPool();
-          return (pool as any)[prop](...args);
+          const method = (pool as any)[prop];
+          return method.apply(pool, args);
         };
       }
 
@@ -128,7 +157,6 @@ function createLazyPool(): pg.Pool {
         };
       }
 
-      // Delegate any other properties to the real pool once initialized, or the dummy
       const val = Reflect.get(realPool || target, prop, receiver);
       return typeof val === 'function' ? val.bind(realPool || target) : val;
     }
@@ -139,9 +167,11 @@ const globalForPrisma = global as unknown as {
   prisma: PrismaClient | undefined;
 };
 
+// Singleton pattern for the Prisma Client instance
 export const prisma =
   globalForPrisma.prisma ??
   (() => {
+    console.log('[PRISMA] Instantiating client with optimized Driver Adapter (Lazy-Initial-V2)...');
     const pool = createLazyPool();
     const adapter = new PrismaPg(pool as any);
     return new PrismaClient({ adapter, log: ['error', 'warn'] });
@@ -149,6 +179,6 @@ export const prisma =
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
-console.log('[PRISMA] Client created with Driver Adapter (GA).');
+console.log('[PRISMA] Adapter initialized successfully.');
 
 export default prisma;
