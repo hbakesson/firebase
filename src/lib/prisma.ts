@@ -1,14 +1,79 @@
-/* eslint-disable */
-import { Pool } from "pg";
+import { Pool, PoolClient, QueryResult, QueryResultRow } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/client";
+import { Connector } from "@google-cloud/cloud-sql-connector";
 
-const globalForPrisma = global as unknown as { prisma: PrismaClient | undefined };
+const globalForPrisma = global as unknown as { 
+  prisma: PrismaClient | undefined,
+  connector: Connector | undefined
+};
 
 /**
- * Prisma 7 Driver Adapter Pattern
- * This is the modern way to handle direct database connections in Prisma 7.
+ * Lazy-initialized Pool for Google Cloud SQL
+ * This class wraps a pg.Pool but only initializes it on the first request,
+ * allowing us to handle the async nature of the Cloud SQL Connector.
  */
+class LazyPool {
+  private pool: Pool | null = null;
+  private initPromise: Promise<Pool> | null = null;
+
+  constructor(
+    private databaseUrl: string,
+    private instanceConnectionName: string
+  ) {}
+
+  private async getPool(): Promise<Pool> {
+    if (this.pool) return this.pool;
+    if (this.initPromise) return this.initPromise;
+
+    this.initPromise = (async () => {
+      console.log(`[PRISMA] Lazy-initializing Cloud SQL Connector for: ${this.instanceConnectionName}`);
+      
+      if (!globalForPrisma.connector) {
+        globalForPrisma.connector = new Connector();
+      }
+
+      const urlParams = new URL(this.databaseUrl);
+      const opts = await globalForPrisma.connector.getOptions({
+        instanceConnectionName: this.instanceConnectionName,
+        ipType: "PUBLIC" as any,
+      });
+
+      this.pool = new Pool({
+        ...opts,
+        user: urlParams.username,
+        password: decodeURIComponent(urlParams.password),
+        database: urlParams.pathname.replace('/', ''),
+      });
+
+      console.log("[PRISMA] Cloud SQL Pool initialized.");
+      return this.pool;
+    })();
+
+    return this.initPromise;
+  }
+
+  // Minimal implementation of the pg.Pool interface required by PrismaPg
+  async query<T extends QueryResultRow = any>(text: string, params?: any[]): Promise<QueryResult<T>> {
+    const pool = await this.getPool();
+    return pool.query(text, params);
+  }
+
+  async connect(): Promise<PoolClient> {
+    const pool = await this.getPool();
+    return pool.connect();
+  }
+
+  on(event: "error" | "release" | "connect" | "acquire" | "remove", listener: (...args: any[]) => void): this {
+    this.getPool().then(pool => pool.on(event, listener));
+    return this;
+  }
+
+  async end(): Promise<void> {
+    if (this.pool) await this.pool.end();
+  }
+}
+
 const isBuild = process.env.NEXT_PHASE === "phase-production-build";
 
 const createPrismaClient = () => {
@@ -22,51 +87,30 @@ const createPrismaClient = () => {
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
     console.error("[PRISMA ERROR] DATABASE_URL is missing at runtime!");
-    // Fallback to avoid complete crash during unexpected edge cases, 
-    // though real DB calls will fail.
     return new PrismaClient();
   }
 
-  console.log("[PRISMA] Runtime initialization with Driver Adapter starting...");
-  
-  // ─── DIAGNOSTIC LOGGING FOR CLOUDSQL ──────────────────────────────────────
-  if (process.env.NODE_ENV === "production" || process.env.VERCEL) {
-    try {
-      const fs = require('fs');
-      if (fs.existsSync('/cloudsql')) {
-        const contents = fs.readdirSync('/cloudsql');
-        console.log(`[PRISMA DEBUG] /cloudsql contains: ${JSON.stringify(contents)}`);
-      } else {
-        console.log("[PRISMA DEBUG] /cloudsql FOLDER NOT FOUND.");
-      }
-    } catch (err: any) {
-      console.log(`[PRISMA DEBUG] Error reading /cloudsql: ${err.message}`);
-    }
-  }
-  // ──────────────────────────────────────────────────────────────────────────
-
-  const maskedUrl = databaseUrl.replace(/:[^:@]+@/, ":****@");
-  console.log(`[PRISMA] Connecting to: ${maskedUrl.substring(0, 50)}...`);
-
   try {
-    // For Unix Sockets, pg-pool works best when we extract the socket path
-    const poolConfig: any = { connectionString: databaseUrl };
+    let pool: Pool | LazyPool;
     
-    // If the URL contains a socket path, ensure pg knows it's the host
-    if (databaseUrl.includes('host=')) {
+    if (databaseUrl.includes('host=/cloudsql/')) {
       const urlParams = new URL(databaseUrl);
       const socketPath = urlParams.searchParams.get('host');
-      if (socketPath) {
-        console.log(`[PRISMA] Overriding host with socket path: ${socketPath}`);
-        poolConfig.host = socketPath;
+      const instanceName = socketPath?.replace('/cloudsql/', '');
+      
+      if (instanceName) {
+        pool = new LazyPool(databaseUrl, instanceName);
+      } else {
+        pool = new Pool({ connectionString: databaseUrl });
       }
+    } else {
+      pool = new Pool({ connectionString: databaseUrl });
     }
 
-    const pool = new Pool(poolConfig);
-    const adapter = new PrismaPg(pool);
+    const adapter = new PrismaPg(pool as any);
     return new PrismaClient({ adapter });
   } catch (error) {
-    console.error("[PRISMA ERROR] Failed to initialize Driver Adapter:", error);
+    console.error("[PRISMA ERROR] Failed to initialize Prisma:", error);
     return new PrismaClient();
   }
 };
