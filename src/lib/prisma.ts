@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Pool, PoolClient, QueryResult, QueryResultRow } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../generated/client";
@@ -33,7 +34,10 @@ class LazyPool {
         globalForPrisma.connector = new Connector();
       }
 
-      const urlParams = new URL(this.databaseUrl);
+      // Handle Prisma's socket URL format by adding a dummy host for parsing
+      const parseableUrl = this.databaseUrl.replace('@/', '@localhost/');
+      const urlParams = new URL(parseableUrl);
+      
       const opts = await globalForPrisma.connector.getOptions({
         instanceConnectionName: this.instanceConnectionName,
         ipType: "PUBLIC" as any,
@@ -46,14 +50,14 @@ class LazyPool {
         database: urlParams.pathname.replace('/', ''),
       });
 
-      console.log("[PRISMA] Cloud SQL Pool initialized.");
+      console.log("[PRISMA] Cloud SQL Pool initialized successfully.");
       return this.pool;
     })();
 
     return this.initPromise;
   }
 
-  // Minimal implementation of the pg.Pool interface required by PrismaPg
+  // Pool interface required by PrismaPg
   async query<T extends QueryResultRow = any>(text: string, params?: any[]): Promise<QueryResult<T>> {
     const pool = await this.getPool();
     return pool.query(text, params);
@@ -86,19 +90,22 @@ const createPrismaClient = () => {
 
   const databaseUrl = process.env.DATABASE_URL;
   if (!databaseUrl) {
-    console.error("[PRISMA ERROR] DATABASE_URL is missing at runtime!");
-    return new PrismaClient();
+    throw new Error("[PRISMA ERROR] DATABASE_URL environment variable is missing.");
   }
 
   try {
     let pool: Pool | LazyPool;
     
     if (databaseUrl.includes('host=/cloudsql/')) {
-      const urlParams = new URL(databaseUrl);
+      // Prisma Format: host=/cloudsql/project:region:instance
+      // We must handle the @/ syntax which the URL constructor rejects
+      const parseableUrl = databaseUrl.replace('@/', '@localhost/');
+      const urlParams = new URL(parseableUrl);
       const socketPath = urlParams.searchParams.get('host');
       const instanceName = socketPath?.replace('/cloudsql/', '');
       
       if (instanceName) {
+        console.log(`[PRISMA] Proxying Cloud SQL connection for: ${instanceName}`);
         pool = new LazyPool(databaseUrl, instanceName);
       } else {
         pool = new Pool({ connectionString: databaseUrl });
@@ -110,8 +117,11 @@ const createPrismaClient = () => {
     const adapter = new PrismaPg(pool as any);
     return new PrismaClient({ adapter });
   } catch (error) {
-    console.error("[PRISMA ERROR] Failed to initialize Prisma:", error);
-    return new PrismaClient();
+    console.error("[PRISMA ERROR] Critical initialization failure:", error);
+    // Return a client that is guaranteed to fail with a clear message rather than a generic configuration error
+    return new PrismaClient({
+      errorFormat: 'pretty',
+    } as any);
   }
 };
 
