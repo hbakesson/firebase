@@ -117,12 +117,14 @@ export default function BulkPlanningGrid({
     {
       id: "total",
       header: "Σ",
-      accessorFn: (row) => initialPeriods.reduce((acc, per) => acc + (allocations[`${row.id}-${per.id}`] || 0), 0),
-      cell: ({ getValue }: any) => (
-        <div style={{ textAlign: 'center', fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary-light)' }}>
-          {getValue()}
-        </div>
-      ),
+      cell: ({ row }: any) => {
+        const total = initialPeriods.reduce((acc, per) => acc + (allocations[`${row.id}-${per.id}`] || 0), 0);
+        return (
+          <div style={{ textAlign: 'center', fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary-light)' }}>
+            {total}
+          </div>
+        );
+      },
       size: 60,
     }
   ], [allocations, initialPeriods]);
@@ -131,6 +133,7 @@ export default function BulkPlanningGrid({
     data: filteredData,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    getRowId: (row) => row.id,
     meta: {
       updateData: (rowIndex: number, columnId: string, value: any) => {
         const prj = filteredData[rowIndex];
