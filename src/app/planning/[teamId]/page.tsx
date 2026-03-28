@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { redirect, notFound } from "next/navigation";
-import PlanningGrid from "@/components/PlanningGrid";
+import { PlanningGrid } from "@/components/PlanningGrid";
 import { 
   Calendar, 
   ChevronLeft, 

@@ -1,5 +1,29 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+export interface Project {
+  id: string;
+  name: string;
+  code: string;
+  teamId?: string;
+  organizationId: string;
+  status: string;
+}
+
+export interface Period {
+  id: string;
+  label: string;
+  startDate: Date;
+  endDate: Date;
+}
+
+export interface Allocation {
+  id: string;
+  projectId: string;
+  periodId: string;
+  plannedHours: number;
+  teamId: string;
+}
+
 /**
  * A robust, high-fidelity mock Prisma Client for local UI verification.
  * This simulates the official Prisma API for teams, projects, and allocations,
@@ -20,14 +44,14 @@ const mockTeams = [
 ];
 
 const mockProjects = [
-  { id: "p1", name: "Nebula Infrastructure", code: "NEB-01", status: "ACTIVE", organizationId: "mock-org", teamId: "t1" },
-  { id: "p2", name: "Solaris Portal v2", code: "SOL-02", status: "ACTIVE", organizationId: "mock-org", teamId: "t1" },
-  { id: "p3", name: "Quantum Analytics", code: "QUA-03", status: "ACTIVE", organizationId: "mock-org", teamId: "t2" },
-  { id: "p4", name: "Titan Core", code: "TIT-04", status: "ACTIVE", organizationId: "mock-org", teamId: "t2" },
-  { id: "p5", name: "Legacy Cleanup", code: "LEG-99", status: "COMPLETED", organizationId: "mock-org", teamId: "t1" },
+  { id: "p1", name: "Nebula Infrastructure", code: "NEB-01", status: "ACTIVE", organizationId: "mock-org", teamId: "t1", allocations: [], actualAllocations: [] },
+  { id: "p2", name: "Solaris Portal v2", code: "SOL-02", status: "ACTIVE", organizationId: "mock-org", teamId: "t1", allocations: [], actualAllocations: [] },
+  { id: "p3", name: "Quantum Analytics", code: "QUA-03", status: "ACTIVE", organizationId: "mock-org", teamId: "t2", allocations: [], actualAllocations: [] },
+  { id: "p4", name: "Titan Core", code: "TIT-04", status: "ACTIVE", organizationId: "mock-org", teamId: "t2", allocations: [], actualAllocations: [] },
+  { id: "p5", name: "Legacy Cleanup", code: "LEG-99", status: "COMPLETED", organizationId: "mock-org", teamId: "t1", allocations: [], actualAllocations: [] },
 ];
 
-const mockAllocations: any[] = [];
+const mockAllocations: Allocation[] = [];
 
 export const createMockPrisma = () => {
   console.log("🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...");

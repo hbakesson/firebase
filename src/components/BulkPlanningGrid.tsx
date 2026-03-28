@@ -1,24 +1,18 @@
-"use client";
+'use client';
 
-import { useState, useTransition, useMemo, useEffect } from "react";
-import { 
-  useReactTable, 
-  getCoreRowModel, 
-  flexRender, 
+import React, { useMemo, useState, useTransition } from 'react';
+import {
+  useReactTable,
+  getCoreRowModel,
+  flexRender,
   ColumnDef,
   CellContext,
-  RowData
-} from "@tanstack/react-table";
-import { upsertAllocation } from "@/lib/actions";
-import { 
-  Zap,
-  Loader2,
-  CheckCircle2,
-  AlertCircle,
-  Search
-} from "lucide-react";
+  RowData,
+} from '@tanstack/react-table';
+import { upsertAllocation } from '@/lib/actions';
+import { Project, Period, Allocation } from '@/lib/mockData';
 
-declare module "@tanstack/react-table" {
+declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface TableMeta<TData extends RowData> {
     updateData: (rowIndex: number, columnId: string, value: unknown) => void;
@@ -29,73 +23,54 @@ interface BulkProject {
   id: string;
   name: string;
   code: string;
-  teamId?: string | null;
+  teamId?: string;
 }
 
-interface BulkPeriod {
-  id: string;
-  label: string;
-}
-
-interface BulkAllocation {
-  projectId: string;
-  periodId: string;
-  plannedHours: number;
-}
-
-const CompactEditableCell = ({ 
-  getValue, 
-  row, 
-  column, 
-  table 
-}: CellContext<BulkProject, any>) => {
-  const initialValue = getValue();
-  const [value, setValue] = useState(initialValue);
+// --- Specialized Compact Editable Cell ---
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const CompactEditableCell = ({ getValue, row, column, table }: CellContext<BulkProject, any>) => {
+  const initialValue = getValue() as number;
+  const [value, setValue] = useState<string | number>(initialValue);
 
   const onBlur = () => {
     table.options.meta?.updateData(row.index, column.id, value);
   };
 
-  useEffect(() => {
-    setValue(initialValue);
-  }, [initialValue]);
-
   return (
-    <input 
-      type="number"
-      value={value ?? ""}
-      placeholder="-"
-      onChange={(e) => setValue(e.target.value)}
+    <input
+      value={value}
+      onChange={e => setValue(e.target.value)}
       onBlur={onBlur}
-      className="compact-input"
+      type="number"
+      step="0.5"
+      min="0"
       style={{
         width: '100%',
-        padding: '0.4rem 0.25rem',
-        textAlign: 'center',
-        border: 'none',
         background: 'transparent',
-        color: value ? 'white' : 'rgba(255,255,255,0.15)',
-        fontSize: '0.8rem',
+        border: 'none',
+        color: 'var(--text-main)',
+        fontSize: '0.7rem',
+        textAlign: 'center',
+        padding: '0.2rem',
         outline: 'none',
-        transition: 'all 0.1s'
+        borderRadius: '2px',
+        transition: 'background 0.2s',
       }}
+      className="hover:bg-white/5 focus:bg-white/10"
     />
   );
 };
 
-export default function BulkPlanningGrid({
-  initialProjects,
-  initialPeriods,
-  initialAllocations,
-}: {
-  initialProjects: BulkProject[];
-  initialPeriods: BulkPeriod[];
-  initialAllocations: BulkAllocation[];
-}) {
+interface BulkPlanningGridProps {
+  initialProjects: Project[];
+  initialAllocations: Allocation[];
+  initialPeriods: Period[];
+}
+
+export function BulkPlanningGrid({ initialProjects, initialAllocations, initialPeriods }: BulkPlanningGridProps) {
+  const [search, setSearch] = useState('');
   const [, startTransition] = useTransition();
-  const [search, setSearch] = useState("");
-  const [data] = useState(() => initialProjects);
-  const [allocations, setAllocations] = useState<Record<string, number>>(() =>
+  const [allocations, setAllocations] = useState<Record<string, number>>(() => 
     initialAllocations.reduce((acc, curr) => ({
       ...acc,
       [`${curr.projectId}-${curr.periodId}`]: curr.plannedHours
@@ -104,21 +79,25 @@ export default function BulkPlanningGrid({
 
   const [savingStatus, setSavingStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
+  // --- Filtered Data ---
   const filteredData = useMemo(() => {
-    if (!search) return data;
-    return data.filter(p => 
+    if (!search) return initialProjects;
+    return initialProjects.filter(p => 
       p.name.toLowerCase().includes(search.toLowerCase()) || 
       p.code.toLowerCase().includes(search.toLowerCase())
     );
-  }, [data, search]);
+  }, [initialProjects, search]);
 
+  // --- Column Definitions ---
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const columns = useMemo<ColumnDef<BulkProject, any>[]>(() => [
     {
       id: "project",
       header: "Project",
       accessorFn: (row) => row,
-      cell: ({ getValue }: CellContext<BulkProject, BulkProject>) => {
-        const prj = getValue();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      cell: ({ getValue }: CellContext<BulkProject, any>) => {
+        const prj = getValue() as BulkProject;
         return (
           <div style={{ padding: '0.25rem 0.5rem', minWidth: '180px' }}>
             <div style={{ fontWeight: 600, fontSize: '0.75rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
@@ -138,13 +117,14 @@ export default function BulkPlanningGrid({
           <div style={{ fontSize: '0.55rem', color: 'var(--text-muted)', fontWeight: 400 }}>{per.label.split(' (')[1]?.replace(')', '')}</div>
         </div>
       ),
-      accessorFn: (row: BulkProject) => allocations[`${row.id}-${per.id}`],
+      accessorFn: (row: BulkProject) => allocations[`${row.id}-${per.id}`] ?? 0,
       cell: CompactEditableCell,
       size: 70,
     })),
     {
       id: "total",
       header: "Σ",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       cell: ({ row }: CellContext<BulkProject, any>) => {
         const total = initialPeriods.reduce((acc, per) => acc + (allocations[`${row.id}-${per.id}`] || 0), 0);
         return (
@@ -163,7 +143,7 @@ export default function BulkPlanningGrid({
     getCoreRowModel: getCoreRowModel(),
     getRowId: (row) => row.id,
     meta: {
-      updateData: (rowIndex: number, columnId: string, value: any) => {
+      updateData: (rowIndex: number, columnId: string, value: unknown) => {
         const prj = filteredData[rowIndex];
         const val = parseFloat(value as string) || 0;
         const key = `${prj.id}-${columnId}`;
@@ -174,14 +154,14 @@ export default function BulkPlanningGrid({
         startTransition(async () => {
           try {
             await upsertAllocation({
-              teamId: prj.teamId || "bulk-global", // Handle global projects
+              teamId: prj.teamId || "bulk-global",
               projectId: prj.id,
               periodId: columnId,
               plannedHours: val,
             });
             setSavingStatus('saved');
             setTimeout(() => setSavingStatus('idle'), 2000);
-          } catch (_err) {
+          } catch {
             setSavingStatus('error');
           }
         });
@@ -190,65 +170,52 @@ export default function BulkPlanningGrid({
   });
 
   return (
-    <div className="glass-panel" style={{ padding: '1rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div className="icon-badge primary">
-            <Zap size={16} />
-          </div>
-          <div>
-            <h2 style={{ fontSize: '1rem', fontWeight: 700, margin: 0 }}>Bulk Weekly Planning</h2>
-            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Today + 8 Weeks rolling window</div>
-          </div>
+    <div className="bg-[#14141e] border border-white/5 rounded-xl overflow-hidden shadow-2xl">
+      <div className="p-3 border-b border-white/5 flex items-center justify-between gap-4">
+        <div className="relative flex-1 max-w-md">
+          <input
+            type="text"
+            placeholder="Search projects..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs focus:ring-1 focus:ring-primary outline-none transition-all"
+          />
         </div>
         
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-           <div style={{ position: 'relative' }}>
-              <Search size={14} style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} />
-              <input 
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Filter projects..."
-                style={{
-                  background: 'rgba(255,255,255,0.05)',
-                  border: '1px solid var(--card-border)',
-                  borderRadius: '2rem',
-                  padding: '0.4rem 1rem 0.4rem 2.25rem',
-                  fontSize: '0.75rem',
-                  color: 'white',
-                  width: '200px'
-                }}
-              />
-           </div>
-           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: '80px' }}>
-              {savingStatus === 'saving' && <Loader2 size={14} className="animate-spin text-indigo-400" />}
-              {savingStatus === 'saved' && <CheckCircle2 size={14} className="text-green-500" />}
-              {savingStatus === 'error' && <AlertCircle size={14} className="text-red-500" />}
-              <span style={{ fontSize: '0.65rem', fontWeight: 600, textTransform: 'uppercase', opacity: 0.6 }}>
-                {savingStatus === 'idle' ? 'Ready' : savingStatus}
-              </span>
-           </div>
+        <div style={{ 
+          display: 'flex', 
+          alignItems: 'center', 
+          gap: '0.5rem', 
+          fontSize: '0.65rem',
+          color: savingStatus === 'error' ? '#ef4444' : (savingStatus === 'saved' ? '#10b981' : 'var(--text-muted)')
+        }}>
+          {savingStatus === 'saving' && <div className="animate-pulse">Saving...</div>}
+          {savingStatus === 'saved' && <span>Changes saved</span>}
+          {savingStatus === 'error' && <span>Save failed</span>}
         </div>
       </div>
 
-      <div style={{ overflowX: 'auto', borderRadius: '0.5rem', border: '1px solid var(--card-border)' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.75rem' }}>
+      <div className="overflow-x-auto">
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id} style={{ background: 'rgba(255,255,255,0.03)' }}>
+              <tr key={headerGroup.id}>
                 {headerGroup.headers.map(header => (
                   <th 
-                    key={header.id} 
+                    key={header.id}
                     style={{ 
                       padding: '0.5rem', 
-                      textAlign: header.id === 'project' ? 'left' : 'center',
+                      background: 'rgba(255,255,255,0.02)', 
+                      textAlign: 'left', 
+                      fontSize: '0.6rem', 
+                      textTransform: 'uppercase', 
+                      letterSpacing: '0.05em', 
+                      color: 'var(--text-muted)',
                       borderBottom: '1px solid var(--card-border)',
                       borderRight: '1px solid var(--card-border)',
                       position: header.id === 'project' ? 'sticky' : 'static',
                       left: 0,
-                      background: header.id === 'project' ? 'rgba(20,20,30,0.95)' : 'transparent',
-                      zIndex: header.id === 'project' ? 10 : 1,
-                      backdropFilter: 'blur(10px)'
+                      zIndex: header.id === 'project' ? 20 : 1,
                     }}
                   >
                     {flexRender(header.column.columnDef.header, header.getContext())}
@@ -259,10 +226,10 @@ export default function BulkPlanningGrid({
           </thead>
           <tbody>
             {table.getRowModel().rows.map(row => (
-              <tr key={row.id} className="hover:bg-white/[0.03]" style={{ borderBottom: '1px solid var(--card-border)' }}>
+              <tr key={row.id} className="hover:bg-white/[0.02] transition-colors border-b border-white/5">
                 {row.getVisibleCells().map(cell => (
                   <td 
-                    key={cell.id} 
+                    key={cell.id}
                     style={{ 
                       padding: 0, 
                       borderRight: '1px solid var(--card-border)',
@@ -281,7 +248,7 @@ export default function BulkPlanningGrid({
           </tbody>
         </table>
       </div>
-      <div style={{ marginTop: '0.75rem', fontSize: '0.6rem', color: 'var(--text-muted)', display: 'flex', gap: '1rem' }}>
+      <div style={{ marginTop: '0.75rem', fontSize: '0.6rem', color: 'var(--text-muted)', display: 'flex', gap: '1rem', padding: '0.75rem' }}>
         <span>* Editing updates globally across all teams assigned to project</span>
         <span>* Only ACTIVE projects shown</span>
       </div>

@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
 import { getOrCreateWeeklyPeriods } from "@/lib/actions";
-import BulkPlanningGrid from "@/components/BulkPlanningGrid";
+import { BulkPlanningGrid } from "@/components/BulkPlanningGrid";
 import { Zap } from "lucide-react";
 
 export default async function BulkPlanningPage() {
