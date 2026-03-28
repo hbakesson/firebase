@@ -13,13 +13,17 @@ const mockProjects = [
   { id: "p5", name: "Legacy Cleanup", code: "LEG-99", status: "COMPLETED", organizationId: "mock-org", teamId: "t1" },
 ];
 
+const mockTeams = [
+  { id: "t1", name: "Engineering Alpha", organizationId: "mock-org" },
+  { id: "t2", name: "Design Beta", organizationId: "mock-org" },
+];
+
 const mockUser = {
   id: "u1",
   name: "Mock Administrator",
   email: "mock@example.com",
   role: "admin",
-  organizationId: "mock-org",
-  isGuest: true
+  organizationId: "mock-org"
 };
 
 const mockAllocations: any[] = [];
@@ -36,6 +40,14 @@ export const createMockPrisma = () => {
             return mockProjects.filter(p => !where?.status || p.status === where.status);
           },
           findUnique: async ({ where }: any) => mockProjects.find(p => p.id === where.id),
+          count: async () => mockProjects.length,
+        };
+      }
+
+      if (prop === "team") {
+        return {
+          findMany: async () => mockTeams,
+          count: async () => mockTeams.length,
         };
       }
 
@@ -57,10 +69,7 @@ export const createMockPrisma = () => {
       if (prop === "period") {
         return {
           findMany: async () => [],
-          upsert: async ({ create }: any) => {
-            console.log("🛠️ [MOCK] period.upsert", create.label);
-            return { id: `per-${create.startDate.getTime()}`, ...create };
-          },
+          upsert: async ({ create }: any) => ({ id: `per-${create.startDate.getTime()}`, ...create }),
         };
       }
 
@@ -68,10 +77,12 @@ export const createMockPrisma = () => {
         return {
           findMany: async () => mockAllocations,
           upsert: async ({ create, update, where }: any) => {
-             console.log("🛠️ [MOCK] budgetAllocation.upsert", where.teamId_projectId_periodId);
+             // Handle the composite key "where" filter correctly
+             const filter = where.teamId_projectId_periodId || where;
              const existingIdx = mockAllocations.findIndex(a => 
-                a.projectId === where.teamId_projectId_periodId.projectId && 
-                a.periodId === where.teamId_projectId_periodId.periodId
+                a.projectId === filter.projectId && 
+                a.periodId === filter.periodId &&
+                a.teamId === filter.teamId
              );
              
              if (existingIdx >= 0) {

@@ -38,30 +38,26 @@ export default async function BulkPlanningPage() {
   });
 
   return (
-    <div className="app-container">
-      <Sidebar user={session.user as any} />
-      
-      <main className="main-content">
-        <header className="page-header" style={{ marginBottom: '1.5rem' }}>
-          <div className="header-content">
-            <h1 className="page-title flex items-center gap-3">
-              <Zap size={28} className="text-yellow-400 fill-yellow-400" />
-              Bulk Capacity Mode
-            </h1>
-            <p className="page-description">
-              High-performance tactical planning for all active organizational projects.
-            </p>
-          </div>
-        </header>
-
-        <div className="grid-layout">
-          <BulkPlanningGrid 
-            initialProjects={projects}
-            initialPeriods={periods}
-            initialAllocations={allocations}
-          />
+    <main>
+      <header className="page-header" style={{ marginBottom: '1.5rem' }}>
+        <div className="header-content">
+          <h1 className="page-title flex items-center gap-3">
+            <Zap size={28} className="text-yellow-400 fill-yellow-400" />
+            Bulk Capacity Mode
+          </h1>
+          <p className="page-description">
+            High-performance tactical planning for all active organizational projects.
+          </p>
         </div>
-      </main>
-    </div>
+      </header>
+
+      <div className="grid-layout">
+        <BulkPlanningGrid 
+          initialProjects={projects}
+          initialPeriods={periods}
+          initialAllocations={allocations}
+        />
+      </div>
+    </main>
   );
 }
