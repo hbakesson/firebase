@@ -3,6 +3,7 @@ import { PrismaClient } from "../generated/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { Connector, IpAddressTypes } from "@google-cloud/cloud-sql-connector";
 import pg from "pg";
+import { createMockPrisma } from "./mockData";
 
 const DATABASE_URL = process.env.DATABASE_URL || "";
 
@@ -153,6 +154,11 @@ const globalForPrisma = global as unknown as {
 export const prisma =
   globalForPrisma.prisma ??
   (() => {
+    if (process.env.MOCK_DATABASE === 'true') {
+      console.log('🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.');
+      return createMockPrisma() as any;
+    }
+
     console.log('[PRISMA] Instantiating Prisma Client with official Connector pattern...');
     const pool = createLazyPool();
     const adapter = new PrismaPg(pool as any);
