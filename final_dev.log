@@ -467,3 +467,263 @@
   digest: '2914337051'
 }
  POST /teams 500 in 194ms
+ GET / 200 in 1950ms
+ GET /api/auth/session 200 in 43ms
+ GET /api/auth/session 200 in 14ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /api/auth/csrf 200 in 29ms
+ POST /api/auth/signout 200 in 15ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ ○ Compiling /login ...
+ ✓ Compiled /login in 1151ms (1477 modules)
+[PRISMA] Client initialized.
+ GET /login 200 in 1894ms
+ GET /api/auth/session 200 in 530ms
+ GET /api/auth/session 200 in 10ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /api/auth/providers 200 in 7ms
+ GET /api/auth/csrf 200 in 5ms
+ POST /api/auth/signin/google? 200 in 110ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /api/auth/callback/google?iss=https%3A%2F%2Faccounts.google.com&code=4%2F0Aci98E_C5RIQ6lyfBR5GA_fs_eWHigDJPhEM_NUGBP4puFALTVOZx1Lvczx8YJDs3lYAjQ&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none 302 in 155ms
+ GET / 307 in 165ms
+ GET /login 200 in 46ms
+ GET /api/auth/session 200 in 15ms
+ GET /api/auth/session 200 in 7ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /api/auth/providers 200 in 14ms
+ GET /api/auth/csrf 200 in 7ms
+ POST /api/auth/signin/google? 200 in 59ms
+ GET /api/auth/callback/google?iss=https%3A%2F%2Faccounts.google.com&code=4%2F0Aci98E_uJCMN2Db1O0HTBZJce-weDJ0_p_aQd-7enkSsEFfs5Rs_wi5TtUuMLMvU03wxbg&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&authuser=0&prompt=none 302 in 116ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET / 307 in 70ms
+ GET /login 200 in 82ms
+ GET /api/auth/session 200 in 10ms
+ GET /api/auth/session 200 in 5ms
+ GET /api/auth/providers 200 in 9ms
+ GET /api/auth/csrf 200 in 6ms
+ POST /api/auth/callback/guest? 200 in 11ms
+ GET / 200 in 70ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /api/auth/session 200 in 10ms
+ GET /api/auth/session 200 in 6ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-22T23:00:00.000Z,
+    endDate: 2026-03-29T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-29T22:00:00.000Z,
+    endDate: 2026-04-05T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-05T22:00:00.000Z,
+    endDate: 2026-04-12T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-12T22:00:00.000Z,
+    endDate: 2026-04-19T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-19T22:00:00.000Z,
+    endDate: 2026-04-26T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-26T22:00:00.000Z,
+    endDate: 2026-05-03T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-03T22:00:00.000Z,
+    endDate: 2026-05-10T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-10T22:00:00.000Z,
+    endDate: 2026-05-17T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-17T22:00:00.000Z,
+    endDate: 2026-05-24T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org', status: 'ACTIVE' }
+ GET /planning/bulk 200 in 935ms
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ GET /projects 200 in 470ms
+   Reload env: .env
+ ✓ Compiled in 1030ms (2230 modules)
+[PRISMA] Client initialized.
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ GET /projects 200 in 874ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 724ms (1472 modules)
+[PRISMA] Client initialized.
+ GET /api/auth/session 200 in 1341ms
+ GET /api/auth/session 200 in 9ms
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ GET /projects 200 in 621ms
+ ✓ Compiled /favicon.ico in 397ms (1474 modules)
+[PRISMA] Client initialized.
+ GET /favicon.ico 200 in 1013ms
+ GET /api/auth/session 200 in 986ms
+ GET /api/auth/session 200 in 10ms
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+ GET / 200 in 359ms
+ GET /api/auth/session 200 in 19ms
+ GET /api/auth/session 200 in 18ms
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+ GET / 307 in 99ms
+ GET /login 200 in 127ms
+ GET /favicon.ico 200 in 17ms
+ GET /api/auth/session 200 in 17ms
+ GET /api/auth/session 200 in 4ms
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+ GET /api/auth/providers 200 in 9ms
+ GET /api/auth/csrf 200 in 5ms
+ POST /api/auth/callback/guest? 200 in 7ms
+ GET / 200 in 173ms
+ GET /favicon.ico 200 in 20ms
+ GET /api/auth/session 200 in 33ms
+ GET /api/auth/session 200 in 15ms
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-22T23:00:00.000Z,
+    endDate: 2026-03-29T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-29T22:00:00.000Z,
+    endDate: 2026-04-05T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-05T22:00:00.000Z,
+    endDate: 2026-04-12T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-12T22:00:00.000Z,
+    endDate: 2026-04-19T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-19T22:00:00.000Z,
+    endDate: 2026-04-26T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-26T22:00:00.000Z,
+    endDate: 2026-05-03T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-03T22:00:00.000Z,
+    endDate: 2026-05-10T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-10T22:00:00.000Z,
+    endDate: 2026-05-17T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-17T22:00:00.000Z,
+    endDate: 2026-05-24T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org', status: 'ACTIVE' }
+ GET /planning/bulk 200 in 846ms
+ GET /favicon.ico 200 in 12ms
