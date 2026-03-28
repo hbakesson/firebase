@@ -1,0 +1,59 @@
+
+> inventory-tracker@0.1.0 dev
+> next dev -p 3000
+
+   ▲ Next.js 15.5.14
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.2.249:3000
+   - Environments: .env.local, .env
+
+ ✓ Starting...
+ ✓ Ready in 1840ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 1156ms (1133 modules)
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ HEAD /login 200 in 1686ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 975ms (819 modules)
+[PRISMA] Client initialized.
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /api/auth/session 200 in 3065ms
+ GET /api/auth/session 200 in 29ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /api/auth/session 200 in 100ms
+ GET /api/auth/session 200 in 19ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ ○ Compiling /login ...
+ ✓ Compiled /login in 532ms (888 modules)
+[PRISMA] Client initialized.
+ GET /login 200 in 1389ms
+ GET /api/auth/session 200 in 615ms
+ GET /api/auth/session 200 in 18ms
+ GET /api/auth/session 200 in 17ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /api/auth/providers 200 in 51ms
+ GET /api/auth/csrf 200 in 25ms
+ POST /api/auth/callback/guest? 200 in 24ms
+ ○ Compiling / ...
+ ✓ Compiled / in 680ms (1157 modules)
+[PRISMA] Client initialized.
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET / 200 in 1796ms
+ GET /api/auth/session 200 in 131ms
+ GET /api/auth/session 200 in 14ms
+ GET /api/auth/session 200 in 18ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.

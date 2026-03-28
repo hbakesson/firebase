@@ -48,3 +48,75 @@
  ✓ Compiled /login in 1624ms (1152 modules)
 [PRISMA] Client initialized.
  HEAD /login 200 in 1995ms
+ GET /login 200 in 114ms
+ GET /api/auth/session 200 in 260ms
+ GET /api/auth/session 200 in 34ms
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+ GET /api/auth/providers 200 in 24ms
+ GET /api/auth/csrf 200 in 8ms
+[PRISMA] Creating Pool for user "postgres" on database "project-tracker"...
+prisma:error Could not load the default credentials. Browse to https://cloud.google.com/docs/authentication/getting-started for more information.
+[31m[auth][error][0m CallbackRouteError: Read more at https://errors.authjs.dev#callbackrouteerror
+[31m[auth][cause][0m: Error: Could not load the default credentials. Browse to https://cloud.google.com/docs/authentication/getting-started for more information.
+    at GoogleAuth.getApplicationDefaultAsync (webpack-internal:///(rsc)/./node_modules/google-auth-library/build/src/auth/googleauth.js:284:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async #determineClient (webpack-internal:///(rsc)/./node_modules/google-auth-library/build/src/auth/googleauth.js:764:36)
+    at async GoogleAuth.getClient (webpack-internal:///(rsc)/./node_modules/google-auth-library/build/src/auth/googleauth.js:741:20)
+    at async GoogleAuth.request (webpack-internal:///(rsc)/./node_modules/google-auth-library/build/src/auth/googleauth.js:841:24)
+    at async createAPIRequestAsync (webpack-internal:///(rsc)/./node_modules/googleapis-common/build/src/apirequest.js:308:25)
+    at async SQLAdminFetcher.getInstanceMetadata (webpack-internal:///(rsc)/./node_modules/@google-cloud/cloud-sql-connector/dist/mjs/sqladmin-fetcher.js:146:21)
+    at async CloudSQLInstance.performRefresh (webpack-internal:///(rsc)/./node_modules/@google-cloud/cloud-sql-connector/dist/mjs/cloud-sql-instance.js:183:26)
+    at async CloudSQLInstance.getCloudSQLInstance (webpack-internal:///(rsc)/./node_modules/@google-cloud/cloud-sql-connector/dist/mjs/cloud-sql-instance.js:39:9)
+[31m[auth][details][0m: {
+  "provider": "guest"
+}
+(node:90418) MetadataLookupWarning: received unexpected error = All promises were rejected code = UNKNOWN
+(Use `node --trace-warnings ...` to show where the warning was created)
+ POST /api/auth/callback/guest? 200 in 820ms
+[Error: Could not load the default credentials. Browse to https://cloud.google.com/docs/authentication/getting-started for more information.] {
+  clientVersion: '7.5.0'
+}
+ ⨯ unhandledRejection: [Error: Could not load the default credentials. Browse to https://cloud.google.com/docs/authentication/getting-started for more information.] {
+  clientVersion: '7.5.0'
+}
+ ⨯ unhandledRejection:  [Error: Could not load the default credentials. Browse to https://cloud.google.com/docs/authentication/getting-started for more information.] {
+  clientVersion: '7.5.0'
+}
+ GET /api/auth/error?error=Configuration 500 in 54ms
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+ GET /login 200 in 75ms
+ GET /api/auth/session 200 in 21ms
+ GET /api/auth/session 200 in 13ms
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+ GET /api/auth/providers 200 in 20ms
+ GET /api/auth/csrf 200 in 47ms
+prisma:error Could not load the default credentials. Browse to https://cloud.google.com/docs/authentication/getting-started for more information.
+[31m[auth][error][0m CallbackRouteError: Read more at https://errors.authjs.dev#callbackrouteerror
+[31m[auth][cause][0m: Error: Could not load the default credentials. Browse to https://cloud.google.com/docs/authentication/getting-started for more information.
+    at GoogleAuth.getApplicationDefaultAsync (webpack-internal:///(rsc)/./node_modules/google-auth-library/build/src/auth/googleauth.js:284:15)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async #determineClient (webpack-internal:///(rsc)/./node_modules/google-auth-library/build/src/auth/googleauth.js:764:36)
+    at async GoogleAuth.getClient (webpack-internal:///(rsc)/./node_modules/google-auth-library/build/src/auth/googleauth.js:741:20)
+    at async GoogleAuth.request (webpack-internal:///(rsc)/./node_modules/google-auth-library/build/src/auth/googleauth.js:841:24)
+    at async createAPIRequestAsync (webpack-internal:///(rsc)/./node_modules/googleapis-common/build/src/apirequest.js:308:25)
+    at async SQLAdminFetcher.getInstanceMetadata (webpack-internal:///(rsc)/./node_modules/@google-cloud/cloud-sql-connector/dist/mjs/sqladmin-fetcher.js:146:21)
+    at async CloudSQLInstance.performRefresh (webpack-internal:///(rsc)/./node_modules/@google-cloud/cloud-sql-connector/dist/mjs/cloud-sql-instance.js:183:26)
+    at async CloudSQLInstance.getCloudSQLInstance (webpack-internal:///(rsc)/./node_modules/@google-cloud/cloud-sql-connector/dist/mjs/cloud-sql-instance.js:39:9)
+[31m[auth][details][0m: {
+  "provider": "guest"
+}
+ POST /api/auth/callback/guest? 200 in 17ms
+ GET /api/auth/error?error=Configuration 500 in 7ms
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
