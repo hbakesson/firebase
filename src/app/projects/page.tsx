@@ -1,13 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { createProject, updateProject, deleteProject } from "@/lib/actions";
+import { createProject, updateProject } from "@/lib/actions";
 import { 
   Briefcase, 
   Plus, 
-  Filter, 
-  MoreVertical, 
-  ExternalLink,
   Users
 } from "lucide-react";
 
@@ -61,7 +58,7 @@ export default async function ProjectsPage({
               <input name="code" placeholder="Code (e.g. PRJ001)" className="btn-sm" required style={{ flex: 1 }} />
               <select name="teamId" className="btn-sm" style={{ background: 'rgba(0,0,0,0.2)', border: '1px solid var(--card-border)', borderRadius: '0.25rem', padding: '0.4rem' }}>
                 <option value="">No Team Assigned</option>
-                {teams.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                {teams.map((t: (typeof teams)[0]) => <option key={t.id} value={t.id}>{t.name}</option>)}
               </select>
             </div>
             <button type="submit" className="btn-sm">
@@ -90,7 +87,7 @@ export default async function ProjectsPage({
                 </td>
               </tr>
             ) : (
-              projects.map((project) => (
+              projects.map((project: (typeof projects)[0]) => (
                 <tr key={project.id} style={{ borderBottom: '1px solid var(--card-border)' }}>
                   <td style={{ padding: '1.25rem' }}>
                     <div style={{ fontWeight: 600 }}>{project.name}</div>

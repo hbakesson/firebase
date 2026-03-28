@@ -5,8 +5,7 @@ import PlanningGrid from "@/components/PlanningGrid";
 import { 
   Calendar, 
   ChevronLeft, 
-  LayoutGrid,
-  Settings
+  LayoutGrid
 } from "lucide-react";
 import Link from "next/link";
 import { createYearPeriods } from "@/lib/actions";

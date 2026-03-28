@@ -6,9 +6,6 @@ import Link from "next/link";
 import { 
   Users, 
   Plus, 
-  MapPin, 
-  ShieldCheck, 
-  Building2,
   ChevronRight
 } from "lucide-react";
 
@@ -46,7 +43,7 @@ export default async function TeamsPage() {
             <input name="code" placeholder="Code (e.g. DEV)" className="btn-sm" required style={{ width: '120px' }} />
             <select name="parentTeamId" className="btn-sm" style={{ background: 'rgba(0,0,0,0.2)', border: '1px solid var(--card-border)', borderRadius: '0.25rem', padding: '0.4rem' }}>
               <option value="">No Parent</option>
-              {teams.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+              {teams.map((t: (typeof teams)[0]) => <option key={t.id} value={t.id}>{t.name}</option>)}
             </select>
             <button type="submit" className="btn-sm">Create Team</button>
           </div>
@@ -73,7 +70,7 @@ export default async function TeamsPage() {
                 </td>
               </tr>
             ) : (
-              teams.map((team) => (
+              teams.map((team: (typeof teams)[0]) => (
                 <tr key={team.id} style={{ borderBottom: '1px solid var(--card-border)', transition: 'background 0.2s' }}>
                   <td style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: team.isActive ? '#4ade80' : '#94a3b8' }} />

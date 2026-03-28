@@ -93,7 +93,7 @@ export async function createProject(data: { name: string; code: string; descript
   return project;
 }
 
-export async function updateProject(id: string, data: Record<string, any>) {
+export async function updateProject(id: string, data: Record<string, unknown>) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
 
