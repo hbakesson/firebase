@@ -24,21 +24,72 @@ model Organization {
 
   users    User[]
   projects Project[]
+  teams    Team[]
+  periods  Period[]
+}
+
+model Team {
+  id             String   @id @default(cuid())
+  organizationId String
+  name           String
+  code           String   @unique
+  parentTeamId   String?
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organization Organization       @relation(fields: [organizationId], references: [id])
+  parentTeam   Team?              @relation("TeamHierarchy", fields: [parentTeamId], references: [id])
+  childTeams   Team[]             @relation("TeamHierarchy")
+  projects     Project[]
+  allocations  BudgetAllocation[]
 }
 
 model Project {
-  id             String        @id @default(cuid())
+  id             String   @id @default(cuid())
   organizationId String?
-  name           String        @unique
+  teamId         String?
+  name           String   @unique
+  code           String   @unique @default(cuid())
   description    String?
-  status         String        @default("PLANNED") // PLANNED | IN_PROGRESS | COMPLETED | ON_HOLD
-  priority       Int           @default(1) // 1 (Low) to 5 (High)
-  progress       Int           @default(0) // 0-100 percentage
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  createdBy      String // User ID
-  organization   Organization? @relation(fields: [organizationId], references: [id])
-  logs           AuditLog[]
+  status         String   @default("PLANNED") // PLANNED | ACTIVE | COMPLETED | ARCHIVED
+  priority       Int      @default(1)
+  progress       Int      @default(0)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  createdBy      String
+
+  organization Organization?      @relation(fields: [organizationId], references: [id])
+  team         Team?              @relation(fields: [teamId], references: [id])
+  logs         AuditLog[]
+  allocations  BudgetAllocation[]
+}
+
+model Period {
+  id             String             @id @default(cuid())
+  organizationId String
+  type           String // MONTH | QUARTER
+  startDate      DateTime
+  endDate        DateTime
+  label          String
+  isLocked       Boolean            @default(false)
+  organization   Organization       @relation(fields: [organizationId], references: [id])
+  allocations    BudgetAllocation[]
+}
+
+model BudgetAllocation {
+  id           String   @id @default(cuid())
+  teamId       String
+  projectId    String
+  periodId     String
+  plannedHours Float    @default(0)
+  updatedAt    DateTime @updatedAt
+
+  team    Team    @relation(fields: [teamId], references: [id])
+  project Project @relation(fields: [projectId], references: [id])
+  period  Period  @relation(fields: [periodId], references: [id])
+
+  @@unique([teamId, projectId, periodId])
 }
 
 model AuditLog {

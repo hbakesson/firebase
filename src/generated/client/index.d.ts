@@ -19,10 +19,25 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  */
 export type Organization = $Result.DefaultSelection<Prisma.$OrganizationPayload>
 /**
+ * Model Team
+ * 
+ */
+export type Team = $Result.DefaultSelection<Prisma.$TeamPayload>
+/**
  * Model Project
  * 
  */
 export type Project = $Result.DefaultSelection<Prisma.$ProjectPayload>
+/**
+ * Model Period
+ * 
+ */
+export type Period = $Result.DefaultSelection<Prisma.$PeriodPayload>
+/**
+ * Model BudgetAllocation
+ * 
+ */
+export type BudgetAllocation = $Result.DefaultSelection<Prisma.$BudgetAllocationPayload>
 /**
  * Model AuditLog
  * 
@@ -181,6 +196,16 @@ export class PrismaClient<
   get organization(): Prisma.OrganizationDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.team`: Exposes CRUD operations for the **Team** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Teams
+    * const teams = await prisma.team.findMany()
+    * ```
+    */
+  get team(): Prisma.TeamDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.project`: Exposes CRUD operations for the **Project** model.
     * Example usage:
     * ```ts
@@ -189,6 +214,26 @@ export class PrismaClient<
     * ```
     */
   get project(): Prisma.ProjectDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.period`: Exposes CRUD operations for the **Period** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Periods
+    * const periods = await prisma.period.findMany()
+    * ```
+    */
+  get period(): Prisma.PeriodDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.budgetAllocation`: Exposes CRUD operations for the **BudgetAllocation** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more BudgetAllocations
+    * const budgetAllocations = await prisma.budgetAllocation.findMany()
+    * ```
+    */
+  get budgetAllocation(): Prisma.BudgetAllocationDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.auditLog`: Exposes CRUD operations for the **AuditLog** model.
@@ -674,7 +719,10 @@ export namespace Prisma {
 
   export const ModelName: {
     Organization: 'Organization',
+    Team: 'Team',
     Project: 'Project',
+    Period: 'Period',
+    BudgetAllocation: 'BudgetAllocation',
     AuditLog: 'AuditLog',
     User: 'User',
     Account: 'Account',
@@ -695,7 +743,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "organization" | "project" | "auditLog" | "user" | "account" | "session" | "verificationToken"
+      modelProps: "organization" | "team" | "project" | "period" | "budgetAllocation" | "auditLog" | "user" | "account" | "session" | "verificationToken"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -773,6 +821,80 @@ export namespace Prisma {
           }
         }
       }
+      Team: {
+        payload: Prisma.$TeamPayload<ExtArgs>
+        fields: Prisma.TeamFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.TeamFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.TeamFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamPayload>
+          }
+          findFirst: {
+            args: Prisma.TeamFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.TeamFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamPayload>
+          }
+          findMany: {
+            args: Prisma.TeamFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamPayload>[]
+          }
+          create: {
+            args: Prisma.TeamCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamPayload>
+          }
+          createMany: {
+            args: Prisma.TeamCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.TeamCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamPayload>[]
+          }
+          delete: {
+            args: Prisma.TeamDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamPayload>
+          }
+          update: {
+            args: Prisma.TeamUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamPayload>
+          }
+          deleteMany: {
+            args: Prisma.TeamDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.TeamUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.TeamUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamPayload>[]
+          }
+          upsert: {
+            args: Prisma.TeamUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$TeamPayload>
+          }
+          aggregate: {
+            args: Prisma.TeamAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTeam>
+          }
+          groupBy: {
+            args: Prisma.TeamGroupByArgs<ExtArgs>
+            result: $Utils.Optional<TeamGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.TeamCountArgs<ExtArgs>
+            result: $Utils.Optional<TeamCountAggregateOutputType> | number
+          }
+        }
+      }
       Project: {
         payload: Prisma.$ProjectPayload<ExtArgs>
         fields: Prisma.ProjectFieldRefs
@@ -844,6 +966,154 @@ export namespace Prisma {
           count: {
             args: Prisma.ProjectCountArgs<ExtArgs>
             result: $Utils.Optional<ProjectCountAggregateOutputType> | number
+          }
+        }
+      }
+      Period: {
+        payload: Prisma.$PeriodPayload<ExtArgs>
+        fields: Prisma.PeriodFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PeriodFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PeriodPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PeriodFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PeriodPayload>
+          }
+          findFirst: {
+            args: Prisma.PeriodFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PeriodPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PeriodFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PeriodPayload>
+          }
+          findMany: {
+            args: Prisma.PeriodFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PeriodPayload>[]
+          }
+          create: {
+            args: Prisma.PeriodCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PeriodPayload>
+          }
+          createMany: {
+            args: Prisma.PeriodCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PeriodCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PeriodPayload>[]
+          }
+          delete: {
+            args: Prisma.PeriodDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PeriodPayload>
+          }
+          update: {
+            args: Prisma.PeriodUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PeriodPayload>
+          }
+          deleteMany: {
+            args: Prisma.PeriodDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PeriodUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PeriodUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PeriodPayload>[]
+          }
+          upsert: {
+            args: Prisma.PeriodUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PeriodPayload>
+          }
+          aggregate: {
+            args: Prisma.PeriodAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePeriod>
+          }
+          groupBy: {
+            args: Prisma.PeriodGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PeriodGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PeriodCountArgs<ExtArgs>
+            result: $Utils.Optional<PeriodCountAggregateOutputType> | number
+          }
+        }
+      }
+      BudgetAllocation: {
+        payload: Prisma.$BudgetAllocationPayload<ExtArgs>
+        fields: Prisma.BudgetAllocationFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.BudgetAllocationFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BudgetAllocationPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.BudgetAllocationFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BudgetAllocationPayload>
+          }
+          findFirst: {
+            args: Prisma.BudgetAllocationFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BudgetAllocationPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.BudgetAllocationFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BudgetAllocationPayload>
+          }
+          findMany: {
+            args: Prisma.BudgetAllocationFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BudgetAllocationPayload>[]
+          }
+          create: {
+            args: Prisma.BudgetAllocationCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BudgetAllocationPayload>
+          }
+          createMany: {
+            args: Prisma.BudgetAllocationCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.BudgetAllocationCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BudgetAllocationPayload>[]
+          }
+          delete: {
+            args: Prisma.BudgetAllocationDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BudgetAllocationPayload>
+          }
+          update: {
+            args: Prisma.BudgetAllocationUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BudgetAllocationPayload>
+          }
+          deleteMany: {
+            args: Prisma.BudgetAllocationDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.BudgetAllocationUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.BudgetAllocationUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BudgetAllocationPayload>[]
+          }
+          upsert: {
+            args: Prisma.BudgetAllocationUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$BudgetAllocationPayload>
+          }
+          aggregate: {
+            args: Prisma.BudgetAllocationAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBudgetAllocation>
+          }
+          groupBy: {
+            args: Prisma.BudgetAllocationGroupByArgs<ExtArgs>
+            result: $Utils.Optional<BudgetAllocationGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.BudgetAllocationCountArgs<ExtArgs>
+            result: $Utils.Optional<BudgetAllocationCountAggregateOutputType> | number
           }
         }
       }
@@ -1326,7 +1596,10 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     organization?: OrganizationOmit
+    team?: TeamOmit
     project?: ProjectOmit
+    period?: PeriodOmit
+    budgetAllocation?: BudgetAllocationOmit
     auditLog?: AuditLogOmit
     user?: UserOmit
     account?: AccountOmit
@@ -1414,11 +1687,15 @@ export namespace Prisma {
   export type OrganizationCountOutputType = {
     users: number
     projects: number
+    teams: number
+    periods: number
   }
 
   export type OrganizationCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | OrganizationCountOutputTypeCountUsersArgs
     projects?: boolean | OrganizationCountOutputTypeCountProjectsArgs
+    teams?: boolean | OrganizationCountOutputTypeCountTeamsArgs
+    periods?: boolean | OrganizationCountOutputTypeCountPeriodsArgs
   }
 
   // Custom InputTypes
@@ -1446,6 +1723,69 @@ export namespace Prisma {
     where?: ProjectWhereInput
   }
 
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeCountTeamsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TeamWhereInput
+  }
+
+  /**
+   * OrganizationCountOutputType without action
+   */
+  export type OrganizationCountOutputTypeCountPeriodsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PeriodWhereInput
+  }
+
+
+  /**
+   * Count Type TeamCountOutputType
+   */
+
+  export type TeamCountOutputType = {
+    childTeams: number
+    projects: number
+    allocations: number
+  }
+
+  export type TeamCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    childTeams?: boolean | TeamCountOutputTypeCountChildTeamsArgs
+    projects?: boolean | TeamCountOutputTypeCountProjectsArgs
+    allocations?: boolean | TeamCountOutputTypeCountAllocationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * TeamCountOutputType without action
+   */
+  export type TeamCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TeamCountOutputType
+     */
+    select?: TeamCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * TeamCountOutputType without action
+   */
+  export type TeamCountOutputTypeCountChildTeamsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TeamWhereInput
+  }
+
+  /**
+   * TeamCountOutputType without action
+   */
+  export type TeamCountOutputTypeCountProjectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: ProjectWhereInput
+  }
+
+  /**
+   * TeamCountOutputType without action
+   */
+  export type TeamCountOutputTypeCountAllocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BudgetAllocationWhereInput
+  }
+
 
   /**
    * Count Type ProjectCountOutputType
@@ -1453,10 +1793,12 @@ export namespace Prisma {
 
   export type ProjectCountOutputType = {
     logs: number
+    allocations: number
   }
 
   export type ProjectCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     logs?: boolean | ProjectCountOutputTypeCountLogsArgs
+    allocations?: boolean | ProjectCountOutputTypeCountAllocationsArgs
   }
 
   // Custom InputTypes
@@ -1475,6 +1817,44 @@ export namespace Prisma {
    */
   export type ProjectCountOutputTypeCountLogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: AuditLogWhereInput
+  }
+
+  /**
+   * ProjectCountOutputType without action
+   */
+  export type ProjectCountOutputTypeCountAllocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BudgetAllocationWhereInput
+  }
+
+
+  /**
+   * Count Type PeriodCountOutputType
+   */
+
+  export type PeriodCountOutputType = {
+    allocations: number
+  }
+
+  export type PeriodCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    allocations?: boolean | PeriodCountOutputTypeCountAllocationsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PeriodCountOutputType without action
+   */
+  export type PeriodCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PeriodCountOutputType
+     */
+    select?: PeriodCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PeriodCountOutputType without action
+   */
+  export type PeriodCountOutputTypeCountAllocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BudgetAllocationWhereInput
   }
 
 
@@ -1680,6 +2060,8 @@ export namespace Prisma {
     updatedAt?: boolean
     users?: boolean | Organization$usersArgs<ExtArgs>
     projects?: boolean | Organization$projectsArgs<ExtArgs>
+    teams?: boolean | Organization$teamsArgs<ExtArgs>
+    periods?: boolean | Organization$periodsArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["organization"]>
 
@@ -1708,6 +2090,8 @@ export namespace Prisma {
   export type OrganizationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     users?: boolean | Organization$usersArgs<ExtArgs>
     projects?: boolean | Organization$projectsArgs<ExtArgs>
+    teams?: boolean | Organization$teamsArgs<ExtArgs>
+    periods?: boolean | Organization$periodsArgs<ExtArgs>
     _count?: boolean | OrganizationCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type OrganizationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
@@ -1718,6 +2102,8 @@ export namespace Prisma {
     objects: {
       users: Prisma.$UserPayload<ExtArgs>[]
       projects: Prisma.$ProjectPayload<ExtArgs>[]
+      teams: Prisma.$TeamPayload<ExtArgs>[]
+      periods: Prisma.$PeriodPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -2120,6 +2506,8 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     users<T extends Organization$usersArgs<ExtArgs> = {}>(args?: Subset<T, Organization$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     projects<T extends Organization$projectsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    teams<T extends Organization$teamsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$teamsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    periods<T extends Organization$periodsArgs<ExtArgs> = {}>(args?: Subset<T, Organization$periodsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2594,6 +2982,54 @@ export namespace Prisma {
   }
 
   /**
+   * Organization.teams
+   */
+  export type Organization$teamsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInclude<ExtArgs> | null
+    where?: TeamWhereInput
+    orderBy?: TeamOrderByWithRelationInput | TeamOrderByWithRelationInput[]
+    cursor?: TeamWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TeamScalarFieldEnum | TeamScalarFieldEnum[]
+  }
+
+  /**
+   * Organization.periods
+   */
+  export type Organization$periodsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Period
+     */
+    select?: PeriodSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Period
+     */
+    omit?: PeriodOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PeriodInclude<ExtArgs> | null
+    where?: PeriodWhereInput
+    orderBy?: PeriodOrderByWithRelationInput | PeriodOrderByWithRelationInput[]
+    cursor?: PeriodWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PeriodScalarFieldEnum | PeriodScalarFieldEnum[]
+  }
+
+  /**
    * Organization without action
    */
   export type OrganizationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2609,6 +3045,1221 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: OrganizationInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Team
+   */
+
+  export type AggregateTeam = {
+    _count: TeamCountAggregateOutputType | null
+    _min: TeamMinAggregateOutputType | null
+    _max: TeamMaxAggregateOutputType | null
+  }
+
+  export type TeamMinAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    name: string | null
+    code: string | null
+    parentTeamId: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TeamMaxAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    name: string | null
+    code: string | null
+    parentTeamId: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type TeamCountAggregateOutputType = {
+    id: number
+    organizationId: number
+    name: number
+    code: number
+    parentTeamId: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type TeamMinAggregateInputType = {
+    id?: true
+    organizationId?: true
+    name?: true
+    code?: true
+    parentTeamId?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TeamMaxAggregateInputType = {
+    id?: true
+    organizationId?: true
+    name?: true
+    code?: true
+    parentTeamId?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type TeamCountAggregateInputType = {
+    id?: true
+    organizationId?: true
+    name?: true
+    code?: true
+    parentTeamId?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type TeamAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Team to aggregate.
+     */
+    where?: TeamWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Teams to fetch.
+     */
+    orderBy?: TeamOrderByWithRelationInput | TeamOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: TeamWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Teams from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Teams.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Teams
+    **/
+    _count?: true | TeamCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: TeamMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: TeamMaxAggregateInputType
+  }
+
+  export type GetTeamAggregateType<T extends TeamAggregateArgs> = {
+        [P in keyof T & keyof AggregateTeam]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTeam[P]>
+      : GetScalarType<T[P], AggregateTeam[P]>
+  }
+
+
+
+
+  export type TeamGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TeamWhereInput
+    orderBy?: TeamOrderByWithAggregationInput | TeamOrderByWithAggregationInput[]
+    by: TeamScalarFieldEnum[] | TeamScalarFieldEnum
+    having?: TeamScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: TeamCountAggregateInputType | true
+    _min?: TeamMinAggregateInputType
+    _max?: TeamMaxAggregateInputType
+  }
+
+  export type TeamGroupByOutputType = {
+    id: string
+    organizationId: string
+    name: string
+    code: string
+    parentTeamId: string | null
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: TeamCountAggregateOutputType | null
+    _min: TeamMinAggregateOutputType | null
+    _max: TeamMaxAggregateOutputType | null
+  }
+
+  type GetTeamGroupByPayload<T extends TeamGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<TeamGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof TeamGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], TeamGroupByOutputType[P]>
+            : GetScalarType<T[P], TeamGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type TeamSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    name?: boolean
+    code?: boolean
+    parentTeamId?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    parentTeam?: boolean | Team$parentTeamArgs<ExtArgs>
+    childTeams?: boolean | Team$childTeamsArgs<ExtArgs>
+    projects?: boolean | Team$projectsArgs<ExtArgs>
+    allocations?: boolean | Team$allocationsArgs<ExtArgs>
+    _count?: boolean | TeamCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["team"]>
+
+  export type TeamSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    name?: boolean
+    code?: boolean
+    parentTeamId?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    parentTeam?: boolean | Team$parentTeamArgs<ExtArgs>
+  }, ExtArgs["result"]["team"]>
+
+  export type TeamSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    name?: boolean
+    code?: boolean
+    parentTeamId?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    parentTeam?: boolean | Team$parentTeamArgs<ExtArgs>
+  }, ExtArgs["result"]["team"]>
+
+  export type TeamSelectScalar = {
+    id?: boolean
+    organizationId?: boolean
+    name?: boolean
+    code?: boolean
+    parentTeamId?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type TeamOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "name" | "code" | "parentTeamId" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["team"]>
+  export type TeamInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    parentTeam?: boolean | Team$parentTeamArgs<ExtArgs>
+    childTeams?: boolean | Team$childTeamsArgs<ExtArgs>
+    projects?: boolean | Team$projectsArgs<ExtArgs>
+    allocations?: boolean | Team$allocationsArgs<ExtArgs>
+    _count?: boolean | TeamCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type TeamIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    parentTeam?: boolean | Team$parentTeamArgs<ExtArgs>
+  }
+  export type TeamIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    parentTeam?: boolean | Team$parentTeamArgs<ExtArgs>
+  }
+
+  export type $TeamPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Team"
+    objects: {
+      organization: Prisma.$OrganizationPayload<ExtArgs>
+      parentTeam: Prisma.$TeamPayload<ExtArgs> | null
+      childTeams: Prisma.$TeamPayload<ExtArgs>[]
+      projects: Prisma.$ProjectPayload<ExtArgs>[]
+      allocations: Prisma.$BudgetAllocationPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      organizationId: string
+      name: string
+      code: string
+      parentTeamId: string | null
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["team"]>
+    composites: {}
+  }
+
+  type TeamGetPayload<S extends boolean | null | undefined | TeamDefaultArgs> = $Result.GetResult<Prisma.$TeamPayload, S>
+
+  type TeamCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<TeamFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: TeamCountAggregateInputType | true
+    }
+
+  export interface TeamDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Team'], meta: { name: 'Team' } }
+    /**
+     * Find zero or one Team that matches the filter.
+     * @param {TeamFindUniqueArgs} args - Arguments to find a Team
+     * @example
+     * // Get one Team
+     * const team = await prisma.team.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends TeamFindUniqueArgs>(args: SelectSubset<T, TeamFindUniqueArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Team that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {TeamFindUniqueOrThrowArgs} args - Arguments to find a Team
+     * @example
+     * // Get one Team
+     * const team = await prisma.team.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends TeamFindUniqueOrThrowArgs>(args: SelectSubset<T, TeamFindUniqueOrThrowArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Team that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamFindFirstArgs} args - Arguments to find a Team
+     * @example
+     * // Get one Team
+     * const team = await prisma.team.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends TeamFindFirstArgs>(args?: SelectSubset<T, TeamFindFirstArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Team that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamFindFirstOrThrowArgs} args - Arguments to find a Team
+     * @example
+     * // Get one Team
+     * const team = await prisma.team.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends TeamFindFirstOrThrowArgs>(args?: SelectSubset<T, TeamFindFirstOrThrowArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Teams that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Teams
+     * const teams = await prisma.team.findMany()
+     * 
+     * // Get first 10 Teams
+     * const teams = await prisma.team.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const teamWithIdOnly = await prisma.team.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends TeamFindManyArgs>(args?: SelectSubset<T, TeamFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Team.
+     * @param {TeamCreateArgs} args - Arguments to create a Team.
+     * @example
+     * // Create one Team
+     * const Team = await prisma.team.create({
+     *   data: {
+     *     // ... data to create a Team
+     *   }
+     * })
+     * 
+     */
+    create<T extends TeamCreateArgs>(args: SelectSubset<T, TeamCreateArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Teams.
+     * @param {TeamCreateManyArgs} args - Arguments to create many Teams.
+     * @example
+     * // Create many Teams
+     * const team = await prisma.team.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends TeamCreateManyArgs>(args?: SelectSubset<T, TeamCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Teams and returns the data saved in the database.
+     * @param {TeamCreateManyAndReturnArgs} args - Arguments to create many Teams.
+     * @example
+     * // Create many Teams
+     * const team = await prisma.team.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Teams and only return the `id`
+     * const teamWithIdOnly = await prisma.team.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends TeamCreateManyAndReturnArgs>(args?: SelectSubset<T, TeamCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Team.
+     * @param {TeamDeleteArgs} args - Arguments to delete one Team.
+     * @example
+     * // Delete one Team
+     * const Team = await prisma.team.delete({
+     *   where: {
+     *     // ... filter to delete one Team
+     *   }
+     * })
+     * 
+     */
+    delete<T extends TeamDeleteArgs>(args: SelectSubset<T, TeamDeleteArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Team.
+     * @param {TeamUpdateArgs} args - Arguments to update one Team.
+     * @example
+     * // Update one Team
+     * const team = await prisma.team.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends TeamUpdateArgs>(args: SelectSubset<T, TeamUpdateArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Teams.
+     * @param {TeamDeleteManyArgs} args - Arguments to filter Teams to delete.
+     * @example
+     * // Delete a few Teams
+     * const { count } = await prisma.team.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends TeamDeleteManyArgs>(args?: SelectSubset<T, TeamDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Teams.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Teams
+     * const team = await prisma.team.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends TeamUpdateManyArgs>(args: SelectSubset<T, TeamUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Teams and returns the data updated in the database.
+     * @param {TeamUpdateManyAndReturnArgs} args - Arguments to update many Teams.
+     * @example
+     * // Update many Teams
+     * const team = await prisma.team.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Teams and only return the `id`
+     * const teamWithIdOnly = await prisma.team.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends TeamUpdateManyAndReturnArgs>(args: SelectSubset<T, TeamUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Team.
+     * @param {TeamUpsertArgs} args - Arguments to update or create a Team.
+     * @example
+     * // Update or create a Team
+     * const team = await prisma.team.upsert({
+     *   create: {
+     *     // ... data to create a Team
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Team we want to update
+     *   }
+     * })
+     */
+    upsert<T extends TeamUpsertArgs>(args: SelectSubset<T, TeamUpsertArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Teams.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamCountArgs} args - Arguments to filter Teams to count.
+     * @example
+     * // Count the number of Teams
+     * const count = await prisma.team.count({
+     *   where: {
+     *     // ... the filter for the Teams we want to count
+     *   }
+     * })
+    **/
+    count<T extends TeamCountArgs>(
+      args?: Subset<T, TeamCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], TeamCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Team.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends TeamAggregateArgs>(args: Subset<T, TeamAggregateArgs>): Prisma.PrismaPromise<GetTeamAggregateType<T>>
+
+    /**
+     * Group by Team.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {TeamGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends TeamGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: TeamGroupByArgs['orderBy'] }
+        : { orderBy?: TeamGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, TeamGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTeamGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Team model
+   */
+  readonly fields: TeamFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Team.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__TeamClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    parentTeam<T extends Team$parentTeamArgs<ExtArgs> = {}>(args?: Subset<T, Team$parentTeamArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    childTeams<T extends Team$childTeamsArgs<ExtArgs> = {}>(args?: Subset<T, Team$childTeamsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    projects<T extends Team$projectsArgs<ExtArgs> = {}>(args?: Subset<T, Team$projectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    allocations<T extends Team$allocationsArgs<ExtArgs> = {}>(args?: Subset<T, Team$allocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BudgetAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Team model
+   */
+  interface TeamFieldRefs {
+    readonly id: FieldRef<"Team", 'String'>
+    readonly organizationId: FieldRef<"Team", 'String'>
+    readonly name: FieldRef<"Team", 'String'>
+    readonly code: FieldRef<"Team", 'String'>
+    readonly parentTeamId: FieldRef<"Team", 'String'>
+    readonly isActive: FieldRef<"Team", 'Boolean'>
+    readonly createdAt: FieldRef<"Team", 'DateTime'>
+    readonly updatedAt: FieldRef<"Team", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Team findUnique
+   */
+  export type TeamFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInclude<ExtArgs> | null
+    /**
+     * Filter, which Team to fetch.
+     */
+    where: TeamWhereUniqueInput
+  }
+
+  /**
+   * Team findUniqueOrThrow
+   */
+  export type TeamFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInclude<ExtArgs> | null
+    /**
+     * Filter, which Team to fetch.
+     */
+    where: TeamWhereUniqueInput
+  }
+
+  /**
+   * Team findFirst
+   */
+  export type TeamFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInclude<ExtArgs> | null
+    /**
+     * Filter, which Team to fetch.
+     */
+    where?: TeamWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Teams to fetch.
+     */
+    orderBy?: TeamOrderByWithRelationInput | TeamOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Teams.
+     */
+    cursor?: TeamWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Teams from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Teams.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Teams.
+     */
+    distinct?: TeamScalarFieldEnum | TeamScalarFieldEnum[]
+  }
+
+  /**
+   * Team findFirstOrThrow
+   */
+  export type TeamFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInclude<ExtArgs> | null
+    /**
+     * Filter, which Team to fetch.
+     */
+    where?: TeamWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Teams to fetch.
+     */
+    orderBy?: TeamOrderByWithRelationInput | TeamOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Teams.
+     */
+    cursor?: TeamWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Teams from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Teams.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Teams.
+     */
+    distinct?: TeamScalarFieldEnum | TeamScalarFieldEnum[]
+  }
+
+  /**
+   * Team findMany
+   */
+  export type TeamFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInclude<ExtArgs> | null
+    /**
+     * Filter, which Teams to fetch.
+     */
+    where?: TeamWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Teams to fetch.
+     */
+    orderBy?: TeamOrderByWithRelationInput | TeamOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Teams.
+     */
+    cursor?: TeamWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Teams from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Teams.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Teams.
+     */
+    distinct?: TeamScalarFieldEnum | TeamScalarFieldEnum[]
+  }
+
+  /**
+   * Team create
+   */
+  export type TeamCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Team.
+     */
+    data: XOR<TeamCreateInput, TeamUncheckedCreateInput>
+  }
+
+  /**
+   * Team createMany
+   */
+  export type TeamCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Teams.
+     */
+    data: TeamCreateManyInput | TeamCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Team createManyAndReturn
+   */
+  export type TeamCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * The data used to create many Teams.
+     */
+    data: TeamCreateManyInput | TeamCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Team update
+   */
+  export type TeamUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Team.
+     */
+    data: XOR<TeamUpdateInput, TeamUncheckedUpdateInput>
+    /**
+     * Choose, which Team to update.
+     */
+    where: TeamWhereUniqueInput
+  }
+
+  /**
+   * Team updateMany
+   */
+  export type TeamUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Teams.
+     */
+    data: XOR<TeamUpdateManyMutationInput, TeamUncheckedUpdateManyInput>
+    /**
+     * Filter which Teams to update
+     */
+    where?: TeamWhereInput
+    /**
+     * Limit how many Teams to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Team updateManyAndReturn
+   */
+  export type TeamUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * The data used to update Teams.
+     */
+    data: XOR<TeamUpdateManyMutationInput, TeamUncheckedUpdateManyInput>
+    /**
+     * Filter which Teams to update
+     */
+    where?: TeamWhereInput
+    /**
+     * Limit how many Teams to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Team upsert
+   */
+  export type TeamUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Team to update in case it exists.
+     */
+    where: TeamWhereUniqueInput
+    /**
+     * In case the Team found by the `where` argument doesn't exist, create a new Team with this data.
+     */
+    create: XOR<TeamCreateInput, TeamUncheckedCreateInput>
+    /**
+     * In case the Team was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<TeamUpdateInput, TeamUncheckedUpdateInput>
+  }
+
+  /**
+   * Team delete
+   */
+  export type TeamDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInclude<ExtArgs> | null
+    /**
+     * Filter which Team to delete.
+     */
+    where: TeamWhereUniqueInput
+  }
+
+  /**
+   * Team deleteMany
+   */
+  export type TeamDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Teams to delete
+     */
+    where?: TeamWhereInput
+    /**
+     * Limit how many Teams to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Team.parentTeam
+   */
+  export type Team$parentTeamArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInclude<ExtArgs> | null
+    where?: TeamWhereInput
+  }
+
+  /**
+   * Team.childTeams
+   */
+  export type Team$childTeamsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInclude<ExtArgs> | null
+    where?: TeamWhereInput
+    orderBy?: TeamOrderByWithRelationInput | TeamOrderByWithRelationInput[]
+    cursor?: TeamWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TeamScalarFieldEnum | TeamScalarFieldEnum[]
+  }
+
+  /**
+   * Team.projects
+   */
+  export type Team$projectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Project
+     */
+    select?: ProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Project
+     */
+    omit?: ProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectInclude<ExtArgs> | null
+    where?: ProjectWhereInput
+    orderBy?: ProjectOrderByWithRelationInput | ProjectOrderByWithRelationInput[]
+    cursor?: ProjectWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProjectScalarFieldEnum | ProjectScalarFieldEnum[]
+  }
+
+  /**
+   * Team.allocations
+   */
+  export type Team$allocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BudgetAllocation
+     */
+    select?: BudgetAllocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BudgetAllocation
+     */
+    omit?: BudgetAllocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BudgetAllocationInclude<ExtArgs> | null
+    where?: BudgetAllocationWhereInput
+    orderBy?: BudgetAllocationOrderByWithRelationInput | BudgetAllocationOrderByWithRelationInput[]
+    cursor?: BudgetAllocationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BudgetAllocationScalarFieldEnum | BudgetAllocationScalarFieldEnum[]
+  }
+
+  /**
+   * Team without action
+   */
+  export type TeamDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInclude<ExtArgs> | null
   }
 
 
@@ -2637,7 +4288,9 @@ export namespace Prisma {
   export type ProjectMinAggregateOutputType = {
     id: string | null
     organizationId: string | null
+    teamId: string | null
     name: string | null
+    code: string | null
     description: string | null
     status: string | null
     priority: number | null
@@ -2650,7 +4303,9 @@ export namespace Prisma {
   export type ProjectMaxAggregateOutputType = {
     id: string | null
     organizationId: string | null
+    teamId: string | null
     name: string | null
+    code: string | null
     description: string | null
     status: string | null
     priority: number | null
@@ -2663,7 +4318,9 @@ export namespace Prisma {
   export type ProjectCountAggregateOutputType = {
     id: number
     organizationId: number
+    teamId: number
     name: number
+    code: number
     description: number
     status: number
     priority: number
@@ -2688,7 +4345,9 @@ export namespace Prisma {
   export type ProjectMinAggregateInputType = {
     id?: true
     organizationId?: true
+    teamId?: true
     name?: true
+    code?: true
     description?: true
     status?: true
     priority?: true
@@ -2701,7 +4360,9 @@ export namespace Prisma {
   export type ProjectMaxAggregateInputType = {
     id?: true
     organizationId?: true
+    teamId?: true
     name?: true
+    code?: true
     description?: true
     status?: true
     priority?: true
@@ -2714,7 +4375,9 @@ export namespace Prisma {
   export type ProjectCountAggregateInputType = {
     id?: true
     organizationId?: true
+    teamId?: true
     name?: true
+    code?: true
     description?: true
     status?: true
     priority?: true
@@ -2814,7 +4477,9 @@ export namespace Prisma {
   export type ProjectGroupByOutputType = {
     id: string
     organizationId: string | null
+    teamId: string | null
     name: string
+    code: string
     description: string | null
     status: string
     priority: number
@@ -2846,7 +4511,9 @@ export namespace Prisma {
   export type ProjectSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     organizationId?: boolean
+    teamId?: boolean
     name?: boolean
+    code?: boolean
     description?: boolean
     status?: boolean
     priority?: boolean
@@ -2855,14 +4522,18 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     organization?: boolean | Project$organizationArgs<ExtArgs>
+    team?: boolean | Project$teamArgs<ExtArgs>
     logs?: boolean | Project$logsArgs<ExtArgs>
+    allocations?: boolean | Project$allocationsArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
   export type ProjectSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     organizationId?: boolean
+    teamId?: boolean
     name?: boolean
+    code?: boolean
     description?: boolean
     status?: boolean
     priority?: boolean
@@ -2871,12 +4542,15 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     organization?: boolean | Project$organizationArgs<ExtArgs>
+    team?: boolean | Project$teamArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
   export type ProjectSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     organizationId?: boolean
+    teamId?: boolean
     name?: boolean
+    code?: boolean
     description?: boolean
     status?: boolean
     priority?: boolean
@@ -2885,12 +4559,15 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     organization?: boolean | Project$organizationArgs<ExtArgs>
+    team?: boolean | Project$teamArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
   export type ProjectSelectScalar = {
     id?: boolean
     organizationId?: boolean
+    teamId?: boolean
     name?: boolean
+    code?: boolean
     description?: boolean
     status?: boolean
     priority?: boolean
@@ -2900,29 +4577,37 @@ export namespace Prisma {
     createdBy?: boolean
   }
 
-  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "name" | "description" | "status" | "priority" | "progress" | "createdAt" | "updatedAt" | "createdBy", ExtArgs["result"]["project"]>
+  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "teamId" | "name" | "code" | "description" | "status" | "priority" | "progress" | "createdAt" | "updatedAt" | "createdBy", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | Project$organizationArgs<ExtArgs>
+    team?: boolean | Project$teamArgs<ExtArgs>
     logs?: boolean | Project$logsArgs<ExtArgs>
+    allocations?: boolean | Project$allocationsArgs<ExtArgs>
     _count?: boolean | ProjectCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type ProjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | Project$organizationArgs<ExtArgs>
+    team?: boolean | Project$teamArgs<ExtArgs>
   }
   export type ProjectIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | Project$organizationArgs<ExtArgs>
+    team?: boolean | Project$teamArgs<ExtArgs>
   }
 
   export type $ProjectPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Project"
     objects: {
       organization: Prisma.$OrganizationPayload<ExtArgs> | null
+      team: Prisma.$TeamPayload<ExtArgs> | null
       logs: Prisma.$AuditLogPayload<ExtArgs>[]
+      allocations: Prisma.$BudgetAllocationPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       organizationId: string | null
+      teamId: string | null
       name: string
+      code: string
       description: string | null
       status: string
       priority: number
@@ -3325,7 +5010,9 @@ export namespace Prisma {
   export interface Prisma__ProjectClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     organization<T extends Project$organizationArgs<ExtArgs> = {}>(args?: Subset<T, Project$organizationArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    team<T extends Project$teamArgs<ExtArgs> = {}>(args?: Subset<T, Project$teamArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     logs<T extends Project$logsArgs<ExtArgs> = {}>(args?: Subset<T, Project$logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    allocations<T extends Project$allocationsArgs<ExtArgs> = {}>(args?: Subset<T, Project$allocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BudgetAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3357,7 +5044,9 @@ export namespace Prisma {
   interface ProjectFieldRefs {
     readonly id: FieldRef<"Project", 'String'>
     readonly organizationId: FieldRef<"Project", 'String'>
+    readonly teamId: FieldRef<"Project", 'String'>
     readonly name: FieldRef<"Project", 'String'>
+    readonly code: FieldRef<"Project", 'String'>
     readonly description: FieldRef<"Project", 'String'>
     readonly status: FieldRef<"Project", 'String'>
     readonly priority: FieldRef<"Project", 'Int'>
@@ -3785,6 +5474,25 @@ export namespace Prisma {
   }
 
   /**
+   * Project.team
+   */
+  export type Project$teamArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInclude<ExtArgs> | null
+    where?: TeamWhereInput
+  }
+
+  /**
    * Project.logs
    */
   export type Project$logsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3809,6 +5517,30 @@ export namespace Prisma {
   }
 
   /**
+   * Project.allocations
+   */
+  export type Project$allocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BudgetAllocation
+     */
+    select?: BudgetAllocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BudgetAllocation
+     */
+    omit?: BudgetAllocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BudgetAllocationInclude<ExtArgs> | null
+    where?: BudgetAllocationWhereInput
+    orderBy?: BudgetAllocationOrderByWithRelationInput | BudgetAllocationOrderByWithRelationInput[]
+    cursor?: BudgetAllocationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BudgetAllocationScalarFieldEnum | BudgetAllocationScalarFieldEnum[]
+  }
+
+  /**
    * Project without action
    */
   export type ProjectDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3824,6 +5556,2251 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ProjectInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Period
+   */
+
+  export type AggregatePeriod = {
+    _count: PeriodCountAggregateOutputType | null
+    _min: PeriodMinAggregateOutputType | null
+    _max: PeriodMaxAggregateOutputType | null
+  }
+
+  export type PeriodMinAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    type: string | null
+    startDate: Date | null
+    endDate: Date | null
+    label: string | null
+    isLocked: boolean | null
+  }
+
+  export type PeriodMaxAggregateOutputType = {
+    id: string | null
+    organizationId: string | null
+    type: string | null
+    startDate: Date | null
+    endDate: Date | null
+    label: string | null
+    isLocked: boolean | null
+  }
+
+  export type PeriodCountAggregateOutputType = {
+    id: number
+    organizationId: number
+    type: number
+    startDate: number
+    endDate: number
+    label: number
+    isLocked: number
+    _all: number
+  }
+
+
+  export type PeriodMinAggregateInputType = {
+    id?: true
+    organizationId?: true
+    type?: true
+    startDate?: true
+    endDate?: true
+    label?: true
+    isLocked?: true
+  }
+
+  export type PeriodMaxAggregateInputType = {
+    id?: true
+    organizationId?: true
+    type?: true
+    startDate?: true
+    endDate?: true
+    label?: true
+    isLocked?: true
+  }
+
+  export type PeriodCountAggregateInputType = {
+    id?: true
+    organizationId?: true
+    type?: true
+    startDate?: true
+    endDate?: true
+    label?: true
+    isLocked?: true
+    _all?: true
+  }
+
+  export type PeriodAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Period to aggregate.
+     */
+    where?: PeriodWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Periods to fetch.
+     */
+    orderBy?: PeriodOrderByWithRelationInput | PeriodOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PeriodWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Periods from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Periods.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Periods
+    **/
+    _count?: true | PeriodCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PeriodMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PeriodMaxAggregateInputType
+  }
+
+  export type GetPeriodAggregateType<T extends PeriodAggregateArgs> = {
+        [P in keyof T & keyof AggregatePeriod]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePeriod[P]>
+      : GetScalarType<T[P], AggregatePeriod[P]>
+  }
+
+
+
+
+  export type PeriodGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PeriodWhereInput
+    orderBy?: PeriodOrderByWithAggregationInput | PeriodOrderByWithAggregationInput[]
+    by: PeriodScalarFieldEnum[] | PeriodScalarFieldEnum
+    having?: PeriodScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PeriodCountAggregateInputType | true
+    _min?: PeriodMinAggregateInputType
+    _max?: PeriodMaxAggregateInputType
+  }
+
+  export type PeriodGroupByOutputType = {
+    id: string
+    organizationId: string
+    type: string
+    startDate: Date
+    endDate: Date
+    label: string
+    isLocked: boolean
+    _count: PeriodCountAggregateOutputType | null
+    _min: PeriodMinAggregateOutputType | null
+    _max: PeriodMaxAggregateOutputType | null
+  }
+
+  type GetPeriodGroupByPayload<T extends PeriodGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PeriodGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PeriodGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PeriodGroupByOutputType[P]>
+            : GetScalarType<T[P], PeriodGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PeriodSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    type?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    label?: boolean
+    isLocked?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    allocations?: boolean | Period$allocationsArgs<ExtArgs>
+    _count?: boolean | PeriodCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["period"]>
+
+  export type PeriodSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    type?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    label?: boolean
+    isLocked?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["period"]>
+
+  export type PeriodSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    organizationId?: boolean
+    type?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    label?: boolean
+    isLocked?: boolean
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["period"]>
+
+  export type PeriodSelectScalar = {
+    id?: boolean
+    organizationId?: boolean
+    type?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    label?: boolean
+    isLocked?: boolean
+  }
+
+  export type PeriodOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "type" | "startDate" | "endDate" | "label" | "isLocked", ExtArgs["result"]["period"]>
+  export type PeriodInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+    allocations?: boolean | Period$allocationsArgs<ExtArgs>
+    _count?: boolean | PeriodCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PeriodIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }
+  export type PeriodIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    organization?: boolean | OrganizationDefaultArgs<ExtArgs>
+  }
+
+  export type $PeriodPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Period"
+    objects: {
+      organization: Prisma.$OrganizationPayload<ExtArgs>
+      allocations: Prisma.$BudgetAllocationPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      organizationId: string
+      type: string
+      startDate: Date
+      endDate: Date
+      label: string
+      isLocked: boolean
+    }, ExtArgs["result"]["period"]>
+    composites: {}
+  }
+
+  type PeriodGetPayload<S extends boolean | null | undefined | PeriodDefaultArgs> = $Result.GetResult<Prisma.$PeriodPayload, S>
+
+  type PeriodCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PeriodFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PeriodCountAggregateInputType | true
+    }
+
+  export interface PeriodDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Period'], meta: { name: 'Period' } }
+    /**
+     * Find zero or one Period that matches the filter.
+     * @param {PeriodFindUniqueArgs} args - Arguments to find a Period
+     * @example
+     * // Get one Period
+     * const period = await prisma.period.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PeriodFindUniqueArgs>(args: SelectSubset<T, PeriodFindUniqueArgs<ExtArgs>>): Prisma__PeriodClient<$Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Period that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PeriodFindUniqueOrThrowArgs} args - Arguments to find a Period
+     * @example
+     * // Get one Period
+     * const period = await prisma.period.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PeriodFindUniqueOrThrowArgs>(args: SelectSubset<T, PeriodFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PeriodClient<$Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Period that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PeriodFindFirstArgs} args - Arguments to find a Period
+     * @example
+     * // Get one Period
+     * const period = await prisma.period.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PeriodFindFirstArgs>(args?: SelectSubset<T, PeriodFindFirstArgs<ExtArgs>>): Prisma__PeriodClient<$Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Period that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PeriodFindFirstOrThrowArgs} args - Arguments to find a Period
+     * @example
+     * // Get one Period
+     * const period = await prisma.period.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PeriodFindFirstOrThrowArgs>(args?: SelectSubset<T, PeriodFindFirstOrThrowArgs<ExtArgs>>): Prisma__PeriodClient<$Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Periods that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PeriodFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Periods
+     * const periods = await prisma.period.findMany()
+     * 
+     * // Get first 10 Periods
+     * const periods = await prisma.period.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const periodWithIdOnly = await prisma.period.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PeriodFindManyArgs>(args?: SelectSubset<T, PeriodFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Period.
+     * @param {PeriodCreateArgs} args - Arguments to create a Period.
+     * @example
+     * // Create one Period
+     * const Period = await prisma.period.create({
+     *   data: {
+     *     // ... data to create a Period
+     *   }
+     * })
+     * 
+     */
+    create<T extends PeriodCreateArgs>(args: SelectSubset<T, PeriodCreateArgs<ExtArgs>>): Prisma__PeriodClient<$Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Periods.
+     * @param {PeriodCreateManyArgs} args - Arguments to create many Periods.
+     * @example
+     * // Create many Periods
+     * const period = await prisma.period.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PeriodCreateManyArgs>(args?: SelectSubset<T, PeriodCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Periods and returns the data saved in the database.
+     * @param {PeriodCreateManyAndReturnArgs} args - Arguments to create many Periods.
+     * @example
+     * // Create many Periods
+     * const period = await prisma.period.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Periods and only return the `id`
+     * const periodWithIdOnly = await prisma.period.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PeriodCreateManyAndReturnArgs>(args?: SelectSubset<T, PeriodCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Period.
+     * @param {PeriodDeleteArgs} args - Arguments to delete one Period.
+     * @example
+     * // Delete one Period
+     * const Period = await prisma.period.delete({
+     *   where: {
+     *     // ... filter to delete one Period
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PeriodDeleteArgs>(args: SelectSubset<T, PeriodDeleteArgs<ExtArgs>>): Prisma__PeriodClient<$Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Period.
+     * @param {PeriodUpdateArgs} args - Arguments to update one Period.
+     * @example
+     * // Update one Period
+     * const period = await prisma.period.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PeriodUpdateArgs>(args: SelectSubset<T, PeriodUpdateArgs<ExtArgs>>): Prisma__PeriodClient<$Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Periods.
+     * @param {PeriodDeleteManyArgs} args - Arguments to filter Periods to delete.
+     * @example
+     * // Delete a few Periods
+     * const { count } = await prisma.period.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PeriodDeleteManyArgs>(args?: SelectSubset<T, PeriodDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Periods.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PeriodUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Periods
+     * const period = await prisma.period.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PeriodUpdateManyArgs>(args: SelectSubset<T, PeriodUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Periods and returns the data updated in the database.
+     * @param {PeriodUpdateManyAndReturnArgs} args - Arguments to update many Periods.
+     * @example
+     * // Update many Periods
+     * const period = await prisma.period.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Periods and only return the `id`
+     * const periodWithIdOnly = await prisma.period.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PeriodUpdateManyAndReturnArgs>(args: SelectSubset<T, PeriodUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Period.
+     * @param {PeriodUpsertArgs} args - Arguments to update or create a Period.
+     * @example
+     * // Update or create a Period
+     * const period = await prisma.period.upsert({
+     *   create: {
+     *     // ... data to create a Period
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Period we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PeriodUpsertArgs>(args: SelectSubset<T, PeriodUpsertArgs<ExtArgs>>): Prisma__PeriodClient<$Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Periods.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PeriodCountArgs} args - Arguments to filter Periods to count.
+     * @example
+     * // Count the number of Periods
+     * const count = await prisma.period.count({
+     *   where: {
+     *     // ... the filter for the Periods we want to count
+     *   }
+     * })
+    **/
+    count<T extends PeriodCountArgs>(
+      args?: Subset<T, PeriodCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PeriodCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Period.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PeriodAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PeriodAggregateArgs>(args: Subset<T, PeriodAggregateArgs>): Prisma.PrismaPromise<GetPeriodAggregateType<T>>
+
+    /**
+     * Group by Period.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PeriodGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PeriodGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PeriodGroupByArgs['orderBy'] }
+        : { orderBy?: PeriodGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PeriodGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPeriodGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Period model
+   */
+  readonly fields: PeriodFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Period.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PeriodClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    organization<T extends OrganizationDefaultArgs<ExtArgs> = {}>(args?: Subset<T, OrganizationDefaultArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    allocations<T extends Period$allocationsArgs<ExtArgs> = {}>(args?: Subset<T, Period$allocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BudgetAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Period model
+   */
+  interface PeriodFieldRefs {
+    readonly id: FieldRef<"Period", 'String'>
+    readonly organizationId: FieldRef<"Period", 'String'>
+    readonly type: FieldRef<"Period", 'String'>
+    readonly startDate: FieldRef<"Period", 'DateTime'>
+    readonly endDate: FieldRef<"Period", 'DateTime'>
+    readonly label: FieldRef<"Period", 'String'>
+    readonly isLocked: FieldRef<"Period", 'Boolean'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Period findUnique
+   */
+  export type PeriodFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Period
+     */
+    select?: PeriodSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Period
+     */
+    omit?: PeriodOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PeriodInclude<ExtArgs> | null
+    /**
+     * Filter, which Period to fetch.
+     */
+    where: PeriodWhereUniqueInput
+  }
+
+  /**
+   * Period findUniqueOrThrow
+   */
+  export type PeriodFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Period
+     */
+    select?: PeriodSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Period
+     */
+    omit?: PeriodOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PeriodInclude<ExtArgs> | null
+    /**
+     * Filter, which Period to fetch.
+     */
+    where: PeriodWhereUniqueInput
+  }
+
+  /**
+   * Period findFirst
+   */
+  export type PeriodFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Period
+     */
+    select?: PeriodSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Period
+     */
+    omit?: PeriodOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PeriodInclude<ExtArgs> | null
+    /**
+     * Filter, which Period to fetch.
+     */
+    where?: PeriodWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Periods to fetch.
+     */
+    orderBy?: PeriodOrderByWithRelationInput | PeriodOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Periods.
+     */
+    cursor?: PeriodWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Periods from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Periods.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Periods.
+     */
+    distinct?: PeriodScalarFieldEnum | PeriodScalarFieldEnum[]
+  }
+
+  /**
+   * Period findFirstOrThrow
+   */
+  export type PeriodFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Period
+     */
+    select?: PeriodSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Period
+     */
+    omit?: PeriodOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PeriodInclude<ExtArgs> | null
+    /**
+     * Filter, which Period to fetch.
+     */
+    where?: PeriodWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Periods to fetch.
+     */
+    orderBy?: PeriodOrderByWithRelationInput | PeriodOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Periods.
+     */
+    cursor?: PeriodWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Periods from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Periods.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Periods.
+     */
+    distinct?: PeriodScalarFieldEnum | PeriodScalarFieldEnum[]
+  }
+
+  /**
+   * Period findMany
+   */
+  export type PeriodFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Period
+     */
+    select?: PeriodSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Period
+     */
+    omit?: PeriodOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PeriodInclude<ExtArgs> | null
+    /**
+     * Filter, which Periods to fetch.
+     */
+    where?: PeriodWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Periods to fetch.
+     */
+    orderBy?: PeriodOrderByWithRelationInput | PeriodOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Periods.
+     */
+    cursor?: PeriodWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Periods from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Periods.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Periods.
+     */
+    distinct?: PeriodScalarFieldEnum | PeriodScalarFieldEnum[]
+  }
+
+  /**
+   * Period create
+   */
+  export type PeriodCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Period
+     */
+    select?: PeriodSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Period
+     */
+    omit?: PeriodOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PeriodInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Period.
+     */
+    data: XOR<PeriodCreateInput, PeriodUncheckedCreateInput>
+  }
+
+  /**
+   * Period createMany
+   */
+  export type PeriodCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Periods.
+     */
+    data: PeriodCreateManyInput | PeriodCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Period createManyAndReturn
+   */
+  export type PeriodCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Period
+     */
+    select?: PeriodSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Period
+     */
+    omit?: PeriodOmit<ExtArgs> | null
+    /**
+     * The data used to create many Periods.
+     */
+    data: PeriodCreateManyInput | PeriodCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PeriodIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Period update
+   */
+  export type PeriodUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Period
+     */
+    select?: PeriodSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Period
+     */
+    omit?: PeriodOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PeriodInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Period.
+     */
+    data: XOR<PeriodUpdateInput, PeriodUncheckedUpdateInput>
+    /**
+     * Choose, which Period to update.
+     */
+    where: PeriodWhereUniqueInput
+  }
+
+  /**
+   * Period updateMany
+   */
+  export type PeriodUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Periods.
+     */
+    data: XOR<PeriodUpdateManyMutationInput, PeriodUncheckedUpdateManyInput>
+    /**
+     * Filter which Periods to update
+     */
+    where?: PeriodWhereInput
+    /**
+     * Limit how many Periods to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Period updateManyAndReturn
+   */
+  export type PeriodUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Period
+     */
+    select?: PeriodSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Period
+     */
+    omit?: PeriodOmit<ExtArgs> | null
+    /**
+     * The data used to update Periods.
+     */
+    data: XOR<PeriodUpdateManyMutationInput, PeriodUncheckedUpdateManyInput>
+    /**
+     * Filter which Periods to update
+     */
+    where?: PeriodWhereInput
+    /**
+     * Limit how many Periods to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PeriodIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Period upsert
+   */
+  export type PeriodUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Period
+     */
+    select?: PeriodSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Period
+     */
+    omit?: PeriodOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PeriodInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Period to update in case it exists.
+     */
+    where: PeriodWhereUniqueInput
+    /**
+     * In case the Period found by the `where` argument doesn't exist, create a new Period with this data.
+     */
+    create: XOR<PeriodCreateInput, PeriodUncheckedCreateInput>
+    /**
+     * In case the Period was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PeriodUpdateInput, PeriodUncheckedUpdateInput>
+  }
+
+  /**
+   * Period delete
+   */
+  export type PeriodDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Period
+     */
+    select?: PeriodSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Period
+     */
+    omit?: PeriodOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PeriodInclude<ExtArgs> | null
+    /**
+     * Filter which Period to delete.
+     */
+    where: PeriodWhereUniqueInput
+  }
+
+  /**
+   * Period deleteMany
+   */
+  export type PeriodDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Periods to delete
+     */
+    where?: PeriodWhereInput
+    /**
+     * Limit how many Periods to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Period.allocations
+   */
+  export type Period$allocationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BudgetAllocation
+     */
+    select?: BudgetAllocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BudgetAllocation
+     */
+    omit?: BudgetAllocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BudgetAllocationInclude<ExtArgs> | null
+    where?: BudgetAllocationWhereInput
+    orderBy?: BudgetAllocationOrderByWithRelationInput | BudgetAllocationOrderByWithRelationInput[]
+    cursor?: BudgetAllocationWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: BudgetAllocationScalarFieldEnum | BudgetAllocationScalarFieldEnum[]
+  }
+
+  /**
+   * Period without action
+   */
+  export type PeriodDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Period
+     */
+    select?: PeriodSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Period
+     */
+    omit?: PeriodOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PeriodInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model BudgetAllocation
+   */
+
+  export type AggregateBudgetAllocation = {
+    _count: BudgetAllocationCountAggregateOutputType | null
+    _avg: BudgetAllocationAvgAggregateOutputType | null
+    _sum: BudgetAllocationSumAggregateOutputType | null
+    _min: BudgetAllocationMinAggregateOutputType | null
+    _max: BudgetAllocationMaxAggregateOutputType | null
+  }
+
+  export type BudgetAllocationAvgAggregateOutputType = {
+    plannedHours: number | null
+  }
+
+  export type BudgetAllocationSumAggregateOutputType = {
+    plannedHours: number | null
+  }
+
+  export type BudgetAllocationMinAggregateOutputType = {
+    id: string | null
+    teamId: string | null
+    projectId: string | null
+    periodId: string | null
+    plannedHours: number | null
+    updatedAt: Date | null
+  }
+
+  export type BudgetAllocationMaxAggregateOutputType = {
+    id: string | null
+    teamId: string | null
+    projectId: string | null
+    periodId: string | null
+    plannedHours: number | null
+    updatedAt: Date | null
+  }
+
+  export type BudgetAllocationCountAggregateOutputType = {
+    id: number
+    teamId: number
+    projectId: number
+    periodId: number
+    plannedHours: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type BudgetAllocationAvgAggregateInputType = {
+    plannedHours?: true
+  }
+
+  export type BudgetAllocationSumAggregateInputType = {
+    plannedHours?: true
+  }
+
+  export type BudgetAllocationMinAggregateInputType = {
+    id?: true
+    teamId?: true
+    projectId?: true
+    periodId?: true
+    plannedHours?: true
+    updatedAt?: true
+  }
+
+  export type BudgetAllocationMaxAggregateInputType = {
+    id?: true
+    teamId?: true
+    projectId?: true
+    periodId?: true
+    plannedHours?: true
+    updatedAt?: true
+  }
+
+  export type BudgetAllocationCountAggregateInputType = {
+    id?: true
+    teamId?: true
+    projectId?: true
+    periodId?: true
+    plannedHours?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type BudgetAllocationAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BudgetAllocation to aggregate.
+     */
+    where?: BudgetAllocationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BudgetAllocations to fetch.
+     */
+    orderBy?: BudgetAllocationOrderByWithRelationInput | BudgetAllocationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: BudgetAllocationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BudgetAllocations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BudgetAllocations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned BudgetAllocations
+    **/
+    _count?: true | BudgetAllocationCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: BudgetAllocationAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: BudgetAllocationSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: BudgetAllocationMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: BudgetAllocationMaxAggregateInputType
+  }
+
+  export type GetBudgetAllocationAggregateType<T extends BudgetAllocationAggregateArgs> = {
+        [P in keyof T & keyof AggregateBudgetAllocation]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBudgetAllocation[P]>
+      : GetScalarType<T[P], AggregateBudgetAllocation[P]>
+  }
+
+
+
+
+  export type BudgetAllocationGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: BudgetAllocationWhereInput
+    orderBy?: BudgetAllocationOrderByWithAggregationInput | BudgetAllocationOrderByWithAggregationInput[]
+    by: BudgetAllocationScalarFieldEnum[] | BudgetAllocationScalarFieldEnum
+    having?: BudgetAllocationScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: BudgetAllocationCountAggregateInputType | true
+    _avg?: BudgetAllocationAvgAggregateInputType
+    _sum?: BudgetAllocationSumAggregateInputType
+    _min?: BudgetAllocationMinAggregateInputType
+    _max?: BudgetAllocationMaxAggregateInputType
+  }
+
+  export type BudgetAllocationGroupByOutputType = {
+    id: string
+    teamId: string
+    projectId: string
+    periodId: string
+    plannedHours: number
+    updatedAt: Date
+    _count: BudgetAllocationCountAggregateOutputType | null
+    _avg: BudgetAllocationAvgAggregateOutputType | null
+    _sum: BudgetAllocationSumAggregateOutputType | null
+    _min: BudgetAllocationMinAggregateOutputType | null
+    _max: BudgetAllocationMaxAggregateOutputType | null
+  }
+
+  type GetBudgetAllocationGroupByPayload<T extends BudgetAllocationGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<BudgetAllocationGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof BudgetAllocationGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], BudgetAllocationGroupByOutputType[P]>
+            : GetScalarType<T[P], BudgetAllocationGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type BudgetAllocationSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    teamId?: boolean
+    projectId?: boolean
+    periodId?: boolean
+    plannedHours?: boolean
+    updatedAt?: boolean
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    period?: boolean | PeriodDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["budgetAllocation"]>
+
+  export type BudgetAllocationSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    teamId?: boolean
+    projectId?: boolean
+    periodId?: boolean
+    plannedHours?: boolean
+    updatedAt?: boolean
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    period?: boolean | PeriodDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["budgetAllocation"]>
+
+  export type BudgetAllocationSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    teamId?: boolean
+    projectId?: boolean
+    periodId?: boolean
+    plannedHours?: boolean
+    updatedAt?: boolean
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    period?: boolean | PeriodDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["budgetAllocation"]>
+
+  export type BudgetAllocationSelectScalar = {
+    id?: boolean
+    teamId?: boolean
+    projectId?: boolean
+    periodId?: boolean
+    plannedHours?: boolean
+    updatedAt?: boolean
+  }
+
+  export type BudgetAllocationOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "teamId" | "projectId" | "periodId" | "plannedHours" | "updatedAt", ExtArgs["result"]["budgetAllocation"]>
+  export type BudgetAllocationInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    period?: boolean | PeriodDefaultArgs<ExtArgs>
+  }
+  export type BudgetAllocationIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    period?: boolean | PeriodDefaultArgs<ExtArgs>
+  }
+  export type BudgetAllocationIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    team?: boolean | TeamDefaultArgs<ExtArgs>
+    project?: boolean | ProjectDefaultArgs<ExtArgs>
+    period?: boolean | PeriodDefaultArgs<ExtArgs>
+  }
+
+  export type $BudgetAllocationPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "BudgetAllocation"
+    objects: {
+      team: Prisma.$TeamPayload<ExtArgs>
+      project: Prisma.$ProjectPayload<ExtArgs>
+      period: Prisma.$PeriodPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      teamId: string
+      projectId: string
+      periodId: string
+      plannedHours: number
+      updatedAt: Date
+    }, ExtArgs["result"]["budgetAllocation"]>
+    composites: {}
+  }
+
+  type BudgetAllocationGetPayload<S extends boolean | null | undefined | BudgetAllocationDefaultArgs> = $Result.GetResult<Prisma.$BudgetAllocationPayload, S>
+
+  type BudgetAllocationCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<BudgetAllocationFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: BudgetAllocationCountAggregateInputType | true
+    }
+
+  export interface BudgetAllocationDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['BudgetAllocation'], meta: { name: 'BudgetAllocation' } }
+    /**
+     * Find zero or one BudgetAllocation that matches the filter.
+     * @param {BudgetAllocationFindUniqueArgs} args - Arguments to find a BudgetAllocation
+     * @example
+     * // Get one BudgetAllocation
+     * const budgetAllocation = await prisma.budgetAllocation.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends BudgetAllocationFindUniqueArgs>(args: SelectSubset<T, BudgetAllocationFindUniqueArgs<ExtArgs>>): Prisma__BudgetAllocationClient<$Result.GetResult<Prisma.$BudgetAllocationPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one BudgetAllocation that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {BudgetAllocationFindUniqueOrThrowArgs} args - Arguments to find a BudgetAllocation
+     * @example
+     * // Get one BudgetAllocation
+     * const budgetAllocation = await prisma.budgetAllocation.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends BudgetAllocationFindUniqueOrThrowArgs>(args: SelectSubset<T, BudgetAllocationFindUniqueOrThrowArgs<ExtArgs>>): Prisma__BudgetAllocationClient<$Result.GetResult<Prisma.$BudgetAllocationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BudgetAllocation that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BudgetAllocationFindFirstArgs} args - Arguments to find a BudgetAllocation
+     * @example
+     * // Get one BudgetAllocation
+     * const budgetAllocation = await prisma.budgetAllocation.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends BudgetAllocationFindFirstArgs>(args?: SelectSubset<T, BudgetAllocationFindFirstArgs<ExtArgs>>): Prisma__BudgetAllocationClient<$Result.GetResult<Prisma.$BudgetAllocationPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first BudgetAllocation that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BudgetAllocationFindFirstOrThrowArgs} args - Arguments to find a BudgetAllocation
+     * @example
+     * // Get one BudgetAllocation
+     * const budgetAllocation = await prisma.budgetAllocation.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends BudgetAllocationFindFirstOrThrowArgs>(args?: SelectSubset<T, BudgetAllocationFindFirstOrThrowArgs<ExtArgs>>): Prisma__BudgetAllocationClient<$Result.GetResult<Prisma.$BudgetAllocationPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more BudgetAllocations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BudgetAllocationFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all BudgetAllocations
+     * const budgetAllocations = await prisma.budgetAllocation.findMany()
+     * 
+     * // Get first 10 BudgetAllocations
+     * const budgetAllocations = await prisma.budgetAllocation.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const budgetAllocationWithIdOnly = await prisma.budgetAllocation.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends BudgetAllocationFindManyArgs>(args?: SelectSubset<T, BudgetAllocationFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BudgetAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a BudgetAllocation.
+     * @param {BudgetAllocationCreateArgs} args - Arguments to create a BudgetAllocation.
+     * @example
+     * // Create one BudgetAllocation
+     * const BudgetAllocation = await prisma.budgetAllocation.create({
+     *   data: {
+     *     // ... data to create a BudgetAllocation
+     *   }
+     * })
+     * 
+     */
+    create<T extends BudgetAllocationCreateArgs>(args: SelectSubset<T, BudgetAllocationCreateArgs<ExtArgs>>): Prisma__BudgetAllocationClient<$Result.GetResult<Prisma.$BudgetAllocationPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many BudgetAllocations.
+     * @param {BudgetAllocationCreateManyArgs} args - Arguments to create many BudgetAllocations.
+     * @example
+     * // Create many BudgetAllocations
+     * const budgetAllocation = await prisma.budgetAllocation.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends BudgetAllocationCreateManyArgs>(args?: SelectSubset<T, BudgetAllocationCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many BudgetAllocations and returns the data saved in the database.
+     * @param {BudgetAllocationCreateManyAndReturnArgs} args - Arguments to create many BudgetAllocations.
+     * @example
+     * // Create many BudgetAllocations
+     * const budgetAllocation = await prisma.budgetAllocation.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many BudgetAllocations and only return the `id`
+     * const budgetAllocationWithIdOnly = await prisma.budgetAllocation.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends BudgetAllocationCreateManyAndReturnArgs>(args?: SelectSubset<T, BudgetAllocationCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BudgetAllocationPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a BudgetAllocation.
+     * @param {BudgetAllocationDeleteArgs} args - Arguments to delete one BudgetAllocation.
+     * @example
+     * // Delete one BudgetAllocation
+     * const BudgetAllocation = await prisma.budgetAllocation.delete({
+     *   where: {
+     *     // ... filter to delete one BudgetAllocation
+     *   }
+     * })
+     * 
+     */
+    delete<T extends BudgetAllocationDeleteArgs>(args: SelectSubset<T, BudgetAllocationDeleteArgs<ExtArgs>>): Prisma__BudgetAllocationClient<$Result.GetResult<Prisma.$BudgetAllocationPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one BudgetAllocation.
+     * @param {BudgetAllocationUpdateArgs} args - Arguments to update one BudgetAllocation.
+     * @example
+     * // Update one BudgetAllocation
+     * const budgetAllocation = await prisma.budgetAllocation.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends BudgetAllocationUpdateArgs>(args: SelectSubset<T, BudgetAllocationUpdateArgs<ExtArgs>>): Prisma__BudgetAllocationClient<$Result.GetResult<Prisma.$BudgetAllocationPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more BudgetAllocations.
+     * @param {BudgetAllocationDeleteManyArgs} args - Arguments to filter BudgetAllocations to delete.
+     * @example
+     * // Delete a few BudgetAllocations
+     * const { count } = await prisma.budgetAllocation.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends BudgetAllocationDeleteManyArgs>(args?: SelectSubset<T, BudgetAllocationDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BudgetAllocations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BudgetAllocationUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many BudgetAllocations
+     * const budgetAllocation = await prisma.budgetAllocation.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends BudgetAllocationUpdateManyArgs>(args: SelectSubset<T, BudgetAllocationUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more BudgetAllocations and returns the data updated in the database.
+     * @param {BudgetAllocationUpdateManyAndReturnArgs} args - Arguments to update many BudgetAllocations.
+     * @example
+     * // Update many BudgetAllocations
+     * const budgetAllocation = await prisma.budgetAllocation.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more BudgetAllocations and only return the `id`
+     * const budgetAllocationWithIdOnly = await prisma.budgetAllocation.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends BudgetAllocationUpdateManyAndReturnArgs>(args: SelectSubset<T, BudgetAllocationUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BudgetAllocationPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one BudgetAllocation.
+     * @param {BudgetAllocationUpsertArgs} args - Arguments to update or create a BudgetAllocation.
+     * @example
+     * // Update or create a BudgetAllocation
+     * const budgetAllocation = await prisma.budgetAllocation.upsert({
+     *   create: {
+     *     // ... data to create a BudgetAllocation
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the BudgetAllocation we want to update
+     *   }
+     * })
+     */
+    upsert<T extends BudgetAllocationUpsertArgs>(args: SelectSubset<T, BudgetAllocationUpsertArgs<ExtArgs>>): Prisma__BudgetAllocationClient<$Result.GetResult<Prisma.$BudgetAllocationPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of BudgetAllocations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BudgetAllocationCountArgs} args - Arguments to filter BudgetAllocations to count.
+     * @example
+     * // Count the number of BudgetAllocations
+     * const count = await prisma.budgetAllocation.count({
+     *   where: {
+     *     // ... the filter for the BudgetAllocations we want to count
+     *   }
+     * })
+    **/
+    count<T extends BudgetAllocationCountArgs>(
+      args?: Subset<T, BudgetAllocationCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], BudgetAllocationCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a BudgetAllocation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BudgetAllocationAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends BudgetAllocationAggregateArgs>(args: Subset<T, BudgetAllocationAggregateArgs>): Prisma.PrismaPromise<GetBudgetAllocationAggregateType<T>>
+
+    /**
+     * Group by BudgetAllocation.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {BudgetAllocationGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends BudgetAllocationGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: BudgetAllocationGroupByArgs['orderBy'] }
+        : { orderBy?: BudgetAllocationGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, BudgetAllocationGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBudgetAllocationGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the BudgetAllocation model
+   */
+  readonly fields: BudgetAllocationFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for BudgetAllocation.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__BudgetAllocationClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    team<T extends TeamDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TeamDefaultArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    project<T extends ProjectDefaultArgs<ExtArgs> = {}>(args?: Subset<T, ProjectDefaultArgs<ExtArgs>>): Prisma__ProjectClient<$Result.GetResult<Prisma.$ProjectPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    period<T extends PeriodDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PeriodDefaultArgs<ExtArgs>>): Prisma__PeriodClient<$Result.GetResult<Prisma.$PeriodPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the BudgetAllocation model
+   */
+  interface BudgetAllocationFieldRefs {
+    readonly id: FieldRef<"BudgetAllocation", 'String'>
+    readonly teamId: FieldRef<"BudgetAllocation", 'String'>
+    readonly projectId: FieldRef<"BudgetAllocation", 'String'>
+    readonly periodId: FieldRef<"BudgetAllocation", 'String'>
+    readonly plannedHours: FieldRef<"BudgetAllocation", 'Float'>
+    readonly updatedAt: FieldRef<"BudgetAllocation", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * BudgetAllocation findUnique
+   */
+  export type BudgetAllocationFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BudgetAllocation
+     */
+    select?: BudgetAllocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BudgetAllocation
+     */
+    omit?: BudgetAllocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BudgetAllocationInclude<ExtArgs> | null
+    /**
+     * Filter, which BudgetAllocation to fetch.
+     */
+    where: BudgetAllocationWhereUniqueInput
+  }
+
+  /**
+   * BudgetAllocation findUniqueOrThrow
+   */
+  export type BudgetAllocationFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BudgetAllocation
+     */
+    select?: BudgetAllocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BudgetAllocation
+     */
+    omit?: BudgetAllocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BudgetAllocationInclude<ExtArgs> | null
+    /**
+     * Filter, which BudgetAllocation to fetch.
+     */
+    where: BudgetAllocationWhereUniqueInput
+  }
+
+  /**
+   * BudgetAllocation findFirst
+   */
+  export type BudgetAllocationFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BudgetAllocation
+     */
+    select?: BudgetAllocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BudgetAllocation
+     */
+    omit?: BudgetAllocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BudgetAllocationInclude<ExtArgs> | null
+    /**
+     * Filter, which BudgetAllocation to fetch.
+     */
+    where?: BudgetAllocationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BudgetAllocations to fetch.
+     */
+    orderBy?: BudgetAllocationOrderByWithRelationInput | BudgetAllocationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BudgetAllocations.
+     */
+    cursor?: BudgetAllocationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BudgetAllocations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BudgetAllocations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BudgetAllocations.
+     */
+    distinct?: BudgetAllocationScalarFieldEnum | BudgetAllocationScalarFieldEnum[]
+  }
+
+  /**
+   * BudgetAllocation findFirstOrThrow
+   */
+  export type BudgetAllocationFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BudgetAllocation
+     */
+    select?: BudgetAllocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BudgetAllocation
+     */
+    omit?: BudgetAllocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BudgetAllocationInclude<ExtArgs> | null
+    /**
+     * Filter, which BudgetAllocation to fetch.
+     */
+    where?: BudgetAllocationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BudgetAllocations to fetch.
+     */
+    orderBy?: BudgetAllocationOrderByWithRelationInput | BudgetAllocationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for BudgetAllocations.
+     */
+    cursor?: BudgetAllocationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BudgetAllocations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BudgetAllocations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BudgetAllocations.
+     */
+    distinct?: BudgetAllocationScalarFieldEnum | BudgetAllocationScalarFieldEnum[]
+  }
+
+  /**
+   * BudgetAllocation findMany
+   */
+  export type BudgetAllocationFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BudgetAllocation
+     */
+    select?: BudgetAllocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BudgetAllocation
+     */
+    omit?: BudgetAllocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BudgetAllocationInclude<ExtArgs> | null
+    /**
+     * Filter, which BudgetAllocations to fetch.
+     */
+    where?: BudgetAllocationWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of BudgetAllocations to fetch.
+     */
+    orderBy?: BudgetAllocationOrderByWithRelationInput | BudgetAllocationOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing BudgetAllocations.
+     */
+    cursor?: BudgetAllocationWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` BudgetAllocations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` BudgetAllocations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of BudgetAllocations.
+     */
+    distinct?: BudgetAllocationScalarFieldEnum | BudgetAllocationScalarFieldEnum[]
+  }
+
+  /**
+   * BudgetAllocation create
+   */
+  export type BudgetAllocationCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BudgetAllocation
+     */
+    select?: BudgetAllocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BudgetAllocation
+     */
+    omit?: BudgetAllocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BudgetAllocationInclude<ExtArgs> | null
+    /**
+     * The data needed to create a BudgetAllocation.
+     */
+    data: XOR<BudgetAllocationCreateInput, BudgetAllocationUncheckedCreateInput>
+  }
+
+  /**
+   * BudgetAllocation createMany
+   */
+  export type BudgetAllocationCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many BudgetAllocations.
+     */
+    data: BudgetAllocationCreateManyInput | BudgetAllocationCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * BudgetAllocation createManyAndReturn
+   */
+  export type BudgetAllocationCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BudgetAllocation
+     */
+    select?: BudgetAllocationSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BudgetAllocation
+     */
+    omit?: BudgetAllocationOmit<ExtArgs> | null
+    /**
+     * The data used to create many BudgetAllocations.
+     */
+    data: BudgetAllocationCreateManyInput | BudgetAllocationCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BudgetAllocationIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BudgetAllocation update
+   */
+  export type BudgetAllocationUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BudgetAllocation
+     */
+    select?: BudgetAllocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BudgetAllocation
+     */
+    omit?: BudgetAllocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BudgetAllocationInclude<ExtArgs> | null
+    /**
+     * The data needed to update a BudgetAllocation.
+     */
+    data: XOR<BudgetAllocationUpdateInput, BudgetAllocationUncheckedUpdateInput>
+    /**
+     * Choose, which BudgetAllocation to update.
+     */
+    where: BudgetAllocationWhereUniqueInput
+  }
+
+  /**
+   * BudgetAllocation updateMany
+   */
+  export type BudgetAllocationUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update BudgetAllocations.
+     */
+    data: XOR<BudgetAllocationUpdateManyMutationInput, BudgetAllocationUncheckedUpdateManyInput>
+    /**
+     * Filter which BudgetAllocations to update
+     */
+    where?: BudgetAllocationWhereInput
+    /**
+     * Limit how many BudgetAllocations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * BudgetAllocation updateManyAndReturn
+   */
+  export type BudgetAllocationUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BudgetAllocation
+     */
+    select?: BudgetAllocationSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the BudgetAllocation
+     */
+    omit?: BudgetAllocationOmit<ExtArgs> | null
+    /**
+     * The data used to update BudgetAllocations.
+     */
+    data: XOR<BudgetAllocationUpdateManyMutationInput, BudgetAllocationUncheckedUpdateManyInput>
+    /**
+     * Filter which BudgetAllocations to update
+     */
+    where?: BudgetAllocationWhereInput
+    /**
+     * Limit how many BudgetAllocations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BudgetAllocationIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * BudgetAllocation upsert
+   */
+  export type BudgetAllocationUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BudgetAllocation
+     */
+    select?: BudgetAllocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BudgetAllocation
+     */
+    omit?: BudgetAllocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BudgetAllocationInclude<ExtArgs> | null
+    /**
+     * The filter to search for the BudgetAllocation to update in case it exists.
+     */
+    where: BudgetAllocationWhereUniqueInput
+    /**
+     * In case the BudgetAllocation found by the `where` argument doesn't exist, create a new BudgetAllocation with this data.
+     */
+    create: XOR<BudgetAllocationCreateInput, BudgetAllocationUncheckedCreateInput>
+    /**
+     * In case the BudgetAllocation was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<BudgetAllocationUpdateInput, BudgetAllocationUncheckedUpdateInput>
+  }
+
+  /**
+   * BudgetAllocation delete
+   */
+  export type BudgetAllocationDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BudgetAllocation
+     */
+    select?: BudgetAllocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BudgetAllocation
+     */
+    omit?: BudgetAllocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BudgetAllocationInclude<ExtArgs> | null
+    /**
+     * Filter which BudgetAllocation to delete.
+     */
+    where: BudgetAllocationWhereUniqueInput
+  }
+
+  /**
+   * BudgetAllocation deleteMany
+   */
+  export type BudgetAllocationDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which BudgetAllocations to delete
+     */
+    where?: BudgetAllocationWhereInput
+    /**
+     * Limit how many BudgetAllocations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * BudgetAllocation without action
+   */
+  export type BudgetAllocationDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the BudgetAllocation
+     */
+    select?: BudgetAllocationSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the BudgetAllocation
+     */
+    omit?: BudgetAllocationOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: BudgetAllocationInclude<ExtArgs> | null
   }
 
 
@@ -9402,10 +13379,26 @@ export namespace Prisma {
   export type OrganizationScalarFieldEnum = (typeof OrganizationScalarFieldEnum)[keyof typeof OrganizationScalarFieldEnum]
 
 
-  export const ProjectScalarFieldEnum: {
+  export const TeamScalarFieldEnum: {
     id: 'id',
     organizationId: 'organizationId',
     name: 'name',
+    code: 'code',
+    parentTeamId: 'parentTeamId',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type TeamScalarFieldEnum = (typeof TeamScalarFieldEnum)[keyof typeof TeamScalarFieldEnum]
+
+
+  export const ProjectScalarFieldEnum: {
+    id: 'id',
+    organizationId: 'organizationId',
+    teamId: 'teamId',
+    name: 'name',
+    code: 'code',
     description: 'description',
     status: 'status',
     priority: 'priority',
@@ -9416,6 +13409,31 @@ export namespace Prisma {
   };
 
   export type ProjectScalarFieldEnum = (typeof ProjectScalarFieldEnum)[keyof typeof ProjectScalarFieldEnum]
+
+
+  export const PeriodScalarFieldEnum: {
+    id: 'id',
+    organizationId: 'organizationId',
+    type: 'type',
+    startDate: 'startDate',
+    endDate: 'endDate',
+    label: 'label',
+    isLocked: 'isLocked'
+  };
+
+  export type PeriodScalarFieldEnum = (typeof PeriodScalarFieldEnum)[keyof typeof PeriodScalarFieldEnum]
+
+
+  export const BudgetAllocationScalarFieldEnum: {
+    id: 'id',
+    teamId: 'teamId',
+    projectId: 'projectId',
+    periodId: 'periodId',
+    plannedHours: 'plannedHours',
+    updatedAt: 'updatedAt'
+  };
+
+  export type BudgetAllocationScalarFieldEnum = (typeof BudgetAllocationScalarFieldEnum)[keyof typeof BudgetAllocationScalarFieldEnum]
 
 
   export const AuditLogScalarFieldEnum: {
@@ -9544,6 +13562,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'Int'
    */
   export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
@@ -9554,13 +13579,6 @@ export namespace Prisma {
    * Reference to a field of type 'Int[]'
    */
   export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -9591,6 +13609,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Organization"> | Date | string
     users?: UserListRelationFilter
     projects?: ProjectListRelationFilter
+    teams?: TeamListRelationFilter
+    periods?: PeriodListRelationFilter
   }
 
   export type OrganizationOrderByWithRelationInput = {
@@ -9600,6 +13620,8 @@ export namespace Prisma {
     updatedAt?: SortOrder
     users?: UserOrderByRelationAggregateInput
     projects?: ProjectOrderByRelationAggregateInput
+    teams?: TeamOrderByRelationAggregateInput
+    periods?: PeriodOrderByRelationAggregateInput
   }
 
   export type OrganizationWhereUniqueInput = Prisma.AtLeast<{
@@ -9612,6 +13634,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Organization"> | Date | string
     users?: UserListRelationFilter
     projects?: ProjectListRelationFilter
+    teams?: TeamListRelationFilter
+    periods?: PeriodListRelationFilter
   }, "id">
 
   export type OrganizationOrderByWithAggregationInput = {
@@ -9634,13 +13658,97 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Organization"> | Date | string
   }
 
+  export type TeamWhereInput = {
+    AND?: TeamWhereInput | TeamWhereInput[]
+    OR?: TeamWhereInput[]
+    NOT?: TeamWhereInput | TeamWhereInput[]
+    id?: StringFilter<"Team"> | string
+    organizationId?: StringFilter<"Team"> | string
+    name?: StringFilter<"Team"> | string
+    code?: StringFilter<"Team"> | string
+    parentTeamId?: StringNullableFilter<"Team"> | string | null
+    isActive?: BoolFilter<"Team"> | boolean
+    createdAt?: DateTimeFilter<"Team"> | Date | string
+    updatedAt?: DateTimeFilter<"Team"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    parentTeam?: XOR<TeamNullableScalarRelationFilter, TeamWhereInput> | null
+    childTeams?: TeamListRelationFilter
+    projects?: ProjectListRelationFilter
+    allocations?: BudgetAllocationListRelationFilter
+  }
+
+  export type TeamOrderByWithRelationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    parentTeamId?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    organization?: OrganizationOrderByWithRelationInput
+    parentTeam?: TeamOrderByWithRelationInput
+    childTeams?: TeamOrderByRelationAggregateInput
+    projects?: ProjectOrderByRelationAggregateInput
+    allocations?: BudgetAllocationOrderByRelationAggregateInput
+  }
+
+  export type TeamWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: TeamWhereInput | TeamWhereInput[]
+    OR?: TeamWhereInput[]
+    NOT?: TeamWhereInput | TeamWhereInput[]
+    organizationId?: StringFilter<"Team"> | string
+    name?: StringFilter<"Team"> | string
+    parentTeamId?: StringNullableFilter<"Team"> | string | null
+    isActive?: BoolFilter<"Team"> | boolean
+    createdAt?: DateTimeFilter<"Team"> | Date | string
+    updatedAt?: DateTimeFilter<"Team"> | Date | string
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    parentTeam?: XOR<TeamNullableScalarRelationFilter, TeamWhereInput> | null
+    childTeams?: TeamListRelationFilter
+    projects?: ProjectListRelationFilter
+    allocations?: BudgetAllocationListRelationFilter
+  }, "id" | "code">
+
+  export type TeamOrderByWithAggregationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    parentTeamId?: SortOrderInput | SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: TeamCountOrderByAggregateInput
+    _max?: TeamMaxOrderByAggregateInput
+    _min?: TeamMinOrderByAggregateInput
+  }
+
+  export type TeamScalarWhereWithAggregatesInput = {
+    AND?: TeamScalarWhereWithAggregatesInput | TeamScalarWhereWithAggregatesInput[]
+    OR?: TeamScalarWhereWithAggregatesInput[]
+    NOT?: TeamScalarWhereWithAggregatesInput | TeamScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Team"> | string
+    organizationId?: StringWithAggregatesFilter<"Team"> | string
+    name?: StringWithAggregatesFilter<"Team"> | string
+    code?: StringWithAggregatesFilter<"Team"> | string
+    parentTeamId?: StringNullableWithAggregatesFilter<"Team"> | string | null
+    isActive?: BoolWithAggregatesFilter<"Team"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Team"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Team"> | Date | string
+  }
+
   export type ProjectWhereInput = {
     AND?: ProjectWhereInput | ProjectWhereInput[]
     OR?: ProjectWhereInput[]
     NOT?: ProjectWhereInput | ProjectWhereInput[]
     id?: StringFilter<"Project"> | string
     organizationId?: StringNullableFilter<"Project"> | string | null
+    teamId?: StringNullableFilter<"Project"> | string | null
     name?: StringFilter<"Project"> | string
+    code?: StringFilter<"Project"> | string
     description?: StringNullableFilter<"Project"> | string | null
     status?: StringFilter<"Project"> | string
     priority?: IntFilter<"Project"> | number
@@ -9649,13 +13757,17 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Project"> | Date | string
     createdBy?: StringFilter<"Project"> | string
     organization?: XOR<OrganizationNullableScalarRelationFilter, OrganizationWhereInput> | null
+    team?: XOR<TeamNullableScalarRelationFilter, TeamWhereInput> | null
     logs?: AuditLogListRelationFilter
+    allocations?: BudgetAllocationListRelationFilter
   }
 
   export type ProjectOrderByWithRelationInput = {
     id?: SortOrder
     organizationId?: SortOrderInput | SortOrder
+    teamId?: SortOrderInput | SortOrder
     name?: SortOrder
+    code?: SortOrder
     description?: SortOrderInput | SortOrder
     status?: SortOrder
     priority?: SortOrder
@@ -9664,16 +13776,20 @@ export namespace Prisma {
     updatedAt?: SortOrder
     createdBy?: SortOrder
     organization?: OrganizationOrderByWithRelationInput
+    team?: TeamOrderByWithRelationInput
     logs?: AuditLogOrderByRelationAggregateInput
+    allocations?: BudgetAllocationOrderByRelationAggregateInput
   }
 
   export type ProjectWhereUniqueInput = Prisma.AtLeast<{
     id?: string
     name?: string
+    code?: string
     AND?: ProjectWhereInput | ProjectWhereInput[]
     OR?: ProjectWhereInput[]
     NOT?: ProjectWhereInput | ProjectWhereInput[]
     organizationId?: StringNullableFilter<"Project"> | string | null
+    teamId?: StringNullableFilter<"Project"> | string | null
     description?: StringNullableFilter<"Project"> | string | null
     status?: StringFilter<"Project"> | string
     priority?: IntFilter<"Project"> | number
@@ -9682,13 +13798,17 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"Project"> | Date | string
     createdBy?: StringFilter<"Project"> | string
     organization?: XOR<OrganizationNullableScalarRelationFilter, OrganizationWhereInput> | null
+    team?: XOR<TeamNullableScalarRelationFilter, TeamWhereInput> | null
     logs?: AuditLogListRelationFilter
-  }, "id" | "name">
+    allocations?: BudgetAllocationListRelationFilter
+  }, "id" | "name" | "code">
 
   export type ProjectOrderByWithAggregationInput = {
     id?: SortOrder
     organizationId?: SortOrderInput | SortOrder
+    teamId?: SortOrderInput | SortOrder
     name?: SortOrder
+    code?: SortOrder
     description?: SortOrderInput | SortOrder
     status?: SortOrder
     priority?: SortOrder
@@ -9709,7 +13829,9 @@ export namespace Prisma {
     NOT?: ProjectScalarWhereWithAggregatesInput | ProjectScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Project"> | string
     organizationId?: StringNullableWithAggregatesFilter<"Project"> | string | null
+    teamId?: StringNullableWithAggregatesFilter<"Project"> | string | null
     name?: StringWithAggregatesFilter<"Project"> | string
+    code?: StringWithAggregatesFilter<"Project"> | string
     description?: StringNullableWithAggregatesFilter<"Project"> | string | null
     status?: StringWithAggregatesFilter<"Project"> | string
     priority?: IntWithAggregatesFilter<"Project"> | number
@@ -9717,6 +13839,143 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Project"> | Date | string
     createdBy?: StringWithAggregatesFilter<"Project"> | string
+  }
+
+  export type PeriodWhereInput = {
+    AND?: PeriodWhereInput | PeriodWhereInput[]
+    OR?: PeriodWhereInput[]
+    NOT?: PeriodWhereInput | PeriodWhereInput[]
+    id?: StringFilter<"Period"> | string
+    organizationId?: StringFilter<"Period"> | string
+    type?: StringFilter<"Period"> | string
+    startDate?: DateTimeFilter<"Period"> | Date | string
+    endDate?: DateTimeFilter<"Period"> | Date | string
+    label?: StringFilter<"Period"> | string
+    isLocked?: BoolFilter<"Period"> | boolean
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    allocations?: BudgetAllocationListRelationFilter
+  }
+
+  export type PeriodOrderByWithRelationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    type?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    label?: SortOrder
+    isLocked?: SortOrder
+    organization?: OrganizationOrderByWithRelationInput
+    allocations?: BudgetAllocationOrderByRelationAggregateInput
+  }
+
+  export type PeriodWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PeriodWhereInput | PeriodWhereInput[]
+    OR?: PeriodWhereInput[]
+    NOT?: PeriodWhereInput | PeriodWhereInput[]
+    organizationId?: StringFilter<"Period"> | string
+    type?: StringFilter<"Period"> | string
+    startDate?: DateTimeFilter<"Period"> | Date | string
+    endDate?: DateTimeFilter<"Period"> | Date | string
+    label?: StringFilter<"Period"> | string
+    isLocked?: BoolFilter<"Period"> | boolean
+    organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
+    allocations?: BudgetAllocationListRelationFilter
+  }, "id">
+
+  export type PeriodOrderByWithAggregationInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    type?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    label?: SortOrder
+    isLocked?: SortOrder
+    _count?: PeriodCountOrderByAggregateInput
+    _max?: PeriodMaxOrderByAggregateInput
+    _min?: PeriodMinOrderByAggregateInput
+  }
+
+  export type PeriodScalarWhereWithAggregatesInput = {
+    AND?: PeriodScalarWhereWithAggregatesInput | PeriodScalarWhereWithAggregatesInput[]
+    OR?: PeriodScalarWhereWithAggregatesInput[]
+    NOT?: PeriodScalarWhereWithAggregatesInput | PeriodScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Period"> | string
+    organizationId?: StringWithAggregatesFilter<"Period"> | string
+    type?: StringWithAggregatesFilter<"Period"> | string
+    startDate?: DateTimeWithAggregatesFilter<"Period"> | Date | string
+    endDate?: DateTimeWithAggregatesFilter<"Period"> | Date | string
+    label?: StringWithAggregatesFilter<"Period"> | string
+    isLocked?: BoolWithAggregatesFilter<"Period"> | boolean
+  }
+
+  export type BudgetAllocationWhereInput = {
+    AND?: BudgetAllocationWhereInput | BudgetAllocationWhereInput[]
+    OR?: BudgetAllocationWhereInput[]
+    NOT?: BudgetAllocationWhereInput | BudgetAllocationWhereInput[]
+    id?: StringFilter<"BudgetAllocation"> | string
+    teamId?: StringFilter<"BudgetAllocation"> | string
+    projectId?: StringFilter<"BudgetAllocation"> | string
+    periodId?: StringFilter<"BudgetAllocation"> | string
+    plannedHours?: FloatFilter<"BudgetAllocation"> | number
+    updatedAt?: DateTimeFilter<"BudgetAllocation"> | Date | string
+    team?: XOR<TeamScalarRelationFilter, TeamWhereInput>
+    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    period?: XOR<PeriodScalarRelationFilter, PeriodWhereInput>
+  }
+
+  export type BudgetAllocationOrderByWithRelationInput = {
+    id?: SortOrder
+    teamId?: SortOrder
+    projectId?: SortOrder
+    periodId?: SortOrder
+    plannedHours?: SortOrder
+    updatedAt?: SortOrder
+    team?: TeamOrderByWithRelationInput
+    project?: ProjectOrderByWithRelationInput
+    period?: PeriodOrderByWithRelationInput
+  }
+
+  export type BudgetAllocationWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    teamId_projectId_periodId?: BudgetAllocationTeamIdProjectIdPeriodIdCompoundUniqueInput
+    AND?: BudgetAllocationWhereInput | BudgetAllocationWhereInput[]
+    OR?: BudgetAllocationWhereInput[]
+    NOT?: BudgetAllocationWhereInput | BudgetAllocationWhereInput[]
+    teamId?: StringFilter<"BudgetAllocation"> | string
+    projectId?: StringFilter<"BudgetAllocation"> | string
+    periodId?: StringFilter<"BudgetAllocation"> | string
+    plannedHours?: FloatFilter<"BudgetAllocation"> | number
+    updatedAt?: DateTimeFilter<"BudgetAllocation"> | Date | string
+    team?: XOR<TeamScalarRelationFilter, TeamWhereInput>
+    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
+    period?: XOR<PeriodScalarRelationFilter, PeriodWhereInput>
+  }, "id" | "teamId_projectId_periodId">
+
+  export type BudgetAllocationOrderByWithAggregationInput = {
+    id?: SortOrder
+    teamId?: SortOrder
+    projectId?: SortOrder
+    periodId?: SortOrder
+    plannedHours?: SortOrder
+    updatedAt?: SortOrder
+    _count?: BudgetAllocationCountOrderByAggregateInput
+    _avg?: BudgetAllocationAvgOrderByAggregateInput
+    _max?: BudgetAllocationMaxOrderByAggregateInput
+    _min?: BudgetAllocationMinOrderByAggregateInput
+    _sum?: BudgetAllocationSumOrderByAggregateInput
+  }
+
+  export type BudgetAllocationScalarWhereWithAggregatesInput = {
+    AND?: BudgetAllocationScalarWhereWithAggregatesInput | BudgetAllocationScalarWhereWithAggregatesInput[]
+    OR?: BudgetAllocationScalarWhereWithAggregatesInput[]
+    NOT?: BudgetAllocationScalarWhereWithAggregatesInput | BudgetAllocationScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"BudgetAllocation"> | string
+    teamId?: StringWithAggregatesFilter<"BudgetAllocation"> | string
+    projectId?: StringWithAggregatesFilter<"BudgetAllocation"> | string
+    periodId?: StringWithAggregatesFilter<"BudgetAllocation"> | string
+    plannedHours?: FloatWithAggregatesFilter<"BudgetAllocation"> | number
+    updatedAt?: DateTimeWithAggregatesFilter<"BudgetAllocation"> | Date | string
   }
 
   export type AuditLogWhereInput = {
@@ -10073,6 +14332,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutOrganizationInput
     projects?: ProjectCreateNestedManyWithoutOrganizationInput
+    teams?: TeamCreateNestedManyWithoutOrganizationInput
+    periods?: PeriodCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateInput = {
@@ -10082,6 +14343,8 @@ export namespace Prisma {
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
     projects?: ProjectUncheckedCreateNestedManyWithoutOrganizationInput
+    teams?: TeamUncheckedCreateNestedManyWithoutOrganizationInput
+    periods?: PeriodUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUpdateInput = {
@@ -10091,6 +14354,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutOrganizationNestedInput
     projects?: ProjectUpdateManyWithoutOrganizationNestedInput
+    teams?: TeamUpdateManyWithoutOrganizationNestedInput
+    periods?: PeriodUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateInput = {
@@ -10100,6 +14365,8 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
     projects?: ProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+    teams?: TeamUncheckedUpdateManyWithoutOrganizationNestedInput
+    periods?: PeriodUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationCreateManyInput = {
@@ -10123,9 +14390,97 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type TeamCreateInput = {
+    id?: string
+    name: string
+    code: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutTeamsInput
+    parentTeam?: TeamCreateNestedOneWithoutChildTeamsInput
+    childTeams?: TeamCreateNestedManyWithoutParentTeamInput
+    projects?: ProjectCreateNestedManyWithoutTeamInput
+    allocations?: BudgetAllocationCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamUncheckedCreateInput = {
+    id?: string
+    organizationId: string
+    name: string
+    code: string
+    parentTeamId?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    childTeams?: TeamUncheckedCreateNestedManyWithoutParentTeamInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutTeamInput
+    allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutTeamsNestedInput
+    parentTeam?: TeamUpdateOneWithoutChildTeamsNestedInput
+    childTeams?: TeamUpdateManyWithoutParentTeamNestedInput
+    projects?: ProjectUpdateManyWithoutTeamNestedInput
+    allocations?: BudgetAllocationUpdateManyWithoutTeamNestedInput
+  }
+
+  export type TeamUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    parentTeamId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    childTeams?: TeamUncheckedUpdateManyWithoutParentTeamNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutTeamNestedInput
+    allocations?: BudgetAllocationUncheckedUpdateManyWithoutTeamNestedInput
+  }
+
+  export type TeamCreateManyInput = {
+    id?: string
+    organizationId: string
+    name: string
+    code: string
+    parentTeamId?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TeamUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TeamUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    parentTeamId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ProjectCreateInput = {
     id?: string
     name: string
+    code?: string
     description?: string | null
     status?: string
     priority?: number
@@ -10134,13 +14489,17 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy: string
     organization?: OrganizationCreateNestedOneWithoutProjectsInput
+    team?: TeamCreateNestedOneWithoutProjectsInput
     logs?: AuditLogCreateNestedManyWithoutProjectInput
+    allocations?: BudgetAllocationCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateInput = {
     id?: string
     organizationId?: string | null
+    teamId?: string | null
     name: string
+    code?: string
     description?: string | null
     status?: string
     priority?: number
@@ -10149,11 +14508,13 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy: string
     logs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
+    allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
@@ -10162,13 +14523,17 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
     organization?: OrganizationUpdateOneWithoutProjectsNestedInput
+    team?: TeamUpdateOneWithoutProjectsNestedInput
     logs?: AuditLogUpdateManyWithoutProjectNestedInput
+    allocations?: BudgetAllocationUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    teamId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
@@ -10177,12 +14542,15 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
     logs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
+    allocations?: BudgetAllocationUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectCreateManyInput = {
     id?: string
     organizationId?: string | null
+    teamId?: string | null
     name: string
+    code?: string
     description?: string | null
     status?: string
     priority?: number
@@ -10195,6 +14563,7 @@ export namespace Prisma {
   export type ProjectUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
@@ -10207,7 +14576,9 @@ export namespace Prisma {
   export type ProjectUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    teamId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
@@ -10215,6 +14586,139 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type PeriodCreateInput = {
+    id?: string
+    type: string
+    startDate: Date | string
+    endDate: Date | string
+    label: string
+    isLocked?: boolean
+    organization: OrganizationCreateNestedOneWithoutPeriodsInput
+    allocations?: BudgetAllocationCreateNestedManyWithoutPeriodInput
+  }
+
+  export type PeriodUncheckedCreateInput = {
+    id?: string
+    organizationId: string
+    type: string
+    startDate: Date | string
+    endDate: Date | string
+    label: string
+    isLocked?: boolean
+    allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutPeriodInput
+  }
+
+  export type PeriodUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    label?: StringFieldUpdateOperationsInput | string
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    organization?: OrganizationUpdateOneRequiredWithoutPeriodsNestedInput
+    allocations?: BudgetAllocationUpdateManyWithoutPeriodNestedInput
+  }
+
+  export type PeriodUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    label?: StringFieldUpdateOperationsInput | string
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    allocations?: BudgetAllocationUncheckedUpdateManyWithoutPeriodNestedInput
+  }
+
+  export type PeriodCreateManyInput = {
+    id?: string
+    organizationId: string
+    type: string
+    startDate: Date | string
+    endDate: Date | string
+    label: string
+    isLocked?: boolean
+  }
+
+  export type PeriodUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    label?: StringFieldUpdateOperationsInput | string
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type PeriodUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    label?: StringFieldUpdateOperationsInput | string
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type BudgetAllocationCreateInput = {
+    id?: string
+    plannedHours?: number
+    updatedAt?: Date | string
+    team: TeamCreateNestedOneWithoutAllocationsInput
+    project: ProjectCreateNestedOneWithoutAllocationsInput
+    period: PeriodCreateNestedOneWithoutAllocationsInput
+  }
+
+  export type BudgetAllocationUncheckedCreateInput = {
+    id?: string
+    teamId: string
+    projectId: string
+    periodId: string
+    plannedHours?: number
+    updatedAt?: Date | string
+  }
+
+  export type BudgetAllocationUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    plannedHours?: FloatFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    team?: TeamUpdateOneRequiredWithoutAllocationsNestedInput
+    project?: ProjectUpdateOneRequiredWithoutAllocationsNestedInput
+    period?: PeriodUpdateOneRequiredWithoutAllocationsNestedInput
+  }
+
+  export type BudgetAllocationUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    teamId?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    periodId?: StringFieldUpdateOperationsInput | string
+    plannedHours?: FloatFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BudgetAllocationCreateManyInput = {
+    id?: string
+    teamId: string
+    projectId: string
+    periodId: string
+    plannedHours?: number
+    updatedAt?: Date | string
+  }
+
+  export type BudgetAllocationUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    plannedHours?: FloatFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BudgetAllocationUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    teamId?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    periodId?: StringFieldUpdateOperationsInput | string
+    plannedHours?: FloatFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AuditLogCreateInput = {
@@ -10630,11 +15134,31 @@ export namespace Prisma {
     none?: ProjectWhereInput
   }
 
+  export type TeamListRelationFilter = {
+    every?: TeamWhereInput
+    some?: TeamWhereInput
+    none?: TeamWhereInput
+  }
+
+  export type PeriodListRelationFilter = {
+    every?: PeriodWhereInput
+    some?: PeriodWhereInput
+    none?: PeriodWhereInput
+  }
+
   export type UserOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type ProjectOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TeamOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PeriodOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -10706,6 +15230,95 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type OrganizationScalarRelationFilter = {
+    is?: OrganizationWhereInput
+    isNot?: OrganizationWhereInput
+  }
+
+  export type TeamNullableScalarRelationFilter = {
+    is?: TeamWhereInput | null
+    isNot?: TeamWhereInput | null
+  }
+
+  export type BudgetAllocationListRelationFilter = {
+    every?: BudgetAllocationWhereInput
+    some?: BudgetAllocationWhereInput
+    none?: BudgetAllocationWhereInput
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
+  export type BudgetAllocationOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type TeamCountOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    parentTeamId?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TeamMaxOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    parentTeamId?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type TeamMinOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    parentTeamId?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -10728,11 +15341,6 @@ export namespace Prisma {
     none?: AuditLogWhereInput
   }
 
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
-  }
-
   export type AuditLogOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -10740,7 +15348,9 @@ export namespace Prisma {
   export type ProjectCountOrderByAggregateInput = {
     id?: SortOrder
     organizationId?: SortOrder
+    teamId?: SortOrder
     name?: SortOrder
+    code?: SortOrder
     description?: SortOrder
     status?: SortOrder
     priority?: SortOrder
@@ -10758,7 +15368,9 @@ export namespace Prisma {
   export type ProjectMaxOrderByAggregateInput = {
     id?: SortOrder
     organizationId?: SortOrder
+    teamId?: SortOrder
     name?: SortOrder
+    code?: SortOrder
     description?: SortOrder
     status?: SortOrder
     priority?: SortOrder
@@ -10771,7 +15383,9 @@ export namespace Prisma {
   export type ProjectMinOrderByAggregateInput = {
     id?: SortOrder
     organizationId?: SortOrder
+    teamId?: SortOrder
     name?: SortOrder
+    code?: SortOrder
     description?: SortOrder
     status?: SortOrder
     priority?: SortOrder
@@ -10784,24 +15398,6 @@ export namespace Prisma {
   export type ProjectSumOrderByAggregateInput = {
     priority?: SortOrder
     progress?: SortOrder
-  }
-
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type IntWithAggregatesFilter<$PrismaModel = never> = {
@@ -10818,6 +15414,119 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type PeriodCountOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    type?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    label?: SortOrder
+    isLocked?: SortOrder
+  }
+
+  export type PeriodMaxOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    type?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    label?: SortOrder
+    isLocked?: SortOrder
+  }
+
+  export type PeriodMinOrderByAggregateInput = {
+    id?: SortOrder
+    organizationId?: SortOrder
+    type?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    label?: SortOrder
+    isLocked?: SortOrder
+  }
+
+  export type FloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type TeamScalarRelationFilter = {
+    is?: TeamWhereInput
+    isNot?: TeamWhereInput
+  }
+
+  export type ProjectScalarRelationFilter = {
+    is?: ProjectWhereInput
+    isNot?: ProjectWhereInput
+  }
+
+  export type PeriodScalarRelationFilter = {
+    is?: PeriodWhereInput
+    isNot?: PeriodWhereInput
+  }
+
+  export type BudgetAllocationTeamIdProjectIdPeriodIdCompoundUniqueInput = {
+    teamId: string
+    projectId: string
+    periodId: string
+  }
+
+  export type BudgetAllocationCountOrderByAggregateInput = {
+    id?: SortOrder
+    teamId?: SortOrder
+    projectId?: SortOrder
+    periodId?: SortOrder
+    plannedHours?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BudgetAllocationAvgOrderByAggregateInput = {
+    plannedHours?: SortOrder
+  }
+
+  export type BudgetAllocationMaxOrderByAggregateInput = {
+    id?: SortOrder
+    teamId?: SortOrder
+    projectId?: SortOrder
+    periodId?: SortOrder
+    plannedHours?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BudgetAllocationMinOrderByAggregateInput = {
+    id?: SortOrder
+    teamId?: SortOrder
+    projectId?: SortOrder
+    periodId?: SortOrder
+    plannedHours?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type BudgetAllocationSumOrderByAggregateInput = {
+    plannedHours?: SortOrder
+  }
+
+  export type FloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
   }
 
   export type ProjectNullableScalarRelationFilter = {
@@ -10873,11 +15582,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type AccountListRelationFilter = {
@@ -10948,14 +15652,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -11106,6 +15802,20 @@ export namespace Prisma {
     connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
   }
 
+  export type TeamCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<TeamCreateWithoutOrganizationInput, TeamUncheckedCreateWithoutOrganizationInput> | TeamCreateWithoutOrganizationInput[] | TeamUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: TeamCreateOrConnectWithoutOrganizationInput | TeamCreateOrConnectWithoutOrganizationInput[]
+    createMany?: TeamCreateManyOrganizationInputEnvelope
+    connect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+  }
+
+  export type PeriodCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<PeriodCreateWithoutOrganizationInput, PeriodUncheckedCreateWithoutOrganizationInput> | PeriodCreateWithoutOrganizationInput[] | PeriodUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: PeriodCreateOrConnectWithoutOrganizationInput | PeriodCreateOrConnectWithoutOrganizationInput[]
+    createMany?: PeriodCreateManyOrganizationInputEnvelope
+    connect?: PeriodWhereUniqueInput | PeriodWhereUniqueInput[]
+  }
+
   export type UserUncheckedCreateNestedManyWithoutOrganizationInput = {
     create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
@@ -11118,6 +15828,20 @@ export namespace Prisma {
     connectOrCreate?: ProjectCreateOrConnectWithoutOrganizationInput | ProjectCreateOrConnectWithoutOrganizationInput[]
     createMany?: ProjectCreateManyOrganizationInputEnvelope
     connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+  }
+
+  export type TeamUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<TeamCreateWithoutOrganizationInput, TeamUncheckedCreateWithoutOrganizationInput> | TeamCreateWithoutOrganizationInput[] | TeamUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: TeamCreateOrConnectWithoutOrganizationInput | TeamCreateOrConnectWithoutOrganizationInput[]
+    createMany?: TeamCreateManyOrganizationInputEnvelope
+    connect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+  }
+
+  export type PeriodUncheckedCreateNestedManyWithoutOrganizationInput = {
+    create?: XOR<PeriodCreateWithoutOrganizationInput, PeriodUncheckedCreateWithoutOrganizationInput> | PeriodCreateWithoutOrganizationInput[] | PeriodUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: PeriodCreateOrConnectWithoutOrganizationInput | PeriodCreateOrConnectWithoutOrganizationInput[]
+    createMany?: PeriodCreateManyOrganizationInputEnvelope
+    connect?: PeriodWhereUniqueInput | PeriodWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -11156,6 +15880,34 @@ export namespace Prisma {
     deleteMany?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
   }
 
+  export type TeamUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<TeamCreateWithoutOrganizationInput, TeamUncheckedCreateWithoutOrganizationInput> | TeamCreateWithoutOrganizationInput[] | TeamUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: TeamCreateOrConnectWithoutOrganizationInput | TeamCreateOrConnectWithoutOrganizationInput[]
+    upsert?: TeamUpsertWithWhereUniqueWithoutOrganizationInput | TeamUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: TeamCreateManyOrganizationInputEnvelope
+    set?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    disconnect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    delete?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    connect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    update?: TeamUpdateWithWhereUniqueWithoutOrganizationInput | TeamUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: TeamUpdateManyWithWhereWithoutOrganizationInput | TeamUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: TeamScalarWhereInput | TeamScalarWhereInput[]
+  }
+
+  export type PeriodUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<PeriodCreateWithoutOrganizationInput, PeriodUncheckedCreateWithoutOrganizationInput> | PeriodCreateWithoutOrganizationInput[] | PeriodUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: PeriodCreateOrConnectWithoutOrganizationInput | PeriodCreateOrConnectWithoutOrganizationInput[]
+    upsert?: PeriodUpsertWithWhereUniqueWithoutOrganizationInput | PeriodUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: PeriodCreateManyOrganizationInputEnvelope
+    set?: PeriodWhereUniqueInput | PeriodWhereUniqueInput[]
+    disconnect?: PeriodWhereUniqueInput | PeriodWhereUniqueInput[]
+    delete?: PeriodWhereUniqueInput | PeriodWhereUniqueInput[]
+    connect?: PeriodWhereUniqueInput | PeriodWhereUniqueInput[]
+    update?: PeriodUpdateWithWhereUniqueWithoutOrganizationInput | PeriodUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: PeriodUpdateManyWithWhereWithoutOrganizationInput | PeriodUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: PeriodScalarWhereInput | PeriodScalarWhereInput[]
+  }
+
   export type UserUncheckedUpdateManyWithoutOrganizationNestedInput = {
     create?: XOR<UserCreateWithoutOrganizationInput, UserUncheckedCreateWithoutOrganizationInput> | UserCreateWithoutOrganizationInput[] | UserUncheckedCreateWithoutOrganizationInput[]
     connectOrCreate?: UserCreateOrConnectWithoutOrganizationInput | UserCreateOrConnectWithoutOrganizationInput[]
@@ -11184,10 +15936,208 @@ export namespace Prisma {
     deleteMany?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
   }
 
+  export type TeamUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<TeamCreateWithoutOrganizationInput, TeamUncheckedCreateWithoutOrganizationInput> | TeamCreateWithoutOrganizationInput[] | TeamUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: TeamCreateOrConnectWithoutOrganizationInput | TeamCreateOrConnectWithoutOrganizationInput[]
+    upsert?: TeamUpsertWithWhereUniqueWithoutOrganizationInput | TeamUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: TeamCreateManyOrganizationInputEnvelope
+    set?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    disconnect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    delete?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    connect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    update?: TeamUpdateWithWhereUniqueWithoutOrganizationInput | TeamUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: TeamUpdateManyWithWhereWithoutOrganizationInput | TeamUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: TeamScalarWhereInput | TeamScalarWhereInput[]
+  }
+
+  export type PeriodUncheckedUpdateManyWithoutOrganizationNestedInput = {
+    create?: XOR<PeriodCreateWithoutOrganizationInput, PeriodUncheckedCreateWithoutOrganizationInput> | PeriodCreateWithoutOrganizationInput[] | PeriodUncheckedCreateWithoutOrganizationInput[]
+    connectOrCreate?: PeriodCreateOrConnectWithoutOrganizationInput | PeriodCreateOrConnectWithoutOrganizationInput[]
+    upsert?: PeriodUpsertWithWhereUniqueWithoutOrganizationInput | PeriodUpsertWithWhereUniqueWithoutOrganizationInput[]
+    createMany?: PeriodCreateManyOrganizationInputEnvelope
+    set?: PeriodWhereUniqueInput | PeriodWhereUniqueInput[]
+    disconnect?: PeriodWhereUniqueInput | PeriodWhereUniqueInput[]
+    delete?: PeriodWhereUniqueInput | PeriodWhereUniqueInput[]
+    connect?: PeriodWhereUniqueInput | PeriodWhereUniqueInput[]
+    update?: PeriodUpdateWithWhereUniqueWithoutOrganizationInput | PeriodUpdateWithWhereUniqueWithoutOrganizationInput[]
+    updateMany?: PeriodUpdateManyWithWhereWithoutOrganizationInput | PeriodUpdateManyWithWhereWithoutOrganizationInput[]
+    deleteMany?: PeriodScalarWhereInput | PeriodScalarWhereInput[]
+  }
+
+  export type OrganizationCreateNestedOneWithoutTeamsInput = {
+    create?: XOR<OrganizationCreateWithoutTeamsInput, OrganizationUncheckedCreateWithoutTeamsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutTeamsInput
+    connect?: OrganizationWhereUniqueInput
+  }
+
+  export type TeamCreateNestedOneWithoutChildTeamsInput = {
+    create?: XOR<TeamCreateWithoutChildTeamsInput, TeamUncheckedCreateWithoutChildTeamsInput>
+    connectOrCreate?: TeamCreateOrConnectWithoutChildTeamsInput
+    connect?: TeamWhereUniqueInput
+  }
+
+  export type TeamCreateNestedManyWithoutParentTeamInput = {
+    create?: XOR<TeamCreateWithoutParentTeamInput, TeamUncheckedCreateWithoutParentTeamInput> | TeamCreateWithoutParentTeamInput[] | TeamUncheckedCreateWithoutParentTeamInput[]
+    connectOrCreate?: TeamCreateOrConnectWithoutParentTeamInput | TeamCreateOrConnectWithoutParentTeamInput[]
+    createMany?: TeamCreateManyParentTeamInputEnvelope
+    connect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+  }
+
+  export type ProjectCreateNestedManyWithoutTeamInput = {
+    create?: XOR<ProjectCreateWithoutTeamInput, ProjectUncheckedCreateWithoutTeamInput> | ProjectCreateWithoutTeamInput[] | ProjectUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: ProjectCreateOrConnectWithoutTeamInput | ProjectCreateOrConnectWithoutTeamInput[]
+    createMany?: ProjectCreateManyTeamInputEnvelope
+    connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+  }
+
+  export type BudgetAllocationCreateNestedManyWithoutTeamInput = {
+    create?: XOR<BudgetAllocationCreateWithoutTeamInput, BudgetAllocationUncheckedCreateWithoutTeamInput> | BudgetAllocationCreateWithoutTeamInput[] | BudgetAllocationUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: BudgetAllocationCreateOrConnectWithoutTeamInput | BudgetAllocationCreateOrConnectWithoutTeamInput[]
+    createMany?: BudgetAllocationCreateManyTeamInputEnvelope
+    connect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+  }
+
+  export type TeamUncheckedCreateNestedManyWithoutParentTeamInput = {
+    create?: XOR<TeamCreateWithoutParentTeamInput, TeamUncheckedCreateWithoutParentTeamInput> | TeamCreateWithoutParentTeamInput[] | TeamUncheckedCreateWithoutParentTeamInput[]
+    connectOrCreate?: TeamCreateOrConnectWithoutParentTeamInput | TeamCreateOrConnectWithoutParentTeamInput[]
+    createMany?: TeamCreateManyParentTeamInputEnvelope
+    connect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+  }
+
+  export type ProjectUncheckedCreateNestedManyWithoutTeamInput = {
+    create?: XOR<ProjectCreateWithoutTeamInput, ProjectUncheckedCreateWithoutTeamInput> | ProjectCreateWithoutTeamInput[] | ProjectUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: ProjectCreateOrConnectWithoutTeamInput | ProjectCreateOrConnectWithoutTeamInput[]
+    createMany?: ProjectCreateManyTeamInputEnvelope
+    connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+  }
+
+  export type BudgetAllocationUncheckedCreateNestedManyWithoutTeamInput = {
+    create?: XOR<BudgetAllocationCreateWithoutTeamInput, BudgetAllocationUncheckedCreateWithoutTeamInput> | BudgetAllocationCreateWithoutTeamInput[] | BudgetAllocationUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: BudgetAllocationCreateOrConnectWithoutTeamInput | BudgetAllocationCreateOrConnectWithoutTeamInput[]
+    createMany?: BudgetAllocationCreateManyTeamInputEnvelope
+    connect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type OrganizationUpdateOneRequiredWithoutTeamsNestedInput = {
+    create?: XOR<OrganizationCreateWithoutTeamsInput, OrganizationUncheckedCreateWithoutTeamsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutTeamsInput
+    upsert?: OrganizationUpsertWithoutTeamsInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutTeamsInput, OrganizationUpdateWithoutTeamsInput>, OrganizationUncheckedUpdateWithoutTeamsInput>
+  }
+
+  export type TeamUpdateOneWithoutChildTeamsNestedInput = {
+    create?: XOR<TeamCreateWithoutChildTeamsInput, TeamUncheckedCreateWithoutChildTeamsInput>
+    connectOrCreate?: TeamCreateOrConnectWithoutChildTeamsInput
+    upsert?: TeamUpsertWithoutChildTeamsInput
+    disconnect?: TeamWhereInput | boolean
+    delete?: TeamWhereInput | boolean
+    connect?: TeamWhereUniqueInput
+    update?: XOR<XOR<TeamUpdateToOneWithWhereWithoutChildTeamsInput, TeamUpdateWithoutChildTeamsInput>, TeamUncheckedUpdateWithoutChildTeamsInput>
+  }
+
+  export type TeamUpdateManyWithoutParentTeamNestedInput = {
+    create?: XOR<TeamCreateWithoutParentTeamInput, TeamUncheckedCreateWithoutParentTeamInput> | TeamCreateWithoutParentTeamInput[] | TeamUncheckedCreateWithoutParentTeamInput[]
+    connectOrCreate?: TeamCreateOrConnectWithoutParentTeamInput | TeamCreateOrConnectWithoutParentTeamInput[]
+    upsert?: TeamUpsertWithWhereUniqueWithoutParentTeamInput | TeamUpsertWithWhereUniqueWithoutParentTeamInput[]
+    createMany?: TeamCreateManyParentTeamInputEnvelope
+    set?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    disconnect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    delete?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    connect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    update?: TeamUpdateWithWhereUniqueWithoutParentTeamInput | TeamUpdateWithWhereUniqueWithoutParentTeamInput[]
+    updateMany?: TeamUpdateManyWithWhereWithoutParentTeamInput | TeamUpdateManyWithWhereWithoutParentTeamInput[]
+    deleteMany?: TeamScalarWhereInput | TeamScalarWhereInput[]
+  }
+
+  export type ProjectUpdateManyWithoutTeamNestedInput = {
+    create?: XOR<ProjectCreateWithoutTeamInput, ProjectUncheckedCreateWithoutTeamInput> | ProjectCreateWithoutTeamInput[] | ProjectUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: ProjectCreateOrConnectWithoutTeamInput | ProjectCreateOrConnectWithoutTeamInput[]
+    upsert?: ProjectUpsertWithWhereUniqueWithoutTeamInput | ProjectUpsertWithWhereUniqueWithoutTeamInput[]
+    createMany?: ProjectCreateManyTeamInputEnvelope
+    set?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    disconnect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    delete?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    update?: ProjectUpdateWithWhereUniqueWithoutTeamInput | ProjectUpdateWithWhereUniqueWithoutTeamInput[]
+    updateMany?: ProjectUpdateManyWithWhereWithoutTeamInput | ProjectUpdateManyWithWhereWithoutTeamInput[]
+    deleteMany?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
+  }
+
+  export type BudgetAllocationUpdateManyWithoutTeamNestedInput = {
+    create?: XOR<BudgetAllocationCreateWithoutTeamInput, BudgetAllocationUncheckedCreateWithoutTeamInput> | BudgetAllocationCreateWithoutTeamInput[] | BudgetAllocationUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: BudgetAllocationCreateOrConnectWithoutTeamInput | BudgetAllocationCreateOrConnectWithoutTeamInput[]
+    upsert?: BudgetAllocationUpsertWithWhereUniqueWithoutTeamInput | BudgetAllocationUpsertWithWhereUniqueWithoutTeamInput[]
+    createMany?: BudgetAllocationCreateManyTeamInputEnvelope
+    set?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    disconnect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    delete?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    connect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    update?: BudgetAllocationUpdateWithWhereUniqueWithoutTeamInput | BudgetAllocationUpdateWithWhereUniqueWithoutTeamInput[]
+    updateMany?: BudgetAllocationUpdateManyWithWhereWithoutTeamInput | BudgetAllocationUpdateManyWithWhereWithoutTeamInput[]
+    deleteMany?: BudgetAllocationScalarWhereInput | BudgetAllocationScalarWhereInput[]
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
+  }
+
+  export type TeamUncheckedUpdateManyWithoutParentTeamNestedInput = {
+    create?: XOR<TeamCreateWithoutParentTeamInput, TeamUncheckedCreateWithoutParentTeamInput> | TeamCreateWithoutParentTeamInput[] | TeamUncheckedCreateWithoutParentTeamInput[]
+    connectOrCreate?: TeamCreateOrConnectWithoutParentTeamInput | TeamCreateOrConnectWithoutParentTeamInput[]
+    upsert?: TeamUpsertWithWhereUniqueWithoutParentTeamInput | TeamUpsertWithWhereUniqueWithoutParentTeamInput[]
+    createMany?: TeamCreateManyParentTeamInputEnvelope
+    set?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    disconnect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    delete?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    connect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    update?: TeamUpdateWithWhereUniqueWithoutParentTeamInput | TeamUpdateWithWhereUniqueWithoutParentTeamInput[]
+    updateMany?: TeamUpdateManyWithWhereWithoutParentTeamInput | TeamUpdateManyWithWhereWithoutParentTeamInput[]
+    deleteMany?: TeamScalarWhereInput | TeamScalarWhereInput[]
+  }
+
+  export type ProjectUncheckedUpdateManyWithoutTeamNestedInput = {
+    create?: XOR<ProjectCreateWithoutTeamInput, ProjectUncheckedCreateWithoutTeamInput> | ProjectCreateWithoutTeamInput[] | ProjectUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: ProjectCreateOrConnectWithoutTeamInput | ProjectCreateOrConnectWithoutTeamInput[]
+    upsert?: ProjectUpsertWithWhereUniqueWithoutTeamInput | ProjectUpsertWithWhereUniqueWithoutTeamInput[]
+    createMany?: ProjectCreateManyTeamInputEnvelope
+    set?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    disconnect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    delete?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    update?: ProjectUpdateWithWhereUniqueWithoutTeamInput | ProjectUpdateWithWhereUniqueWithoutTeamInput[]
+    updateMany?: ProjectUpdateManyWithWhereWithoutTeamInput | ProjectUpdateManyWithWhereWithoutTeamInput[]
+    deleteMany?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
+  }
+
+  export type BudgetAllocationUncheckedUpdateManyWithoutTeamNestedInput = {
+    create?: XOR<BudgetAllocationCreateWithoutTeamInput, BudgetAllocationUncheckedCreateWithoutTeamInput> | BudgetAllocationCreateWithoutTeamInput[] | BudgetAllocationUncheckedCreateWithoutTeamInput[]
+    connectOrCreate?: BudgetAllocationCreateOrConnectWithoutTeamInput | BudgetAllocationCreateOrConnectWithoutTeamInput[]
+    upsert?: BudgetAllocationUpsertWithWhereUniqueWithoutTeamInput | BudgetAllocationUpsertWithWhereUniqueWithoutTeamInput[]
+    createMany?: BudgetAllocationCreateManyTeamInputEnvelope
+    set?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    disconnect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    delete?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    connect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    update?: BudgetAllocationUpdateWithWhereUniqueWithoutTeamInput | BudgetAllocationUpdateWithWhereUniqueWithoutTeamInput[]
+    updateMany?: BudgetAllocationUpdateManyWithWhereWithoutTeamInput | BudgetAllocationUpdateManyWithWhereWithoutTeamInput[]
+    deleteMany?: BudgetAllocationScalarWhereInput | BudgetAllocationScalarWhereInput[]
+  }
+
   export type OrganizationCreateNestedOneWithoutProjectsInput = {
     create?: XOR<OrganizationCreateWithoutProjectsInput, OrganizationUncheckedCreateWithoutProjectsInput>
     connectOrCreate?: OrganizationCreateOrConnectWithoutProjectsInput
     connect?: OrganizationWhereUniqueInput
+  }
+
+  export type TeamCreateNestedOneWithoutProjectsInput = {
+    create?: XOR<TeamCreateWithoutProjectsInput, TeamUncheckedCreateWithoutProjectsInput>
+    connectOrCreate?: TeamCreateOrConnectWithoutProjectsInput
+    connect?: TeamWhereUniqueInput
   }
 
   export type AuditLogCreateNestedManyWithoutProjectInput = {
@@ -11197,6 +16147,13 @@ export namespace Prisma {
     connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
   }
 
+  export type BudgetAllocationCreateNestedManyWithoutProjectInput = {
+    create?: XOR<BudgetAllocationCreateWithoutProjectInput, BudgetAllocationUncheckedCreateWithoutProjectInput> | BudgetAllocationCreateWithoutProjectInput[] | BudgetAllocationUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: BudgetAllocationCreateOrConnectWithoutProjectInput | BudgetAllocationCreateOrConnectWithoutProjectInput[]
+    createMany?: BudgetAllocationCreateManyProjectInputEnvelope
+    connect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+  }
+
   export type AuditLogUncheckedCreateNestedManyWithoutProjectInput = {
     create?: XOR<AuditLogCreateWithoutProjectInput, AuditLogUncheckedCreateWithoutProjectInput> | AuditLogCreateWithoutProjectInput[] | AuditLogUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: AuditLogCreateOrConnectWithoutProjectInput | AuditLogCreateOrConnectWithoutProjectInput[]
@@ -11204,8 +16161,11 @@ export namespace Prisma {
     connect?: AuditLogWhereUniqueInput | AuditLogWhereUniqueInput[]
   }
 
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
+  export type BudgetAllocationUncheckedCreateNestedManyWithoutProjectInput = {
+    create?: XOR<BudgetAllocationCreateWithoutProjectInput, BudgetAllocationUncheckedCreateWithoutProjectInput> | BudgetAllocationCreateWithoutProjectInput[] | BudgetAllocationUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: BudgetAllocationCreateOrConnectWithoutProjectInput | BudgetAllocationCreateOrConnectWithoutProjectInput[]
+    createMany?: BudgetAllocationCreateManyProjectInputEnvelope
+    connect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -11226,6 +16186,16 @@ export namespace Prisma {
     update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutProjectsInput, OrganizationUpdateWithoutProjectsInput>, OrganizationUncheckedUpdateWithoutProjectsInput>
   }
 
+  export type TeamUpdateOneWithoutProjectsNestedInput = {
+    create?: XOR<TeamCreateWithoutProjectsInput, TeamUncheckedCreateWithoutProjectsInput>
+    connectOrCreate?: TeamCreateOrConnectWithoutProjectsInput
+    upsert?: TeamUpsertWithoutProjectsInput
+    disconnect?: TeamWhereInput | boolean
+    delete?: TeamWhereInput | boolean
+    connect?: TeamWhereUniqueInput
+    update?: XOR<XOR<TeamUpdateToOneWithWhereWithoutProjectsInput, TeamUpdateWithoutProjectsInput>, TeamUncheckedUpdateWithoutProjectsInput>
+  }
+
   export type AuditLogUpdateManyWithoutProjectNestedInput = {
     create?: XOR<AuditLogCreateWithoutProjectInput, AuditLogUncheckedCreateWithoutProjectInput> | AuditLogCreateWithoutProjectInput[] | AuditLogUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: AuditLogCreateOrConnectWithoutProjectInput | AuditLogCreateOrConnectWithoutProjectInput[]
@@ -11240,6 +16210,20 @@ export namespace Prisma {
     deleteMany?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
   }
 
+  export type BudgetAllocationUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<BudgetAllocationCreateWithoutProjectInput, BudgetAllocationUncheckedCreateWithoutProjectInput> | BudgetAllocationCreateWithoutProjectInput[] | BudgetAllocationUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: BudgetAllocationCreateOrConnectWithoutProjectInput | BudgetAllocationCreateOrConnectWithoutProjectInput[]
+    upsert?: BudgetAllocationUpsertWithWhereUniqueWithoutProjectInput | BudgetAllocationUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: BudgetAllocationCreateManyProjectInputEnvelope
+    set?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    disconnect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    delete?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    connect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    update?: BudgetAllocationUpdateWithWhereUniqueWithoutProjectInput | BudgetAllocationUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: BudgetAllocationUpdateManyWithWhereWithoutProjectInput | BudgetAllocationUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: BudgetAllocationScalarWhereInput | BudgetAllocationScalarWhereInput[]
+  }
+
   export type AuditLogUncheckedUpdateManyWithoutProjectNestedInput = {
     create?: XOR<AuditLogCreateWithoutProjectInput, AuditLogUncheckedCreateWithoutProjectInput> | AuditLogCreateWithoutProjectInput[] | AuditLogUncheckedCreateWithoutProjectInput[]
     connectOrCreate?: AuditLogCreateOrConnectWithoutProjectInput | AuditLogCreateOrConnectWithoutProjectInput[]
@@ -11252,6 +16236,126 @@ export namespace Prisma {
     update?: AuditLogUpdateWithWhereUniqueWithoutProjectInput | AuditLogUpdateWithWhereUniqueWithoutProjectInput[]
     updateMany?: AuditLogUpdateManyWithWhereWithoutProjectInput | AuditLogUpdateManyWithWhereWithoutProjectInput[]
     deleteMany?: AuditLogScalarWhereInput | AuditLogScalarWhereInput[]
+  }
+
+  export type BudgetAllocationUncheckedUpdateManyWithoutProjectNestedInput = {
+    create?: XOR<BudgetAllocationCreateWithoutProjectInput, BudgetAllocationUncheckedCreateWithoutProjectInput> | BudgetAllocationCreateWithoutProjectInput[] | BudgetAllocationUncheckedCreateWithoutProjectInput[]
+    connectOrCreate?: BudgetAllocationCreateOrConnectWithoutProjectInput | BudgetAllocationCreateOrConnectWithoutProjectInput[]
+    upsert?: BudgetAllocationUpsertWithWhereUniqueWithoutProjectInput | BudgetAllocationUpsertWithWhereUniqueWithoutProjectInput[]
+    createMany?: BudgetAllocationCreateManyProjectInputEnvelope
+    set?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    disconnect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    delete?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    connect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    update?: BudgetAllocationUpdateWithWhereUniqueWithoutProjectInput | BudgetAllocationUpdateWithWhereUniqueWithoutProjectInput[]
+    updateMany?: BudgetAllocationUpdateManyWithWhereWithoutProjectInput | BudgetAllocationUpdateManyWithWhereWithoutProjectInput[]
+    deleteMany?: BudgetAllocationScalarWhereInput | BudgetAllocationScalarWhereInput[]
+  }
+
+  export type OrganizationCreateNestedOneWithoutPeriodsInput = {
+    create?: XOR<OrganizationCreateWithoutPeriodsInput, OrganizationUncheckedCreateWithoutPeriodsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutPeriodsInput
+    connect?: OrganizationWhereUniqueInput
+  }
+
+  export type BudgetAllocationCreateNestedManyWithoutPeriodInput = {
+    create?: XOR<BudgetAllocationCreateWithoutPeriodInput, BudgetAllocationUncheckedCreateWithoutPeriodInput> | BudgetAllocationCreateWithoutPeriodInput[] | BudgetAllocationUncheckedCreateWithoutPeriodInput[]
+    connectOrCreate?: BudgetAllocationCreateOrConnectWithoutPeriodInput | BudgetAllocationCreateOrConnectWithoutPeriodInput[]
+    createMany?: BudgetAllocationCreateManyPeriodInputEnvelope
+    connect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+  }
+
+  export type BudgetAllocationUncheckedCreateNestedManyWithoutPeriodInput = {
+    create?: XOR<BudgetAllocationCreateWithoutPeriodInput, BudgetAllocationUncheckedCreateWithoutPeriodInput> | BudgetAllocationCreateWithoutPeriodInput[] | BudgetAllocationUncheckedCreateWithoutPeriodInput[]
+    connectOrCreate?: BudgetAllocationCreateOrConnectWithoutPeriodInput | BudgetAllocationCreateOrConnectWithoutPeriodInput[]
+    createMany?: BudgetAllocationCreateManyPeriodInputEnvelope
+    connect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+  }
+
+  export type OrganizationUpdateOneRequiredWithoutPeriodsNestedInput = {
+    create?: XOR<OrganizationCreateWithoutPeriodsInput, OrganizationUncheckedCreateWithoutPeriodsInput>
+    connectOrCreate?: OrganizationCreateOrConnectWithoutPeriodsInput
+    upsert?: OrganizationUpsertWithoutPeriodsInput
+    connect?: OrganizationWhereUniqueInput
+    update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutPeriodsInput, OrganizationUpdateWithoutPeriodsInput>, OrganizationUncheckedUpdateWithoutPeriodsInput>
+  }
+
+  export type BudgetAllocationUpdateManyWithoutPeriodNestedInput = {
+    create?: XOR<BudgetAllocationCreateWithoutPeriodInput, BudgetAllocationUncheckedCreateWithoutPeriodInput> | BudgetAllocationCreateWithoutPeriodInput[] | BudgetAllocationUncheckedCreateWithoutPeriodInput[]
+    connectOrCreate?: BudgetAllocationCreateOrConnectWithoutPeriodInput | BudgetAllocationCreateOrConnectWithoutPeriodInput[]
+    upsert?: BudgetAllocationUpsertWithWhereUniqueWithoutPeriodInput | BudgetAllocationUpsertWithWhereUniqueWithoutPeriodInput[]
+    createMany?: BudgetAllocationCreateManyPeriodInputEnvelope
+    set?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    disconnect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    delete?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    connect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    update?: BudgetAllocationUpdateWithWhereUniqueWithoutPeriodInput | BudgetAllocationUpdateWithWhereUniqueWithoutPeriodInput[]
+    updateMany?: BudgetAllocationUpdateManyWithWhereWithoutPeriodInput | BudgetAllocationUpdateManyWithWhereWithoutPeriodInput[]
+    deleteMany?: BudgetAllocationScalarWhereInput | BudgetAllocationScalarWhereInput[]
+  }
+
+  export type BudgetAllocationUncheckedUpdateManyWithoutPeriodNestedInput = {
+    create?: XOR<BudgetAllocationCreateWithoutPeriodInput, BudgetAllocationUncheckedCreateWithoutPeriodInput> | BudgetAllocationCreateWithoutPeriodInput[] | BudgetAllocationUncheckedCreateWithoutPeriodInput[]
+    connectOrCreate?: BudgetAllocationCreateOrConnectWithoutPeriodInput | BudgetAllocationCreateOrConnectWithoutPeriodInput[]
+    upsert?: BudgetAllocationUpsertWithWhereUniqueWithoutPeriodInput | BudgetAllocationUpsertWithWhereUniqueWithoutPeriodInput[]
+    createMany?: BudgetAllocationCreateManyPeriodInputEnvelope
+    set?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    disconnect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    delete?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    connect?: BudgetAllocationWhereUniqueInput | BudgetAllocationWhereUniqueInput[]
+    update?: BudgetAllocationUpdateWithWhereUniqueWithoutPeriodInput | BudgetAllocationUpdateWithWhereUniqueWithoutPeriodInput[]
+    updateMany?: BudgetAllocationUpdateManyWithWhereWithoutPeriodInput | BudgetAllocationUpdateManyWithWhereWithoutPeriodInput[]
+    deleteMany?: BudgetAllocationScalarWhereInput | BudgetAllocationScalarWhereInput[]
+  }
+
+  export type TeamCreateNestedOneWithoutAllocationsInput = {
+    create?: XOR<TeamCreateWithoutAllocationsInput, TeamUncheckedCreateWithoutAllocationsInput>
+    connectOrCreate?: TeamCreateOrConnectWithoutAllocationsInput
+    connect?: TeamWhereUniqueInput
+  }
+
+  export type ProjectCreateNestedOneWithoutAllocationsInput = {
+    create?: XOR<ProjectCreateWithoutAllocationsInput, ProjectUncheckedCreateWithoutAllocationsInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutAllocationsInput
+    connect?: ProjectWhereUniqueInput
+  }
+
+  export type PeriodCreateNestedOneWithoutAllocationsInput = {
+    create?: XOR<PeriodCreateWithoutAllocationsInput, PeriodUncheckedCreateWithoutAllocationsInput>
+    connectOrCreate?: PeriodCreateOrConnectWithoutAllocationsInput
+    connect?: PeriodWhereUniqueInput
+  }
+
+  export type FloatFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type TeamUpdateOneRequiredWithoutAllocationsNestedInput = {
+    create?: XOR<TeamCreateWithoutAllocationsInput, TeamUncheckedCreateWithoutAllocationsInput>
+    connectOrCreate?: TeamCreateOrConnectWithoutAllocationsInput
+    upsert?: TeamUpsertWithoutAllocationsInput
+    connect?: TeamWhereUniqueInput
+    update?: XOR<XOR<TeamUpdateToOneWithWhereWithoutAllocationsInput, TeamUpdateWithoutAllocationsInput>, TeamUncheckedUpdateWithoutAllocationsInput>
+  }
+
+  export type ProjectUpdateOneRequiredWithoutAllocationsNestedInput = {
+    create?: XOR<ProjectCreateWithoutAllocationsInput, ProjectUncheckedCreateWithoutAllocationsInput>
+    connectOrCreate?: ProjectCreateOrConnectWithoutAllocationsInput
+    upsert?: ProjectUpsertWithoutAllocationsInput
+    connect?: ProjectWhereUniqueInput
+    update?: XOR<XOR<ProjectUpdateToOneWithWhereWithoutAllocationsInput, ProjectUpdateWithoutAllocationsInput>, ProjectUncheckedUpdateWithoutAllocationsInput>
+  }
+
+  export type PeriodUpdateOneRequiredWithoutAllocationsNestedInput = {
+    create?: XOR<PeriodCreateWithoutAllocationsInput, PeriodUncheckedCreateWithoutAllocationsInput>
+    connectOrCreate?: PeriodCreateOrConnectWithoutAllocationsInput
+    upsert?: PeriodUpsertWithoutAllocationsInput
+    connect?: PeriodWhereUniqueInput
+    update?: XOR<XOR<PeriodUpdateToOneWithWhereWithoutAllocationsInput, PeriodUpdateWithoutAllocationsInput>, PeriodUncheckedUpdateWithoutAllocationsInput>
   }
 
   export type ProjectCreateNestedOneWithoutLogsInput = {
@@ -11306,10 +16410,6 @@ export namespace Prisma {
 
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type OrganizationUpdateOneWithoutUsersNestedInput = {
@@ -11495,6 +16595,11 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
@@ -11521,6 +16626,14 @@ export namespace Prisma {
     gt?: number | IntFieldRefInput<$PrismaModel>
     gte?: number | IntFieldRefInput<$PrismaModel>
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -11550,6 +16663,22 @@ export namespace Prisma {
     not?: NestedFloatFilter<$PrismaModel> | number
   }
 
+  export type NestedFloatWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedFloatFilter<$PrismaModel>
+    _min?: NestedFloatFilter<$PrismaModel>
+    _max?: NestedFloatFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -11559,11 +16688,6 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -11578,14 +16702,6 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -11654,6 +16770,7 @@ export namespace Prisma {
   export type ProjectCreateWithoutOrganizationInput = {
     id?: string
     name: string
+    code?: string
     description?: string | null
     status?: string
     priority?: number
@@ -11661,12 +16778,16 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: string
+    team?: TeamCreateNestedOneWithoutProjectsInput
     logs?: AuditLogCreateNestedManyWithoutProjectInput
+    allocations?: BudgetAllocationCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectUncheckedCreateWithoutOrganizationInput = {
     id?: string
+    teamId?: string | null
     name: string
+    code?: string
     description?: string | null
     status?: string
     priority?: number
@@ -11675,6 +16796,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy: string
     logs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
+    allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutOrganizationInput = {
@@ -11684,6 +16806,72 @@ export namespace Prisma {
 
   export type ProjectCreateManyOrganizationInputEnvelope = {
     data: ProjectCreateManyOrganizationInput | ProjectCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TeamCreateWithoutOrganizationInput = {
+    id?: string
+    name: string
+    code: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    parentTeam?: TeamCreateNestedOneWithoutChildTeamsInput
+    childTeams?: TeamCreateNestedManyWithoutParentTeamInput
+    projects?: ProjectCreateNestedManyWithoutTeamInput
+    allocations?: BudgetAllocationCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    name: string
+    code: string
+    parentTeamId?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    childTeams?: TeamUncheckedCreateNestedManyWithoutParentTeamInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutTeamInput
+    allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamCreateOrConnectWithoutOrganizationInput = {
+    where: TeamWhereUniqueInput
+    create: XOR<TeamCreateWithoutOrganizationInput, TeamUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type TeamCreateManyOrganizationInputEnvelope = {
+    data: TeamCreateManyOrganizationInput | TeamCreateManyOrganizationInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PeriodCreateWithoutOrganizationInput = {
+    id?: string
+    type: string
+    startDate: Date | string
+    endDate: Date | string
+    label: string
+    isLocked?: boolean
+    allocations?: BudgetAllocationCreateNestedManyWithoutPeriodInput
+  }
+
+  export type PeriodUncheckedCreateWithoutOrganizationInput = {
+    id?: string
+    type: string
+    startDate: Date | string
+    endDate: Date | string
+    label: string
+    isLocked?: boolean
+    allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutPeriodInput
+  }
+
+  export type PeriodCreateOrConnectWithoutOrganizationInput = {
+    where: PeriodWhereUniqueInput
+    create: XOR<PeriodCreateWithoutOrganizationInput, PeriodUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type PeriodCreateManyOrganizationInputEnvelope = {
+    data: PeriodCreateManyOrganizationInput | PeriodCreateManyOrganizationInput[]
     skipDuplicates?: boolean
   }
 
@@ -11740,7 +16928,9 @@ export namespace Prisma {
     NOT?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
     id?: StringFilter<"Project"> | string
     organizationId?: StringNullableFilter<"Project"> | string | null
+    teamId?: StringNullableFilter<"Project"> | string | null
     name?: StringFilter<"Project"> | string
+    code?: StringFilter<"Project"> | string
     description?: StringNullableFilter<"Project"> | string | null
     status?: StringFilter<"Project"> | string
     priority?: IntFilter<"Project"> | number
@@ -11750,12 +16940,361 @@ export namespace Prisma {
     createdBy?: StringFilter<"Project"> | string
   }
 
+  export type TeamUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: TeamWhereUniqueInput
+    update: XOR<TeamUpdateWithoutOrganizationInput, TeamUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<TeamCreateWithoutOrganizationInput, TeamUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type TeamUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: TeamWhereUniqueInput
+    data: XOR<TeamUpdateWithoutOrganizationInput, TeamUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type TeamUpdateManyWithWhereWithoutOrganizationInput = {
+    where: TeamScalarWhereInput
+    data: XOR<TeamUpdateManyMutationInput, TeamUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type TeamScalarWhereInput = {
+    AND?: TeamScalarWhereInput | TeamScalarWhereInput[]
+    OR?: TeamScalarWhereInput[]
+    NOT?: TeamScalarWhereInput | TeamScalarWhereInput[]
+    id?: StringFilter<"Team"> | string
+    organizationId?: StringFilter<"Team"> | string
+    name?: StringFilter<"Team"> | string
+    code?: StringFilter<"Team"> | string
+    parentTeamId?: StringNullableFilter<"Team"> | string | null
+    isActive?: BoolFilter<"Team"> | boolean
+    createdAt?: DateTimeFilter<"Team"> | Date | string
+    updatedAt?: DateTimeFilter<"Team"> | Date | string
+  }
+
+  export type PeriodUpsertWithWhereUniqueWithoutOrganizationInput = {
+    where: PeriodWhereUniqueInput
+    update: XOR<PeriodUpdateWithoutOrganizationInput, PeriodUncheckedUpdateWithoutOrganizationInput>
+    create: XOR<PeriodCreateWithoutOrganizationInput, PeriodUncheckedCreateWithoutOrganizationInput>
+  }
+
+  export type PeriodUpdateWithWhereUniqueWithoutOrganizationInput = {
+    where: PeriodWhereUniqueInput
+    data: XOR<PeriodUpdateWithoutOrganizationInput, PeriodUncheckedUpdateWithoutOrganizationInput>
+  }
+
+  export type PeriodUpdateManyWithWhereWithoutOrganizationInput = {
+    where: PeriodScalarWhereInput
+    data: XOR<PeriodUpdateManyMutationInput, PeriodUncheckedUpdateManyWithoutOrganizationInput>
+  }
+
+  export type PeriodScalarWhereInput = {
+    AND?: PeriodScalarWhereInput | PeriodScalarWhereInput[]
+    OR?: PeriodScalarWhereInput[]
+    NOT?: PeriodScalarWhereInput | PeriodScalarWhereInput[]
+    id?: StringFilter<"Period"> | string
+    organizationId?: StringFilter<"Period"> | string
+    type?: StringFilter<"Period"> | string
+    startDate?: DateTimeFilter<"Period"> | Date | string
+    endDate?: DateTimeFilter<"Period"> | Date | string
+    label?: StringFilter<"Period"> | string
+    isLocked?: BoolFilter<"Period"> | boolean
+  }
+
+  export type OrganizationCreateWithoutTeamsInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserCreateNestedManyWithoutOrganizationInput
+    projects?: ProjectCreateNestedManyWithoutOrganizationInput
+    periods?: PeriodCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutTeamsInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutOrganizationInput
+    periods?: PeriodUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutTeamsInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutTeamsInput, OrganizationUncheckedCreateWithoutTeamsInput>
+  }
+
+  export type TeamCreateWithoutChildTeamsInput = {
+    id?: string
+    name: string
+    code: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutTeamsInput
+    parentTeam?: TeamCreateNestedOneWithoutChildTeamsInput
+    projects?: ProjectCreateNestedManyWithoutTeamInput
+    allocations?: BudgetAllocationCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamUncheckedCreateWithoutChildTeamsInput = {
+    id?: string
+    organizationId: string
+    name: string
+    code: string
+    parentTeamId?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectUncheckedCreateNestedManyWithoutTeamInput
+    allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamCreateOrConnectWithoutChildTeamsInput = {
+    where: TeamWhereUniqueInput
+    create: XOR<TeamCreateWithoutChildTeamsInput, TeamUncheckedCreateWithoutChildTeamsInput>
+  }
+
+  export type TeamCreateWithoutParentTeamInput = {
+    id?: string
+    name: string
+    code: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutTeamsInput
+    childTeams?: TeamCreateNestedManyWithoutParentTeamInput
+    projects?: ProjectCreateNestedManyWithoutTeamInput
+    allocations?: BudgetAllocationCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamUncheckedCreateWithoutParentTeamInput = {
+    id?: string
+    organizationId: string
+    name: string
+    code: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    childTeams?: TeamUncheckedCreateNestedManyWithoutParentTeamInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutTeamInput
+    allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamCreateOrConnectWithoutParentTeamInput = {
+    where: TeamWhereUniqueInput
+    create: XOR<TeamCreateWithoutParentTeamInput, TeamUncheckedCreateWithoutParentTeamInput>
+  }
+
+  export type TeamCreateManyParentTeamInputEnvelope = {
+    data: TeamCreateManyParentTeamInput | TeamCreateManyParentTeamInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProjectCreateWithoutTeamInput = {
+    id?: string
+    name: string
+    code?: string
+    description?: string | null
+    status?: string
+    priority?: number
+    progress?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    organization?: OrganizationCreateNestedOneWithoutProjectsInput
+    logs?: AuditLogCreateNestedManyWithoutProjectInput
+    allocations?: BudgetAllocationCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectUncheckedCreateWithoutTeamInput = {
+    id?: string
+    organizationId?: string | null
+    name: string
+    code?: string
+    description?: string | null
+    status?: string
+    priority?: number
+    progress?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    logs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
+    allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectCreateOrConnectWithoutTeamInput = {
+    where: ProjectWhereUniqueInput
+    create: XOR<ProjectCreateWithoutTeamInput, ProjectUncheckedCreateWithoutTeamInput>
+  }
+
+  export type ProjectCreateManyTeamInputEnvelope = {
+    data: ProjectCreateManyTeamInput | ProjectCreateManyTeamInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type BudgetAllocationCreateWithoutTeamInput = {
+    id?: string
+    plannedHours?: number
+    updatedAt?: Date | string
+    project: ProjectCreateNestedOneWithoutAllocationsInput
+    period: PeriodCreateNestedOneWithoutAllocationsInput
+  }
+
+  export type BudgetAllocationUncheckedCreateWithoutTeamInput = {
+    id?: string
+    projectId: string
+    periodId: string
+    plannedHours?: number
+    updatedAt?: Date | string
+  }
+
+  export type BudgetAllocationCreateOrConnectWithoutTeamInput = {
+    where: BudgetAllocationWhereUniqueInput
+    create: XOR<BudgetAllocationCreateWithoutTeamInput, BudgetAllocationUncheckedCreateWithoutTeamInput>
+  }
+
+  export type BudgetAllocationCreateManyTeamInputEnvelope = {
+    data: BudgetAllocationCreateManyTeamInput | BudgetAllocationCreateManyTeamInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OrganizationUpsertWithoutTeamsInput = {
+    update: XOR<OrganizationUpdateWithoutTeamsInput, OrganizationUncheckedUpdateWithoutTeamsInput>
+    create: XOR<OrganizationCreateWithoutTeamsInput, OrganizationUncheckedCreateWithoutTeamsInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutTeamsInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutTeamsInput, OrganizationUncheckedUpdateWithoutTeamsInput>
+  }
+
+  export type OrganizationUpdateWithoutTeamsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+    projects?: ProjectUpdateManyWithoutOrganizationNestedInput
+    periods?: PeriodUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutTeamsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+    periods?: PeriodUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type TeamUpsertWithoutChildTeamsInput = {
+    update: XOR<TeamUpdateWithoutChildTeamsInput, TeamUncheckedUpdateWithoutChildTeamsInput>
+    create: XOR<TeamCreateWithoutChildTeamsInput, TeamUncheckedCreateWithoutChildTeamsInput>
+    where?: TeamWhereInput
+  }
+
+  export type TeamUpdateToOneWithWhereWithoutChildTeamsInput = {
+    where?: TeamWhereInput
+    data: XOR<TeamUpdateWithoutChildTeamsInput, TeamUncheckedUpdateWithoutChildTeamsInput>
+  }
+
+  export type TeamUpdateWithoutChildTeamsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutTeamsNestedInput
+    parentTeam?: TeamUpdateOneWithoutChildTeamsNestedInput
+    projects?: ProjectUpdateManyWithoutTeamNestedInput
+    allocations?: BudgetAllocationUpdateManyWithoutTeamNestedInput
+  }
+
+  export type TeamUncheckedUpdateWithoutChildTeamsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    parentTeamId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUncheckedUpdateManyWithoutTeamNestedInput
+    allocations?: BudgetAllocationUncheckedUpdateManyWithoutTeamNestedInput
+  }
+
+  export type TeamUpsertWithWhereUniqueWithoutParentTeamInput = {
+    where: TeamWhereUniqueInput
+    update: XOR<TeamUpdateWithoutParentTeamInput, TeamUncheckedUpdateWithoutParentTeamInput>
+    create: XOR<TeamCreateWithoutParentTeamInput, TeamUncheckedCreateWithoutParentTeamInput>
+  }
+
+  export type TeamUpdateWithWhereUniqueWithoutParentTeamInput = {
+    where: TeamWhereUniqueInput
+    data: XOR<TeamUpdateWithoutParentTeamInput, TeamUncheckedUpdateWithoutParentTeamInput>
+  }
+
+  export type TeamUpdateManyWithWhereWithoutParentTeamInput = {
+    where: TeamScalarWhereInput
+    data: XOR<TeamUpdateManyMutationInput, TeamUncheckedUpdateManyWithoutParentTeamInput>
+  }
+
+  export type ProjectUpsertWithWhereUniqueWithoutTeamInput = {
+    where: ProjectWhereUniqueInput
+    update: XOR<ProjectUpdateWithoutTeamInput, ProjectUncheckedUpdateWithoutTeamInput>
+    create: XOR<ProjectCreateWithoutTeamInput, ProjectUncheckedCreateWithoutTeamInput>
+  }
+
+  export type ProjectUpdateWithWhereUniqueWithoutTeamInput = {
+    where: ProjectWhereUniqueInput
+    data: XOR<ProjectUpdateWithoutTeamInput, ProjectUncheckedUpdateWithoutTeamInput>
+  }
+
+  export type ProjectUpdateManyWithWhereWithoutTeamInput = {
+    where: ProjectScalarWhereInput
+    data: XOR<ProjectUpdateManyMutationInput, ProjectUncheckedUpdateManyWithoutTeamInput>
+  }
+
+  export type BudgetAllocationUpsertWithWhereUniqueWithoutTeamInput = {
+    where: BudgetAllocationWhereUniqueInput
+    update: XOR<BudgetAllocationUpdateWithoutTeamInput, BudgetAllocationUncheckedUpdateWithoutTeamInput>
+    create: XOR<BudgetAllocationCreateWithoutTeamInput, BudgetAllocationUncheckedCreateWithoutTeamInput>
+  }
+
+  export type BudgetAllocationUpdateWithWhereUniqueWithoutTeamInput = {
+    where: BudgetAllocationWhereUniqueInput
+    data: XOR<BudgetAllocationUpdateWithoutTeamInput, BudgetAllocationUncheckedUpdateWithoutTeamInput>
+  }
+
+  export type BudgetAllocationUpdateManyWithWhereWithoutTeamInput = {
+    where: BudgetAllocationScalarWhereInput
+    data: XOR<BudgetAllocationUpdateManyMutationInput, BudgetAllocationUncheckedUpdateManyWithoutTeamInput>
+  }
+
+  export type BudgetAllocationScalarWhereInput = {
+    AND?: BudgetAllocationScalarWhereInput | BudgetAllocationScalarWhereInput[]
+    OR?: BudgetAllocationScalarWhereInput[]
+    NOT?: BudgetAllocationScalarWhereInput | BudgetAllocationScalarWhereInput[]
+    id?: StringFilter<"BudgetAllocation"> | string
+    teamId?: StringFilter<"BudgetAllocation"> | string
+    projectId?: StringFilter<"BudgetAllocation"> | string
+    periodId?: StringFilter<"BudgetAllocation"> | string
+    plannedHours?: FloatFilter<"BudgetAllocation"> | number
+    updatedAt?: DateTimeFilter<"BudgetAllocation"> | Date | string
+  }
+
   export type OrganizationCreateWithoutProjectsInput = {
     id?: string
     name: string
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserCreateNestedManyWithoutOrganizationInput
+    teams?: TeamCreateNestedManyWithoutOrganizationInput
+    periods?: PeriodCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutProjectsInput = {
@@ -11764,11 +17303,44 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    teams?: TeamUncheckedCreateNestedManyWithoutOrganizationInput
+    periods?: PeriodUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutProjectsInput = {
     where: OrganizationWhereUniqueInput
     create: XOR<OrganizationCreateWithoutProjectsInput, OrganizationUncheckedCreateWithoutProjectsInput>
+  }
+
+  export type TeamCreateWithoutProjectsInput = {
+    id?: string
+    name: string
+    code: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutTeamsInput
+    parentTeam?: TeamCreateNestedOneWithoutChildTeamsInput
+    childTeams?: TeamCreateNestedManyWithoutParentTeamInput
+    allocations?: BudgetAllocationCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamUncheckedCreateWithoutProjectsInput = {
+    id?: string
+    organizationId: string
+    name: string
+    code: string
+    parentTeamId?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    childTeams?: TeamUncheckedCreateNestedManyWithoutParentTeamInput
+    allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamCreateOrConnectWithoutProjectsInput = {
+    where: TeamWhereUniqueInput
+    create: XOR<TeamCreateWithoutProjectsInput, TeamUncheckedCreateWithoutProjectsInput>
   }
 
   export type AuditLogCreateWithoutProjectInput = {
@@ -11805,6 +17377,32 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type BudgetAllocationCreateWithoutProjectInput = {
+    id?: string
+    plannedHours?: number
+    updatedAt?: Date | string
+    team: TeamCreateNestedOneWithoutAllocationsInput
+    period: PeriodCreateNestedOneWithoutAllocationsInput
+  }
+
+  export type BudgetAllocationUncheckedCreateWithoutProjectInput = {
+    id?: string
+    teamId: string
+    periodId: string
+    plannedHours?: number
+    updatedAt?: Date | string
+  }
+
+  export type BudgetAllocationCreateOrConnectWithoutProjectInput = {
+    where: BudgetAllocationWhereUniqueInput
+    create: XOR<BudgetAllocationCreateWithoutProjectInput, BudgetAllocationUncheckedCreateWithoutProjectInput>
+  }
+
+  export type BudgetAllocationCreateManyProjectInputEnvelope = {
+    data: BudgetAllocationCreateManyProjectInput | BudgetAllocationCreateManyProjectInput[]
+    skipDuplicates?: boolean
+  }
+
   export type OrganizationUpsertWithoutProjectsInput = {
     update: XOR<OrganizationUpdateWithoutProjectsInput, OrganizationUncheckedUpdateWithoutProjectsInput>
     create: XOR<OrganizationCreateWithoutProjectsInput, OrganizationUncheckedCreateWithoutProjectsInput>
@@ -11822,6 +17420,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUpdateManyWithoutOrganizationNestedInput
+    teams?: TeamUpdateManyWithoutOrganizationNestedInput
+    periods?: PeriodUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutProjectsInput = {
@@ -11830,6 +17430,45 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    teams?: TeamUncheckedUpdateManyWithoutOrganizationNestedInput
+    periods?: PeriodUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type TeamUpsertWithoutProjectsInput = {
+    update: XOR<TeamUpdateWithoutProjectsInput, TeamUncheckedUpdateWithoutProjectsInput>
+    create: XOR<TeamCreateWithoutProjectsInput, TeamUncheckedCreateWithoutProjectsInput>
+    where?: TeamWhereInput
+  }
+
+  export type TeamUpdateToOneWithWhereWithoutProjectsInput = {
+    where?: TeamWhereInput
+    data: XOR<TeamUpdateWithoutProjectsInput, TeamUncheckedUpdateWithoutProjectsInput>
+  }
+
+  export type TeamUpdateWithoutProjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutTeamsNestedInput
+    parentTeam?: TeamUpdateOneWithoutChildTeamsNestedInput
+    childTeams?: TeamUpdateManyWithoutParentTeamNestedInput
+    allocations?: BudgetAllocationUpdateManyWithoutTeamNestedInput
+  }
+
+  export type TeamUncheckedUpdateWithoutProjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    parentTeamId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    childTeams?: TeamUncheckedUpdateManyWithoutParentTeamNestedInput
+    allocations?: BudgetAllocationUncheckedUpdateManyWithoutTeamNestedInput
   }
 
   export type AuditLogUpsertWithWhereUniqueWithoutProjectInput = {
@@ -11864,9 +17503,155 @@ export namespace Prisma {
     timestamp?: DateTimeFilter<"AuditLog"> | Date | string
   }
 
-  export type ProjectCreateWithoutLogsInput = {
+  export type BudgetAllocationUpsertWithWhereUniqueWithoutProjectInput = {
+    where: BudgetAllocationWhereUniqueInput
+    update: XOR<BudgetAllocationUpdateWithoutProjectInput, BudgetAllocationUncheckedUpdateWithoutProjectInput>
+    create: XOR<BudgetAllocationCreateWithoutProjectInput, BudgetAllocationUncheckedCreateWithoutProjectInput>
+  }
+
+  export type BudgetAllocationUpdateWithWhereUniqueWithoutProjectInput = {
+    where: BudgetAllocationWhereUniqueInput
+    data: XOR<BudgetAllocationUpdateWithoutProjectInput, BudgetAllocationUncheckedUpdateWithoutProjectInput>
+  }
+
+  export type BudgetAllocationUpdateManyWithWhereWithoutProjectInput = {
+    where: BudgetAllocationScalarWhereInput
+    data: XOR<BudgetAllocationUpdateManyMutationInput, BudgetAllocationUncheckedUpdateManyWithoutProjectInput>
+  }
+
+  export type OrganizationCreateWithoutPeriodsInput = {
     id?: string
     name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserCreateNestedManyWithoutOrganizationInput
+    projects?: ProjectCreateNestedManyWithoutOrganizationInput
+    teams?: TeamCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutPeriodsInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutOrganizationInput
+    teams?: TeamUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutPeriodsInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutPeriodsInput, OrganizationUncheckedCreateWithoutPeriodsInput>
+  }
+
+  export type BudgetAllocationCreateWithoutPeriodInput = {
+    id?: string
+    plannedHours?: number
+    updatedAt?: Date | string
+    team: TeamCreateNestedOneWithoutAllocationsInput
+    project: ProjectCreateNestedOneWithoutAllocationsInput
+  }
+
+  export type BudgetAllocationUncheckedCreateWithoutPeriodInput = {
+    id?: string
+    teamId: string
+    projectId: string
+    plannedHours?: number
+    updatedAt?: Date | string
+  }
+
+  export type BudgetAllocationCreateOrConnectWithoutPeriodInput = {
+    where: BudgetAllocationWhereUniqueInput
+    create: XOR<BudgetAllocationCreateWithoutPeriodInput, BudgetAllocationUncheckedCreateWithoutPeriodInput>
+  }
+
+  export type BudgetAllocationCreateManyPeriodInputEnvelope = {
+    data: BudgetAllocationCreateManyPeriodInput | BudgetAllocationCreateManyPeriodInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type OrganizationUpsertWithoutPeriodsInput = {
+    update: XOR<OrganizationUpdateWithoutPeriodsInput, OrganizationUncheckedUpdateWithoutPeriodsInput>
+    create: XOR<OrganizationCreateWithoutPeriodsInput, OrganizationUncheckedCreateWithoutPeriodsInput>
+    where?: OrganizationWhereInput
+  }
+
+  export type OrganizationUpdateToOneWithWhereWithoutPeriodsInput = {
+    where?: OrganizationWhereInput
+    data: XOR<OrganizationUpdateWithoutPeriodsInput, OrganizationUncheckedUpdateWithoutPeriodsInput>
+  }
+
+  export type OrganizationUpdateWithoutPeriodsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUpdateManyWithoutOrganizationNestedInput
+    projects?: ProjectUpdateManyWithoutOrganizationNestedInput
+    teams?: TeamUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type OrganizationUncheckedUpdateWithoutPeriodsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: UserUncheckedUpdateManyWithoutOrganizationNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+    teams?: TeamUncheckedUpdateManyWithoutOrganizationNestedInput
+  }
+
+  export type BudgetAllocationUpsertWithWhereUniqueWithoutPeriodInput = {
+    where: BudgetAllocationWhereUniqueInput
+    update: XOR<BudgetAllocationUpdateWithoutPeriodInput, BudgetAllocationUncheckedUpdateWithoutPeriodInput>
+    create: XOR<BudgetAllocationCreateWithoutPeriodInput, BudgetAllocationUncheckedCreateWithoutPeriodInput>
+  }
+
+  export type BudgetAllocationUpdateWithWhereUniqueWithoutPeriodInput = {
+    where: BudgetAllocationWhereUniqueInput
+    data: XOR<BudgetAllocationUpdateWithoutPeriodInput, BudgetAllocationUncheckedUpdateWithoutPeriodInput>
+  }
+
+  export type BudgetAllocationUpdateManyWithWhereWithoutPeriodInput = {
+    where: BudgetAllocationScalarWhereInput
+    data: XOR<BudgetAllocationUpdateManyMutationInput, BudgetAllocationUncheckedUpdateManyWithoutPeriodInput>
+  }
+
+  export type TeamCreateWithoutAllocationsInput = {
+    id?: string
+    name: string
+    code: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    organization: OrganizationCreateNestedOneWithoutTeamsInput
+    parentTeam?: TeamCreateNestedOneWithoutChildTeamsInput
+    childTeams?: TeamCreateNestedManyWithoutParentTeamInput
+    projects?: ProjectCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamUncheckedCreateWithoutAllocationsInput = {
+    id?: string
+    organizationId: string
+    name: string
+    code: string
+    parentTeamId?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    childTeams?: TeamUncheckedCreateNestedManyWithoutParentTeamInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutTeamInput
+  }
+
+  export type TeamCreateOrConnectWithoutAllocationsInput = {
+    where: TeamWhereUniqueInput
+    create: XOR<TeamCreateWithoutAllocationsInput, TeamUncheckedCreateWithoutAllocationsInput>
+  }
+
+  export type ProjectCreateWithoutAllocationsInput = {
+    id?: string
+    name: string
+    code?: string
     description?: string | null
     status?: string
     priority?: number
@@ -11875,12 +17660,16 @@ export namespace Prisma {
     updatedAt?: Date | string
     createdBy: string
     organization?: OrganizationCreateNestedOneWithoutProjectsInput
+    team?: TeamCreateNestedOneWithoutProjectsInput
+    logs?: AuditLogCreateNestedManyWithoutProjectInput
   }
 
-  export type ProjectUncheckedCreateWithoutLogsInput = {
+  export type ProjectUncheckedCreateWithoutAllocationsInput = {
     id?: string
     organizationId?: string | null
+    teamId?: string | null
     name: string
+    code?: string
     description?: string | null
     status?: string
     priority?: number
@@ -11888,6 +17677,180 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: string
+    logs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectCreateOrConnectWithoutAllocationsInput = {
+    where: ProjectWhereUniqueInput
+    create: XOR<ProjectCreateWithoutAllocationsInput, ProjectUncheckedCreateWithoutAllocationsInput>
+  }
+
+  export type PeriodCreateWithoutAllocationsInput = {
+    id?: string
+    type: string
+    startDate: Date | string
+    endDate: Date | string
+    label: string
+    isLocked?: boolean
+    organization: OrganizationCreateNestedOneWithoutPeriodsInput
+  }
+
+  export type PeriodUncheckedCreateWithoutAllocationsInput = {
+    id?: string
+    organizationId: string
+    type: string
+    startDate: Date | string
+    endDate: Date | string
+    label: string
+    isLocked?: boolean
+  }
+
+  export type PeriodCreateOrConnectWithoutAllocationsInput = {
+    where: PeriodWhereUniqueInput
+    create: XOR<PeriodCreateWithoutAllocationsInput, PeriodUncheckedCreateWithoutAllocationsInput>
+  }
+
+  export type TeamUpsertWithoutAllocationsInput = {
+    update: XOR<TeamUpdateWithoutAllocationsInput, TeamUncheckedUpdateWithoutAllocationsInput>
+    create: XOR<TeamCreateWithoutAllocationsInput, TeamUncheckedCreateWithoutAllocationsInput>
+    where?: TeamWhereInput
+  }
+
+  export type TeamUpdateToOneWithWhereWithoutAllocationsInput = {
+    where?: TeamWhereInput
+    data: XOR<TeamUpdateWithoutAllocationsInput, TeamUncheckedUpdateWithoutAllocationsInput>
+  }
+
+  export type TeamUpdateWithoutAllocationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutTeamsNestedInput
+    parentTeam?: TeamUpdateOneWithoutChildTeamsNestedInput
+    childTeams?: TeamUpdateManyWithoutParentTeamNestedInput
+    projects?: ProjectUpdateManyWithoutTeamNestedInput
+  }
+
+  export type TeamUncheckedUpdateWithoutAllocationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    parentTeamId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    childTeams?: TeamUncheckedUpdateManyWithoutParentTeamNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutTeamNestedInput
+  }
+
+  export type ProjectUpsertWithoutAllocationsInput = {
+    update: XOR<ProjectUpdateWithoutAllocationsInput, ProjectUncheckedUpdateWithoutAllocationsInput>
+    create: XOR<ProjectCreateWithoutAllocationsInput, ProjectUncheckedCreateWithoutAllocationsInput>
+    where?: ProjectWhereInput
+  }
+
+  export type ProjectUpdateToOneWithWhereWithoutAllocationsInput = {
+    where?: ProjectWhereInput
+    data: XOR<ProjectUpdateWithoutAllocationsInput, ProjectUncheckedUpdateWithoutAllocationsInput>
+  }
+
+  export type ProjectUpdateWithoutAllocationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    organization?: OrganizationUpdateOneWithoutProjectsNestedInput
+    team?: TeamUpdateOneWithoutProjectsNestedInput
+    logs?: AuditLogUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateWithoutAllocationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    teamId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    logs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
+  }
+
+  export type PeriodUpsertWithoutAllocationsInput = {
+    update: XOR<PeriodUpdateWithoutAllocationsInput, PeriodUncheckedUpdateWithoutAllocationsInput>
+    create: XOR<PeriodCreateWithoutAllocationsInput, PeriodUncheckedCreateWithoutAllocationsInput>
+    where?: PeriodWhereInput
+  }
+
+  export type PeriodUpdateToOneWithWhereWithoutAllocationsInput = {
+    where?: PeriodWhereInput
+    data: XOR<PeriodUpdateWithoutAllocationsInput, PeriodUncheckedUpdateWithoutAllocationsInput>
+  }
+
+  export type PeriodUpdateWithoutAllocationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    label?: StringFieldUpdateOperationsInput | string
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    organization?: OrganizationUpdateOneRequiredWithoutPeriodsNestedInput
+  }
+
+  export type PeriodUncheckedUpdateWithoutAllocationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    label?: StringFieldUpdateOperationsInput | string
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type ProjectCreateWithoutLogsInput = {
+    id?: string
+    name: string
+    code?: string
+    description?: string | null
+    status?: string
+    priority?: number
+    progress?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    organization?: OrganizationCreateNestedOneWithoutProjectsInput
+    team?: TeamCreateNestedOneWithoutProjectsInput
+    allocations?: BudgetAllocationCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectUncheckedCreateWithoutLogsInput = {
+    id?: string
+    organizationId?: string | null
+    teamId?: string | null
+    name: string
+    code?: string
+    description?: string | null
+    status?: string
+    priority?: number
+    progress?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+    allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutProjectInput
   }
 
   export type ProjectCreateOrConnectWithoutLogsInput = {
@@ -11909,6 +17872,7 @@ export namespace Prisma {
   export type ProjectUpdateWithoutLogsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
@@ -11917,12 +17881,16 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
     organization?: OrganizationUpdateOneWithoutProjectsNestedInput
+    team?: TeamUpdateOneWithoutProjectsNestedInput
+    allocations?: BudgetAllocationUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutLogsInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    teamId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
@@ -11930,6 +17898,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
+    allocations?: BudgetAllocationUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type OrganizationCreateWithoutUsersInput = {
@@ -11938,6 +17907,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutOrganizationInput
+    teams?: TeamCreateNestedManyWithoutOrganizationInput
+    periods?: PeriodCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationUncheckedCreateWithoutUsersInput = {
@@ -11946,6 +17917,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutOrganizationInput
+    teams?: TeamUncheckedCreateNestedManyWithoutOrganizationInput
+    periods?: PeriodUncheckedCreateNestedManyWithoutOrganizationInput
   }
 
   export type OrganizationCreateOrConnectWithoutUsersInput = {
@@ -12030,6 +18003,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutOrganizationNestedInput
+    teams?: TeamUpdateManyWithoutOrganizationNestedInput
+    periods?: PeriodUpdateManyWithoutOrganizationNestedInput
   }
 
   export type OrganizationUncheckedUpdateWithoutUsersInput = {
@@ -12038,6 +18013,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutOrganizationNestedInput
+    teams?: TeamUncheckedUpdateManyWithoutOrganizationNestedInput
+    periods?: PeriodUncheckedUpdateManyWithoutOrganizationNestedInput
   }
 
   export type AccountUpsertWithWhereUniqueWithoutUserInput = {
@@ -12249,7 +18226,9 @@ export namespace Prisma {
 
   export type ProjectCreateManyOrganizationInput = {
     id?: string
+    teamId?: string | null
     name: string
+    code?: string
     description?: string | null
     status?: string
     priority?: number
@@ -12257,6 +18236,25 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: string
+  }
+
+  export type TeamCreateManyOrganizationInput = {
+    id?: string
+    name: string
+    code: string
+    parentTeamId?: string | null
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type PeriodCreateManyOrganizationInput = {
+    id?: string
+    type: string
+    startDate: Date | string
+    endDate: Date | string
+    label: string
+    isLocked?: boolean
   }
 
   export type UserUpdateWithoutOrganizationInput = {
@@ -12299,6 +18297,7 @@ export namespace Prisma {
   export type ProjectUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
@@ -12306,12 +18305,16 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
+    team?: TeamUpdateOneWithoutProjectsNestedInput
     logs?: AuditLogUpdateManyWithoutProjectNestedInput
+    allocations?: BudgetAllocationUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    teamId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
@@ -12320,11 +18323,14 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
     logs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
+    allocations?: BudgetAllocationUncheckedUpdateManyWithoutProjectNestedInput
   }
 
   export type ProjectUncheckedUpdateManyWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
+    teamId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
     priority?: IntFieldUpdateOperationsInput | number
@@ -12332,6 +18338,209 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type TeamUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    parentTeam?: TeamUpdateOneWithoutChildTeamsNestedInput
+    childTeams?: TeamUpdateManyWithoutParentTeamNestedInput
+    projects?: ProjectUpdateManyWithoutTeamNestedInput
+    allocations?: BudgetAllocationUpdateManyWithoutTeamNestedInput
+  }
+
+  export type TeamUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    parentTeamId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    childTeams?: TeamUncheckedUpdateManyWithoutParentTeamNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutTeamNestedInput
+    allocations?: BudgetAllocationUncheckedUpdateManyWithoutTeamNestedInput
+  }
+
+  export type TeamUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    parentTeamId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PeriodUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    label?: StringFieldUpdateOperationsInput | string
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    allocations?: BudgetAllocationUpdateManyWithoutPeriodNestedInput
+  }
+
+  export type PeriodUncheckedUpdateWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    label?: StringFieldUpdateOperationsInput | string
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+    allocations?: BudgetAllocationUncheckedUpdateManyWithoutPeriodNestedInput
+  }
+
+  export type PeriodUncheckedUpdateManyWithoutOrganizationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    label?: StringFieldUpdateOperationsInput | string
+    isLocked?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type TeamCreateManyParentTeamInput = {
+    id?: string
+    organizationId: string
+    name: string
+    code: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProjectCreateManyTeamInput = {
+    id?: string
+    organizationId?: string | null
+    name: string
+    code?: string
+    description?: string | null
+    status?: string
+    priority?: number
+    progress?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    createdBy: string
+  }
+
+  export type BudgetAllocationCreateManyTeamInput = {
+    id?: string
+    projectId: string
+    periodId: string
+    plannedHours?: number
+    updatedAt?: Date | string
+  }
+
+  export type TeamUpdateWithoutParentTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutTeamsNestedInput
+    childTeams?: TeamUpdateManyWithoutParentTeamNestedInput
+    projects?: ProjectUpdateManyWithoutTeamNestedInput
+    allocations?: BudgetAllocationUpdateManyWithoutTeamNestedInput
+  }
+
+  export type TeamUncheckedUpdateWithoutParentTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    childTeams?: TeamUncheckedUpdateManyWithoutParentTeamNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutTeamNestedInput
+    allocations?: BudgetAllocationUncheckedUpdateManyWithoutTeamNestedInput
+  }
+
+  export type TeamUncheckedUpdateManyWithoutParentTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectUpdateWithoutTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    organization?: OrganizationUpdateOneWithoutProjectsNestedInput
+    logs?: AuditLogUpdateManyWithoutProjectNestedInput
+    allocations?: BudgetAllocationUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateWithoutTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+    logs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
+    allocations?: BudgetAllocationUncheckedUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateManyWithoutTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: NullableStringFieldUpdateOperationsInput | string | null
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: IntFieldUpdateOperationsInput | number
+    progress?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type BudgetAllocationUpdateWithoutTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    plannedHours?: FloatFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    project?: ProjectUpdateOneRequiredWithoutAllocationsNestedInput
+    period?: PeriodUpdateOneRequiredWithoutAllocationsNestedInput
+  }
+
+  export type BudgetAllocationUncheckedUpdateWithoutTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    periodId?: StringFieldUpdateOperationsInput | string
+    plannedHours?: FloatFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BudgetAllocationUncheckedUpdateManyWithoutTeamInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    periodId?: StringFieldUpdateOperationsInput | string
+    plannedHours?: FloatFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AuditLogCreateManyProjectInput = {
@@ -12344,6 +18553,14 @@ export namespace Prisma {
     userId: string
     userEmail: string
     timestamp?: Date | string
+  }
+
+  export type BudgetAllocationCreateManyProjectInput = {
+    id?: string
+    teamId: string
+    periodId: string
+    plannedHours?: number
+    updatedAt?: Date | string
   }
 
   export type AuditLogUpdateWithoutProjectInput = {
@@ -12380,6 +18597,62 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     userEmail?: StringFieldUpdateOperationsInput | string
     timestamp?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BudgetAllocationUpdateWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    plannedHours?: FloatFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    team?: TeamUpdateOneRequiredWithoutAllocationsNestedInput
+    period?: PeriodUpdateOneRequiredWithoutAllocationsNestedInput
+  }
+
+  export type BudgetAllocationUncheckedUpdateWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    teamId?: StringFieldUpdateOperationsInput | string
+    periodId?: StringFieldUpdateOperationsInput | string
+    plannedHours?: FloatFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BudgetAllocationUncheckedUpdateManyWithoutProjectInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    teamId?: StringFieldUpdateOperationsInput | string
+    periodId?: StringFieldUpdateOperationsInput | string
+    plannedHours?: FloatFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BudgetAllocationCreateManyPeriodInput = {
+    id?: string
+    teamId: string
+    projectId: string
+    plannedHours?: number
+    updatedAt?: Date | string
+  }
+
+  export type BudgetAllocationUpdateWithoutPeriodInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    plannedHours?: FloatFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    team?: TeamUpdateOneRequiredWithoutAllocationsNestedInput
+    project?: ProjectUpdateOneRequiredWithoutAllocationsNestedInput
+  }
+
+  export type BudgetAllocationUncheckedUpdateWithoutPeriodInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    teamId?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    plannedHours?: FloatFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type BudgetAllocationUncheckedUpdateManyWithoutPeriodInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    teamId?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    plannedHours?: FloatFieldUpdateOperationsInput | number
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AccountCreateManyUserInput = {

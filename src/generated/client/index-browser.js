@@ -127,10 +127,23 @@ exports.Prisma.OrganizationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.ProjectScalarFieldEnum = {
+exports.Prisma.TeamScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
   name: 'name',
+  code: 'code',
+  parentTeamId: 'parentTeamId',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProjectScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  teamId: 'teamId',
+  name: 'name',
+  code: 'code',
   description: 'description',
   status: 'status',
   priority: 'priority',
@@ -138,6 +151,25 @@ exports.Prisma.ProjectScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   createdBy: 'createdBy'
+};
+
+exports.Prisma.PeriodScalarFieldEnum = {
+  id: 'id',
+  organizationId: 'organizationId',
+  type: 'type',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  label: 'label',
+  isLocked: 'isLocked'
+};
+
+exports.Prisma.BudgetAllocationScalarFieldEnum = {
+  id: 'id',
+  teamId: 'teamId',
+  projectId: 'projectId',
+  periodId: 'periodId',
+  plannedHours: 'plannedHours',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.AuditLogScalarFieldEnum = {
@@ -211,7 +243,10 @@ exports.Prisma.NullsOrder = {
 
 exports.Prisma.ModelName = {
   Organization: 'Organization',
+  Team: 'Team',
   Project: 'Project',
+  Period: 'Period',
+  BudgetAllocation: 'BudgetAllocation',
   AuditLog: 'AuditLog',
   User: 'User',
   Account: 'Account',
