@@ -1,0 +1,20 @@
+
+> inventory-tracker@0.1.0 dev
+> next dev -p 3000
+
+   ▲ Next.js 15.5.14
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.2.249:3000
+   - Environments: .env.local, .env
+
+ ✓ Starting...
+ ✓ Ready in 1554ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 2.8s (1147 modules)
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+ HEAD /login 200 in 3256ms
+ GET /login 200 in 109ms
+ ✓ Compiled in 232ms (250 modules)
