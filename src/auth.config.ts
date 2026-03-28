@@ -4,7 +4,13 @@ import Credentials from "next-auth/providers/credentials";
 
 export const authConfig = {
   secret: process.env.AUTH_SECRET,
-  providers: [], // Providers added in auth.ts
+  providers: [
+    Google({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    }),
+    Credentials({}), // Implementation in auth.ts
+  ],
   pages: {
     signIn: "/login",
   },
