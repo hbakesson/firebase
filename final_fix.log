@@ -1,0 +1,50 @@
+
+> inventory-tracker@0.1.0 dev
+> next dev -p 3000
+
+   ▲ Next.js 15.5.14
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.2.249:3000
+   - Environments: .env.local, .env
+
+ ✓ Starting...
+ ✓ Ready in 1546ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 1708ms (763 modules)
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+[31m[auth][error][0m UnknownAction: Only GET and POST requests are supported. Read more at https://errors.authjs.dev#unknownaction
+    at toInternalRequest (webpack-internal:///(rsc)/./node_modules/next-auth/node_modules/@auth/core/lib/utils/web.js:34:19)
+    at Auth (webpack-internal:///(rsc)/./node_modules/next-auth/node_modules/@auth/core/index.js:87:103)
+    at httpHandler (webpack-internal:///(rsc)/./node_modules/next-auth/index.js:142:82)
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:59:14)
+    at AppRouteRouteModule.do (/Users/hbakesson/Coding/Firebase/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:5:38775)
+    at /Users/hbakesson/Coding/Firebase/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:5:48915
+    at /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/trace/tracer.js:184:36
+    at NoopContextManager.with (/Users/hbakesson/Coding/Firebase/node_modules/@opentelemetry/api/build/src/context/NoopContextManager.js:25:19)
+    at ContextAPI.with (/Users/hbakesson/Coding/Firebase/node_modules/@opentelemetry/api/build/src/api/context.js:60:46)
+    at NoopTracer.startActiveSpan (/Users/hbakesson/Coding/Firebase/node_modules/@opentelemetry/api/build/src/trace/NoopTracer.js:65:31)
+    at ProxyTracer.startActiveSpan (/Users/hbakesson/Coding/Firebase/node_modules/@opentelemetry/api/build/src/trace/ProxyTracer.js:36:24)
+    at /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/trace/tracer.js:153:103
+    at NoopContextManager.with (/Users/hbakesson/Coding/Firebase/node_modules/@opentelemetry/api/build/src/context/NoopContextManager.js:25:19)
+    at ContextAPI.with (/Users/hbakesson/Coding/Firebase/node_modules/@opentelemetry/api/build/src/api/context.js:60:46)
+    at NextTracerImpl.trace (/Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/trace/tracer.js:153:28)
+    at /Users/hbakesson/Coding/Firebase/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:5:48760
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
+    at /Users/hbakesson/Coding/Firebase/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:5:46097
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
+    at /Users/hbakesson/Coding/Firebase/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:5:46054
+    at AsyncLocalStorage.run (node:internal/async_local_storage/async_context_frame:63:14)
+    at AppRouteRouteModule.handle (/Users/hbakesson/Coding/Firebase/node_modules/next/dist/compiled/next-server/app-route.runtime.dev.js:5:46008)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+ HEAD /api/auth/providers 400 in 2641ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 1624ms (1152 modules)
+[PRISMA] Client initialized.
+ HEAD /login 200 in 1995ms
