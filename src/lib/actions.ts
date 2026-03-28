@@ -142,3 +142,74 @@ export async function deleteProject(id: string) {
   revalidatePath("/dashboard");
   return project;
 }
+
+// ─── Planning Actions ────────────────────────────────────────────────────────
+
+export async function createYearPeriods(year: number) {
+  const session = await auth();
+  if (!session?.user?.organizationId) throw new Error("Unauthorized");
+
+  const orgId = session.user.organizationId;
+  const periods = [];
+
+  for (let month = 0; month < 12; month++) {
+    const startDate = new Date(year, month, 1);
+    const endDate = new Date(year, month + 1, 0);
+    const label = startDate.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+    periods.push({
+      organizationId: orgId,
+      type: "MONTH",
+      startDate,
+      endDate,
+      label,
+    });
+  }
+
+  const result = await prisma.period.createMany({ data: periods });
+
+  await prisma.auditLog.create({
+    data: {
+      action: "CREATE",
+      entityType: "Period",
+      entityId: "BATCH",
+      projectName: `Batch Periods ${year}`,
+      userId: session.user.id!,
+      userEmail: session.user.email!,
+    },
+  });
+
+  revalidatePath("/");
+  return result;
+}
+
+export async function upsertAllocation(data: { teamId: string; projectId: string; periodId: string; plannedHours: number }) {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Unauthorized");
+
+  const allocation = await prisma.budgetAllocation.upsert({
+    where: {
+      teamId_projectId_periodId: {
+        teamId: data.teamId,
+        projectId: data.projectId,
+        periodId: data.periodId,
+      },
+    },
+    update: { plannedHours: data.plannedHours },
+    create: data,
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      action: "UPDATE",
+      entityType: "BudgetAllocation",
+      entityId: allocation.id,
+      projectName: "Grid Update",
+      userId: session.user.id!,
+      userEmail: session.user.email!,
+      newValue: `Planned: ${data.plannedHours}`,
+    },
+  });
+
+  return allocation;
+}

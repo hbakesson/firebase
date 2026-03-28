@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { createTeam, updateTeam } from "@/lib/actions";
+import Link from "next/link";
 import { 
   Users, 
   Plus, 
@@ -98,6 +99,9 @@ export default async function TeamsPage() {
                   </td>
                   <td style={{ textAlign: 'right', paddingRight: '1.25rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
+                      <Link href={`/planning/${team.id}`} className="btn-sm" style={{ textDecoration: 'none', background: 'var(--primary)', color: 'white' }}>
+                        Plan Capacity
+                      </Link>
                       <form action={async () => {
                         "use server";
                         await updateTeam(team.id, { isActive: !team.isActive });
