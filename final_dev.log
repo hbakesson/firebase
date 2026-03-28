@@ -727,3 +727,415 @@
 🛠️ [MOCK] project.findMany { organizationId: 'mock-org', status: 'ACTIVE' }
  GET /planning/bulk 200 in 846ms
  GET /favicon.ico 200 in 12ms
+ GET /api/auth/session 200 in 97ms
+ GET /api/auth/session 200 in 10ms
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+ ⨯ Error: Cannot find module './745.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/api/auth/[...nextauth]/route.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/options.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/index.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-server.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/start-server.js
+    at <unknown> (.next/server/app/import/page.js:528:102098)
+    at Object.<anonymous> (.next/server/app/import/page.js:528:102155) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/import'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /reports in 2.9s (3078 modules)
+[PRISMA] Client initialized.
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ ⨯ TypeError: Cannot read properties of undefined (reading 'reduce')
+    at eval (src/app/reports/page.tsx:66:26)
+    at Array.map (<anonymous>)
+    at ReportsPage (src/app/reports/page.tsx:63:52)
+  64 |     name: t.name,
+  65 |     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+> 66 |     value: t.allocations.reduce((acc: number, curr: any) => acc + (curr.plannedHours || 0), 0)
+     |                          ^
+  67 |   })).filter((t: TeamBreakdownItem) => t.value > 0);
+  68 |
+  69 |   // 3. Overall Organization Stats {
+  digest: '116868489'
+}
+ GET /reports 200 in 3235ms
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ ⨯ TypeError: Cannot read properties of undefined (reading 'reduce')
+    at eval (src/app/reports/page.tsx:66:26)
+    at Array.map (<anonymous>)
+    at ReportsPage (src/app/reports/page.tsx:63:52)
+  64 |     name: t.name,
+  65 |     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+> 66 |     value: t.allocations.reduce((acc: number, curr: any) => acc + (curr.plannedHours || 0), 0)
+     |                          ^
+  67 |   })).filter((t: TeamBreakdownItem) => t.value > 0);
+  68 |
+  69 |   // 3. Overall Organization Stats {
+  digest: '116868489'
+}
+ GET /reports 200 in 31ms
+ GET /import 500 in 4638ms
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ ⨯ TypeError: Cannot read properties of undefined (reading 'reduce')
+    at eval (src/app/reports/page.tsx:66:26)
+    at Array.map (<anonymous>)
+    at ReportsPage (src/app/reports/page.tsx:63:52)
+  64 |     name: t.name,
+  65 |     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+> 66 |     value: t.allocations.reduce((acc: number, curr: any) => acc + (curr.plannedHours || 0), 0)
+     |                          ^
+  67 |   })).filter((t: TeamBreakdownItem) => t.value > 0);
+  68 |
+  69 |   // 3. Overall Organization Stats {
+  digest: '116868489'
+}
+ GET /reports 500 in 138ms
+ ✓ Compiled /favicon.ico in 360ms (2165 modules)
+ ⨯ Error: Cannot find module './745.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/favicon.ico/route.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/options.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/index.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-server.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/start-server.js
+    at <unknown> (.next/server/app/favicon.ico/route.js:1:41970)
+    at Object.<anonymous> (.next/server/app/favicon.ico/route.js:1:42016) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 434ms
+ ⨯ Error: Cannot find module './745.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/favicon.ico/route.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/options.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/index.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-server.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/start-server.js
+    at <unknown> (.next/server/app/favicon.ico/route.js:1:41970)
+    at Object.<anonymous> (.next/server/app/favicon.ico/route.js:1:42016) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 22ms
+[PRISMA] Client initialized.
+ GET /projects 200 in 972ms
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-22T23:00:00.000Z,
+    endDate: 2026-03-29T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-29T22:00:00.000Z,
+    endDate: 2026-04-05T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-05T22:00:00.000Z,
+    endDate: 2026-04-12T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-12T22:00:00.000Z,
+    endDate: 2026-04-19T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-19T22:00:00.000Z,
+    endDate: 2026-04-26T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-26T22:00:00.000Z,
+    endDate: 2026-05-03T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-03T22:00:00.000Z,
+    endDate: 2026-05-10T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-10T22:00:00.000Z,
+    endDate: 2026-05-17T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-17T22:00:00.000Z,
+    endDate: 2026-05-24T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org', status: 'ACTIVE' }
+ GET /planning/bulk 200 in 411ms
+ ⨯ Error: Cannot find module './745.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/favicon.ico/route.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/options.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/index.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-server.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/start-server.js
+    at <unknown> (.next/server/app/favicon.ico/route.js:1:41970)
+    at Object.<anonymous> (.next/server/app/favicon.ico/route.js:1:42016) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 28ms
+ ⨯ Error: Cannot find module './745.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/favicon.ico/route.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/options.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/index.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-server.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/start-server.js
+    at <unknown> (.next/server/app/favicon.ico/route.js:1:41970)
+    at Object.<anonymous> (.next/server/app/favicon.ico/route.js:1:42016) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 16ms
+ GET /login 200 in 294ms
+ ⨯ Error: Cannot find module './745.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/favicon.ico/route.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/options.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/index.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-server.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/start-server.js
+    at <unknown> (.next/server/app/favicon.ico/route.js:1:41970)
+    at Object.<anonymous> (.next/server/app/favicon.ico/route.js:1:42016) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 16ms
+ GET /login 200 in 49ms
+ ⨯ Error: Cannot find module './745.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/favicon.ico/route.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/options.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/index.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-server.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/start-server.js
+    at <unknown> (.next/server/app/favicon.ico/route.js:1:41970)
+    at Object.<anonymous> (.next/server/app/favicon.ico/route.js:1:42016) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 16ms
+ GET /login 200 in 44ms
+ ⨯ Error: Cannot find module './745.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/favicon.ico/route.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/options.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/index.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-server.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/start-server.js
+    at <unknown> (.next/server/app/favicon.ico/route.js:1:41970)
+    at Object.<anonymous> (.next/server/app/favicon.ico/route.js:1:42016) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 16ms
+ GET / 200 in 889ms
+ GET /api/auth/error?error=Configuration 500 in 721ms
+ ⨯ Error: Cannot find module './745.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/favicon.ico/route.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/options.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/index.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-server.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/start-server.js
+    at <unknown> (.next/server/app/favicon.ico/route.js:1:41970)
+    at Object.<anonymous> (.next/server/app/favicon.ico/route.js:1:42016) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 273ms
+ ⨯ Failed to generate static paths for /api/auth/[...nextauth]:
+[Error: Cannot find module './vendor-chunks/google-auth-library.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/api/auth/[...nextauth]/route.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/compiled/jest-worker/processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+ ⨯ [Error: Cannot find module './vendor-chunks/google-auth-library.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/api/auth/[...nextauth]/route.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/compiled/jest-worker/processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/api/auth/error'
+}
+ GET /api/auth/error?error=Configuration 500 in 592ms
+ ⨯ Error: Cannot find module './745.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/favicon.ico/route.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/options.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/index.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-server.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/start-server.js
+    at <unknown> (.next/server/app/favicon.ico/route.js:1:41970)
+    at Object.<anonymous> (.next/server/app/favicon.ico/route.js:1:42016) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 54ms
+ ⨯ [Error: Cannot find module './vendor-chunks/google-auth-library.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/api/auth/[...nextauth]/route.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/compiled/jest-worker/processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/api/auth/error'
+}
+ GET /api/auth/error?error=Configuration 500 in 1392ms
+ ⨯ Error: Cannot find module './745.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/favicon.ico/route.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/options.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/index.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-server.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/start-server.js
+    at <unknown> (.next/server/app/favicon.ico/route.js:1:41970)
+    at Object.<anonymous> (.next/server/app/favicon.ico/route.js:1:42016) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 291ms
