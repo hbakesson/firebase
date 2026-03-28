@@ -18,3 +18,15 @@
  HEAD /login 200 in 3256ms
  GET /login 200 in 109ms
  ✓ Compiled in 232ms (250 modules)
+ ✓ Compiled /api/auth/[...nextauth] in 420ms (819 modules)
+[PRISMA] Client initialized.
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+ GET /api/auth/csrf 200 in 1435ms
+ ✓ Compiled /login in 260ms (888 modules)
+[PRISMA] Client initialized.
+ HEAD /login 200 in 896ms
+   Reload env: .env
+ ✓ Compiled in 282ms (250 modules)

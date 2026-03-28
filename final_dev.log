@@ -1,0 +1,469 @@
+
+> inventory-tracker@0.1.0 dev
+> next dev -p 3000
+
+   ▲ Next.js 15.5.14
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.2.249:3000
+   - Environments: .env.local, .env
+
+ ✓ Starting...
+ ✓ Ready in 1492ms
+ ○ Compiling /login ...
+ ✓ Compiled /login in 2.4s (1147 modules)
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ HEAD /login 200 in 2846ms
+ GET /login 200 in 163ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 669ms (1138 modules)
+[PRISMA] Client initialized.
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /api/auth/session 200 in 1830ms
+ GET /api/auth/providers 200 in 58ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/csrf 200 in 6ms
+ GET /api/auth/session 200 in 7ms
+ GET /api/auth/session 200 in 10ms
+ POST /api/auth/callback/guest? 200 in 22ms
+ ✓ Compiled / in 425ms (1157 modules)
+[PRISMA] Client initialized.
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET / 200 in 825ms
+ GET /api/auth/session 200 in 49ms
+ GET /api/auth/session 200 in 9ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ ✓ Compiled /teams in 331ms (1176 modules)
+[PRISMA] Client initialized.
+ GET /teams 200 in 689ms
+ ✓ Compiled /projects in 208ms (1183 modules)
+[PRISMA] Client initialized.
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ GET /projects 200 in 450ms
+ ⨯ TypeError: _lib_prisma__WEBPACK_IMPORTED_MODULE_2__.prisma.project.update is not a function
+    at updateProject (src/lib/actions.ts:101:40)
+    at async action (src/app/projects/page.tsx:125:25)
+   99 |
+  100 |   const previous = await prisma.project.findUnique({ where: { id } });
+> 101 |   const project = await prisma.project.update({
+      |                                        ^
+  102 |     where: { id },
+  103 |     data,
+  104 |   }); {
+  digest: '2752917699'
+}
+ POST /projects 500 in 316ms
+ GET / 200 in 225ms
+ GET /api/auth/session 200 in 51ms
+ GET /api/auth/session 200 in 7ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ ✓ Compiled /_not-found in 285ms (1184 modules)
+[PRISMA] Client initialized.
+ GET /settings 404 in 445ms
+ GET /settings 307 in 83ms
+ GET / 200 in 77ms
+ GET /api/auth/session 200 in 39ms
+ GET /api/auth/session 200 in 5ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /settings 404 in 33ms
+ GET /settings 307 in 79ms
+ GET / 200 in 75ms
+ GET /api/auth/session 200 in 11ms
+ GET /api/auth/session 200 in 10ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ ○ Compiling /audit ...
+ ✓ Compiled /audit in 828ms (1209 modules)
+[PRISMA] Client initialized.
+ GET /audit 200 in 1024ms
+ ○ Compiling /reports ...
+ ✓ Compiled /reports in 1567ms (2193 modules)
+[PRISMA] Client initialized.
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ ⨯ TypeError: Cannot read properties of undefined (reading 'reduce')
+    at eval (src/app/reports/page.tsx:66:26)
+    at Array.map (<anonymous>)
+    at ReportsPage (src/app/reports/page.tsx:63:52)
+  64 |     name: t.name,
+  65 |     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+> 66 |     value: t.allocations.reduce((acc: number, curr: any) => acc + (curr.plannedHours || 0), 0)
+     |                          ^
+  67 |   })).filter((t: TeamBreakdownItem) => t.value > 0);
+  68 |
+  69 |   // 3. Overall Organization Stats {
+  digest: '116868489'
+}
+ GET /reports 200 in 1786ms
+ GET / 200 in 185ms
+ GET /api/auth/session 200 in 49ms
+ GET /api/auth/session 200 in 6ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ ✓ Compiled /planning/bulk in 463ms (2212 modules)
+[PRISMA] Client initialized.
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-22T23:00:00.000Z,
+    endDate: 2026-03-29T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-29T22:00:00.000Z,
+    endDate: 2026-04-05T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-05T22:00:00.000Z,
+    endDate: 2026-04-12T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-12T22:00:00.000Z,
+    endDate: 2026-04-19T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-19T22:00:00.000Z,
+    endDate: 2026-04-26T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-26T22:00:00.000Z,
+    endDate: 2026-05-03T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-03T22:00:00.000Z,
+    endDate: 2026-05-10T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-10T22:00:00.000Z,
+    endDate: 2026-05-17T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-17T22:00:00.000Z,
+    endDate: 2026-05-24T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org', status: 'ACTIVE' }
+ GET /planning/bulk 200 in 730ms
+🛠️ [MOCK] budgetAllocation.upsert {
+  teamId_projectId_periodId: {
+    teamId: 't1',
+    projectId: 'p2',
+    periodId: 'per-2026-03-29T22:00:00.000Z'
+  }
+}
+🛠️ [MOCK] auditLog.create UPDATE BudgetAllocation
+ POST /planning/bulk 200 in 24ms
+🛠️ [MOCK] budgetAllocation.upsert {
+  teamId_projectId_periodId: {
+    teamId: 't1',
+    projectId: 'p2',
+    periodId: 'per-2026-04-05T22:00:00.000Z'
+  }
+}
+🛠️ [MOCK] auditLog.create UPDATE BudgetAllocation
+ POST /planning/bulk 200 in 24ms
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ GET /projects 200 in 141ms
+ GET /teams 200 in 171ms
+ GET / 200 in 76ms
+ GET /teams 200 in 52ms
+ GET /teams 200 in 29ms
+ ○ Compiling /import ...
+ ✓ Compiled /import in 1532ms (2754 modules)
+[PRISMA] Client initialized.
+ GET /import 200 in 1894ms
+ GET /import 200 in 10ms
+ GET /api/auth/session 200 in 1034ms
+ GET /api/auth/session 200 in 97ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET / 200 in 670ms
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-22T23:00:00.000Z,
+    endDate: 2026-03-29T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-29T22:00:00.000Z,
+    endDate: 2026-04-05T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-05T22:00:00.000Z,
+    endDate: 2026-04-12T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-12T22:00:00.000Z,
+    endDate: 2026-04-19T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-19T22:00:00.000Z,
+    endDate: 2026-04-26T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-26T22:00:00.000Z,
+    endDate: 2026-05-03T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-03T22:00:00.000Z,
+    endDate: 2026-05-10T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-10T22:00:00.000Z,
+    endDate: 2026-05-17T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-17T22:00:00.000Z,
+    endDate: 2026-05-24T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org', status: 'ACTIVE' }
+ GET /planning/bulk 200 in 435ms
+🛠️ [MOCK] budgetAllocation.upsert {
+  teamId_projectId_periodId: {
+    teamId: 't1',
+    projectId: 'p1',
+    periodId: 'per-2026-03-22T23:00:00.000Z'
+  }
+}
+🛠️ [MOCK] auditLog.create UPDATE BudgetAllocation
+ POST /planning/bulk 200 in 236ms
+🛠️ [MOCK] budgetAllocation.upsert {
+  teamId_projectId_periodId: {
+    teamId: 't1',
+    projectId: 'p1',
+    periodId: 'per-2026-03-29T22:00:00.000Z'
+  }
+}
+🛠️ [MOCK] auditLog.create UPDATE BudgetAllocation
+ POST /planning/bulk 200 in 89ms
+🛠️ [MOCK] budgetAllocation.upsert {
+  teamId_projectId_periodId: {
+    teamId: 't1',
+    projectId: 'p2',
+    periodId: 'per-2026-03-29T22:00:00.000Z'
+  }
+}
+🛠️ [MOCK] auditLog.create UPDATE BudgetAllocation
+ POST /planning/bulk 200 in 89ms
+🛠️ [MOCK] budgetAllocation.upsert {
+  teamId_projectId_periodId: {
+    teamId: 't1',
+    projectId: 'p1',
+    periodId: 'per-2026-04-12T22:00:00.000Z'
+  }
+}
+🛠️ [MOCK] auditLog.create UPDATE BudgetAllocation
+ POST /planning/bulk 200 in 79ms
+🛠️ [MOCK] budgetAllocation.upsert {
+  teamId_projectId_periodId: {
+    teamId: 't1',
+    projectId: 'p1',
+    periodId: 'per-2026-04-12T22:00:00.000Z'
+  }
+}
+🛠️ [MOCK] auditLog.create UPDATE BudgetAllocation
+ POST /planning/bulk 200 in 87ms
+🛠️ [MOCK] budgetAllocation.upsert {
+  teamId_projectId_periodId: {
+    teamId: 't1',
+    projectId: 'p1',
+    periodId: 'per-2026-04-05T22:00:00.000Z'
+  }
+}
+🛠️ [MOCK] auditLog.create UPDATE BudgetAllocation
+ POST /planning/bulk 200 in 143ms
+🛠️ [MOCK] budgetAllocation.upsert {
+  teamId_projectId_periodId: {
+    teamId: 't1',
+    projectId: 'p1',
+    periodId: 'per-2026-04-05T22:00:00.000Z'
+  }
+}
+🛠️ [MOCK] auditLog.create UPDATE BudgetAllocation
+ POST /planning/bulk 200 in 30ms
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-22T23:00:00.000Z,
+    endDate: 2026-03-29T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-29T22:00:00.000Z,
+    endDate: 2026-04-05T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-05T22:00:00.000Z,
+    endDate: 2026-04-12T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-12T22:00:00.000Z,
+    endDate: 2026-04-19T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-19T22:00:00.000Z,
+    endDate: 2026-04-26T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-26T22:00:00.000Z,
+    endDate: 2026-05-03T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-03T22:00:00.000Z,
+    endDate: 2026-05-10T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-10T22:00:00.000Z,
+    endDate: 2026-05-17T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-17T22:00:00.000Z,
+    endDate: 2026-05-24T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org', status: 'ACTIVE' }
+ GET /planning/bulk 200 in 448ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 2.1s (1474 modules)
+ GET /favicon.ico 200 in 2425ms
+[PRISMA] Client initialized.
+ GET /api/auth/session 200 in 2455ms
+ GET /api/auth/session 200 in 6ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+🛠️ [MOCK] budgetAllocation.upsert {
+  teamId_projectId_periodId: {
+    teamId: 't1',
+    projectId: 'p1',
+    periodId: 'per-2026-03-29T22:00:00.000Z'
+  }
+}
+🛠️ [MOCK] auditLog.create UPDATE BudgetAllocation
+ POST /planning/bulk 200 in 165ms
+ GET /teams 200 in 351ms
+ GET /teams 200 in 31ms
+ ⨯ TypeError: _lib_prisma__WEBPACK_IMPORTED_MODULE_2__.prisma.team.findUnique is not a function
+    at updateTeam (src/lib/actions.ts:41:38)
+    at async action (src/app/teams/page.tsx:104:25)
+  39 |   if (!session?.user?.id) throw new Error("Unauthorized");
+  40 |
+> 41 |   const previous = await prisma.team.findUnique({ where: { id } });
+     |                                      ^
+  42 |   const team = await prisma.team.update({
+  43 |     where: { id },
+  44 |     data, {
+  digest: '2914337051'
+}
+ POST /teams 500 in 194ms
