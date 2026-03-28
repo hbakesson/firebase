@@ -7,8 +7,10 @@ import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 
+const adapter = process.env.MOCK_DATABASE === 'true' ? undefined : PrismaAdapter(prisma as any);
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: PrismaAdapter(prisma as any),
+  adapter,
   ...authConfig,
   providers: [
     Google({

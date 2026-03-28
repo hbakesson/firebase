@@ -40,7 +40,7 @@ export default async function DashboardPage() {
             <LayoutDashboard size={32} className="text-indigo-400" />
             Organizational Dashboard
           </h2>
-          <p style={{ color: "var(--text-muted)" }}>Overview of your team's current capacity and project status.</p>
+          <p style={{ color: "var(--text-muted)" }}>Overview of your team&apos;s current capacity and project status.</p>
         </div>
       </div>
 
