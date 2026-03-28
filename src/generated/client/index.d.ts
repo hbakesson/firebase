@@ -15299,6 +15299,7 @@ export namespace Prisma {
 
   export type PeriodWhereUniqueInput = Prisma.AtLeast<{
     id?: string
+    organizationId_type_startDate_endDate?: PeriodOrganizationIdTypeStartDateEndDateCompoundUniqueInput
     AND?: PeriodWhereInput | PeriodWhereInput[]
     OR?: PeriodWhereInput[]
     NOT?: PeriodWhereInput | PeriodWhereInput[]
@@ -15311,7 +15312,7 @@ export namespace Prisma {
     organization?: XOR<OrganizationScalarRelationFilter, OrganizationWhereInput>
     allocations?: BudgetAllocationListRelationFilter
     actualAllocations?: ActualAllocationListRelationFilter
-  }, "id">
+  }, "id" | "organizationId_type_startDate_endDate">
 
   export type PeriodOrderByWithAggregationInput = {
     id?: SortOrder
@@ -17013,6 +17014,13 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type PeriodOrganizationIdTypeStartDateEndDateCompoundUniqueInput = {
+    organizationId: string
+    type: string
+    startDate: Date | string
+    endDate: Date | string
   }
 
   export type PeriodCountOrderByAggregateInput = {

@@ -1,13 +1,21 @@
 "use client";
 
-import { useState, useTransition, useMemo, useEffect } from "react";
+import { useState, useTransition, useMemo, useEffect, ReactNode } from "react";
+import { 
+  useReactTable, 
+  getCoreRowModel, 
+  flexRender, 
+  ColumnDef,
+  Row
+} from "@tanstack/react-table";
 import { upsertAllocation } from "@/lib/actions";
 import { 
   Save, 
   AlertCircle, 
   Loader2,
   CalendarDays,
-  CheckCircle2
+  CheckCircle2,
+  Table as TableIcon
 } from "lucide-react";
 
 interface Project {
@@ -27,6 +35,51 @@ interface Allocation {
   plannedHours: number;
 }
 
+// --- Specialized Editable Cell ---
+const EditableCell = ({ 
+  value: initialValue, 
+  row, 
+  column, 
+  table 
+}: { 
+  value: any; 
+  row: any; 
+  column: any; 
+  table: any 
+}) => {
+  const [value, setValue] = useState(initialValue);
+
+  const onBlur = () => {
+    table.options.meta?.updateData(row.index, column.id, value);
+  };
+
+  useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
+  return (
+    <input 
+      type="number"
+      value={value ?? ""}
+      placeholder="0"
+      onChange={(e) => setValue(e.target.value)}
+      onBlur={onBlur}
+      style={{
+        width: '100%',
+        height: '100%',
+        padding: '1rem 0.5rem',
+        textAlign: 'center',
+        border: 'none',
+        background: 'transparent',
+        color: value ? 'white' : 'rgba(255,255,255,0.2)',
+        fontSize: '0.9rem',
+        fontWeight: value ? 600 : 400,
+        transition: 'background 0.2s'
+      }}
+    />
+  );
+};
+
 export default function PlanningGrid({
   teamId,
   initialProjects,
@@ -39,7 +92,8 @@ export default function PlanningGrid({
   initialAllocations: any[];
 }) {
   const [isPending, startTransition] = useTransition();
-  const [allocations, setAllocations] = useState<Record<string, number>>(
+  const [data, setData] = useState(() => initialProjects);
+  const [allocations, setAllocations] = useState<Record<string, number>>(() =>
     initialAllocations.reduce((acc, curr) => ({
       ...acc,
       [`${curr.projectId}-${curr.periodId}`]: curr.plannedHours
@@ -48,41 +102,81 @@ export default function PlanningGrid({
 
   const [savingStatus, setSavingStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
-  const handleUpdate = (projectId: string, periodId: string, value: string) => {
-    const val = parseFloat(value) || 0;
-    const key = `${projectId}-${periodId}`;
-    
-    setAllocations(prev => ({ ...prev, [key]: val }));
-    setSavingStatus('saving');
+  // --- Dynamic Column Definitions ---
+  const columns = useMemo<ColumnDef<any>[]>(() => [
+    {
+      id: "projectInfo",
+      header: "Project Detail",
+      accessorFn: (row) => row,
+      cell: ({ getValue }: any) => {
+        const prj = getValue();
+        return (
+          <div style={{ padding: '0.75rem 1rem' }}>
+            <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{prj.name}</div>
+            <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{prj.code}</div>
+          </div>
+        );
+      },
+      size: 250,
+    },
+    ...initialPeriods.map(per => ({
+      id: per.id,
+      header: () => (
+        <div style={{ textAlign: 'center' }}>
+          <div style={{ fontSize: '0.8rem', fontWeight: 700 }}>{per.label.split(' ')[0]}</div>
+          <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 400 }}>{per.label.split(' ')[1]}</div>
+        </div>
+      ),
+      accessorFn: (row: any) => allocations[`${row.id}-${per.id}`],
+      cell: EditableCell,
+      size: 100,
+    })),
+    {
+      id: "projectTotal",
+      header: "Project Total",
+      accessorFn: (row) => initialPeriods.reduce((acc, per) => acc + (allocations[`${row.id}-${per.id}`] || 0), 0),
+      cell: ({ getValue }: any) => (
+        <div style={{ textAlign: 'center', fontWeight: 800, color: 'var(--primary-light)' }}>
+          {getValue()}h
+        </div>
+      ),
+      size: 120,
+    }
+  ], [allocations, initialPeriods]);
 
-    startTransition(async () => {
-      try {
-        await upsertAllocation({
-          teamId,
-          projectId,
-          periodId,
-          plannedHours: val,
+  // --- React Table Instance ---
+  const table = useReactTable({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    meta: {
+      updateData: (rowIndex: number, columnId: string, value: any) => {
+        const prj = data[rowIndex];
+        const val = parseFloat(value) || 0;
+        const key = `${prj.id}-${columnId}`;
+        
+        setAllocations(prev => ({ ...prev, [key]: val }));
+        setSavingStatus('saving');
+
+        startTransition(async () => {
+          try {
+            await upsertAllocation({
+              teamId,
+              projectId: prj.id,
+              periodId: columnId,
+              plannedHours: val,
+            });
+            setSavingStatus('saved');
+            setTimeout(() => setSavingStatus('idle'), 2000);
+          } catch (e) {
+            setSavingStatus('error');
+          }
         });
-        setSavingStatus('saved');
-        setTimeout(() => setSavingStatus('idle'), 2000);
-      } catch (e) {
-        setSavingStatus('error');
       }
-    });
-  };
+    }
+  });
 
-  // Horizontal totals (Project Total)
-  const projectTotals = useMemo(() => {
-    const totals: Record<string, number> = {};
-    initialProjects.forEach(prj => {
-      totals[prj.id] = initialPeriods.reduce((acc, per) => 
-        acc + (allocations[`${prj.id}-${per.id}`] || 0), 0
-      );
-    });
-    return totals;
-  }, [allocations, initialProjects, initialPeriods]);
-
-  // Vertical totals (Period Total - Team Capacity Used)
+  // Capacity Totals Footer row Calculation
   const periodTotals = useMemo(() => {
     const totals: Record<string, number> = {};
     initialPeriods.forEach(per => {
@@ -106,69 +200,63 @@ export default function PlanningGrid({
     <div className="space-y-4">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
         <h3 className="text-sm font-semibold tracking-wider uppercase text-muted-foreground flex items-center gap-2">
-          Capacity Allocation
+          <TableIcon size={16} className="text-indigo-400" />
+          TanStack Capacity Grid
           {savingStatus === 'saving' && <Loader2 size={14} className="animate-spin text-indigo-400" />}
           {savingStatus === 'saved' && <CheckCircle2 size={14} className="text-green-500" />}
           {savingStatus === 'error' && <AlertCircle size={14} className="text-red-500" />}
         </h3>
         <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-          Changes are auto-saved in real-time.
+          Optimized bulk-editing using TanStack Table v8.
         </div>
       </div>
 
-      <div style={{ overflowX: 'auto', borderRadius: '0.5rem', border: '1px solid var(--card-border)' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', borderSpacing: 0 }}>
+      <div style={{ overflowX: 'auto', borderRadius: '0.5rem', border: '1px solid var(--card-border)', background: 'rgba(0,0,0,0.1)' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
-            <tr style={{ borderBottom: '1px solid var(--card-border)', background: 'rgba(255,255,255,0.02)' }}>
-              <th style={{ padding: '1rem', textAlign: 'left', minWidth: '200px', position: 'sticky', left: 0, background: 'var(--bg-primary)', zIndex: 10 }}>Project Name</th>
-              {initialPeriods.map(p => (
-                <th key={p.id} style={{ padding: '1rem', minWidth: '100px', textAlign: 'center', borderLeft: '1px solid var(--card-border)' }}>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 700 }}>{p.label.split(' ')[0]}</div>
-                  <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 400 }}>{p.label.split(' ')[1]}</div>
-                </th>
-              ))}
-              <th style={{ padding: '1rem', minWidth: '120px', textAlign: 'center', borderLeft: '2px solid var(--card-border)', background: 'rgba(255,255,255,0.03)' }}>Project Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            {initialProjects.map(prj => (
-              <tr key={prj.id} style={{ borderBottom: '1px solid var(--card-border)', transition: 'background 0.2s' }} className="hover:bg-white/[0.02]">
-                <td style={{ padding: '0.75rem 1rem', position: 'sticky', left: 0, background: 'var(--bg-primary)', zIndex: 10 }}>
-                  <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{prj.name}</div>
-                  <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>{prj.code}</div>
-                </td>
-                {initialPeriods.map(per => {
-                  const key = `${prj.id}-${per.id}`;
-                  const val = allocations[key] || "";
-                  return (
-                    <td key={per.id} style={{ padding: 0, borderLeft: '1px solid var(--card-border)' }}>
-                      <input 
-                        type="number"
-                        value={val}
-                        placeholder="0"
-                        onChange={(e) => handleUpdate(prj.id, per.id, e.target.value)}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          padding: '1rem 0.5rem',
-                          textAlign: 'center',
-                          border: 'none',
-                          background: 'transparent',
-                          color: val ? 'white' : 'rgba(255,255,255,0.2)',
-                          fontSize: '0.9rem',
-                          fontWeight: val ? 600 : 400,
-                          transition: 'background 0.2s'
-                        }}
-                      />
-                    </td>
-                  );
-                })}
-                <td style={{ textAlign: 'center', fontWeight: 800, borderLeft: '2px solid var(--card-border)', background: 'rgba(255,255,255,0.03)' }}>
-                  {projectTotals[prj.id] || 0}h
-                </td>
+            {table.getHeaderGroups().map(headerGroup => (
+              <tr key={headerGroup.id} style={{ borderBottom: '1px solid var(--card-border)', background: 'rgba(255,255,255,0.02)' }}>
+                {headerGroup.headers.map(header => (
+                  <th 
+                    key={header.id} 
+                    style={{ 
+                      padding: '1rem', 
+                      minWidth: header.id === 'projectInfo' ? '250px' : '100px',
+                      textAlign: header.id === 'projectInfo' ? 'left' : 'center',
+                      borderLeft: header.id === 'projectInfo' ? 'none' : '1px solid var(--card-border)',
+                      position: header.id === 'projectInfo' ? 'sticky' : 'static',
+                      left: 0,
+                      background: header.id === 'projectInfo' ? 'var(--bg-primary)' : 'transparent',
+                      zIndex: header.id === 'projectInfo' ? 10 : 1
+                    }}
+                  >
+                    {flexRender(header.column.columnDef.header, header.getContext())}
+                  </th>
+                ))}
               </tr>
             ))}
-            {/* Totals Row */}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map(row => (
+              <tr key={row.id} style={{ borderBottom: '1px solid var(--card-border)' }} className="hover:bg-white/[0.02]">
+                {row.getVisibleCells().map(cell => (
+                  <td 
+                    key={cell.id} 
+                    style={{ 
+                      padding: 0, 
+                      borderLeft: cell.column.id === 'projectInfo' ? 'none' : '1px solid var(--card-border)',
+                      position: cell.column.id === 'projectInfo' ? 'sticky' : 'static',
+                      left: 0,
+                      background: cell.column.id === 'projectInfo' ? 'var(--bg-primary)' : 'transparent',
+                      zIndex: cell.column.id === 'projectInfo' ? 10 : 1
+                    }}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+            {/* Summary Totals Row */}
             <tr style={{ background: 'rgba(99, 102, 241, 0.1)', fontWeight: 800 }}>
               <td style={{ padding: '1rem', textAlign: 'right', position: 'sticky', left: 0, background: 'var(--bg-primary)', zIndex: 10, borderTop: '2px solid var(--card-border)' }}>Period Capacity:</td>
               {initialPeriods.map(per => (
@@ -176,8 +264,8 @@ export default function PlanningGrid({
                   {periodTotals[per.id] || 0}h
                 </td>
               ))}
-              <td style={{ textAlign: 'center', padding: '1rem', borderTop: '2px solid var(--card-border)', borderLeft: '2px solid var(--card-border)', background: 'rgba(99, 102, 241, 0.2)' }}>
-                {Object.values(projectTotals).reduce((a, b) => a + b, 0)}h
+              <td style={{ textAlign: 'center', padding: '1rem', borderTop: '2px solid var(--card-border)', borderLeft: '1px solid var(--card-border)', background: 'rgba(99, 102, 241, 0.2)' }}>
+                {Object.values(periodTotals).reduce((a, b) => a + b, 0)}h
               </td>
             </tr>
           </tbody>

@@ -79,6 +79,8 @@ model Period {
   organization      Organization       @relation(fields: [organizationId], references: [id])
   allocations       BudgetAllocation[]
   actualAllocations ActualAllocation[]
+
+  @@unique([organizationId, type, startDate, endDate])
 }
 
 model BudgetAllocation {

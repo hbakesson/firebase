@@ -221,6 +221,59 @@ export async function upsertAllocation(data: { teamId: string; projectId: string
   return allocation;
 }
 
+export async function getOrCreateWeeklyPeriods() {
+  const session = await auth();
+  if (!session?.user?.organizationId) throw new Error("Unauthorized");
+
+  const orgId = session.user.organizationId;
+  const periods = [];
+  
+  // Calculate current Monday
+  const today = new Date();
+  const day = today.getDay();
+  const diff = today.getDate() - day + (day === 0 ? -6 : 1);
+  const monday = new Date(today.setDate(diff));
+  monday.setHours(0, 0, 0, 0);
+
+  for (let i = 0; i < 9; i++) {
+    const startDate = new Date(monday);
+    startDate.setDate(monday.getDate() + (i * 7));
+    
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 6);
+    endDate.setHours(23, 59, 59, 999);
+
+    const weekNum = i === 0 ? "Current" : `+${i}`;
+    const label = `Week ${weekNum} (${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})`;
+
+    periods.push({
+      organizationId: orgId,
+      type: "WEEK",
+      startDate,
+      endDate,
+      label,
+    });
+  }
+
+  // Use a transaction to find/upsert each week for the organization
+  const results = await Promise.all(periods.map(p => 
+    prisma.period.upsert({
+      where: {
+        organizationId_type_startDate_endDate: {
+          organizationId: orgId,
+          type: "WEEK",
+          startDate: p.startDate,
+          endDate: p.endDate
+        }
+      },
+      update: { label: p.label },
+      create: p
+    })
+  ));
+
+  return results;
+}
+
 export async function importActuals(rows: { projectCode: string; periodId: string; hours: number }[]) {
   const session = await auth();
   if (!session?.user?.organizationId) throw new Error("Unauthorized");
