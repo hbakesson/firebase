@@ -30,6 +30,15 @@ A high-performance, multi-tenant **Team Budgeting & Capacity Planning** platform
 - **Visual Change Inspector**: Side-by-side "Previous Value" vs. "New Value" diffing for absolute accountability.
 - **Tenant-Level Logs**: Securely partitioned audit records ensure data privacy and historical integrity.
 
+## 🚀 Phase 6 & 7: Tactical Modernization
+
+The platform has been upgraded with a high-performance **Bulk Capacity Mode** for rolling tactical forecasting.
+
+- **9-Week Rolling Window**: Automatically maintains a "Today + 8 Weeks" planning horizon for the entire organization.
+- **TanStack Table v8**: High-density grid implementation featuring real-time row totals (Σ) and inline 'Blur-Sync' persistence.
+- **Glassmorphic UI/UX**: Premium responsive design with a collapsible sidebar and desktop-to-mobile navigation fluidly.
+- **High-Fidelity Mock Mode**: Virtual PostgreSQL/Prisma layer allows 100% functional verification without cloud credentials.
+
 ## 🛠️ Tech Stack
 
 - **Framework**: [Next.js 15](https://nextjs.org/) (App Router, Server Actions)
