@@ -152,20 +152,22 @@ const globalForPrisma = global as unknown as {
 };
 
 export const prisma =
-  globalForPrisma.prisma ??
   (() => {
     if (process.env.MOCK_DATABASE === 'true') {
       console.log('🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.');
       return createMockPrisma() as any;
     }
-
-    console.log('[PRISMA] Instantiating Prisma Client with official Connector pattern...');
-    const pool = createLazyPool();
-    const adapter = new PrismaPg(pool as any);
-    return new PrismaClient({ adapter, log: ['error', 'warn'] });
+    return globalForPrisma.prisma ?? (() => {
+      console.log('[PRISMA] Instantiating Prisma Client with official Connector pattern...');
+      const pool = createLazyPool();
+      const adapter = new PrismaPg(pool as any);
+      return new PrismaClient({ adapter, log: ['error', 'warn'] });
+    })();
   })();
 
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV !== 'production' && process.env.MOCK_DATABASE !== 'true') {
+  globalForPrisma.prisma = prisma;
+}
 
 console.log('[PRISMA] Client initialized.');
 

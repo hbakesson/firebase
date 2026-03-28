@@ -1,0 +1,880 @@
+
+> inventory-tracker@0.1.0 dev
+> next dev -p 3000
+
+   ▲ Next.js 15.5.14
+   - Local:        http://localhost:3000
+   - Network:      http://192.168.2.249:3000
+   - Environments: .env.local, .env
+
+ ✓ Starting...
+ ✓ Ready in 2s
+ ○ Compiling /login ...
+ ✓ Compiled /login in 1501ms (1076 modules)
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ HEAD /login 200 in 2153ms
+ GET /login 200 in 1680ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 2.2s (1081 modules)
+[PRISMA] Client initialized.
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /api/auth/session 200 in 5489ms
+ GET /api/auth/session 200 in 20ms
+ GET /api/auth/session 200 in 91ms
+ GET /api/auth/session 200 in 23ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /api/auth/providers 200 in 97ms
+ GET /api/auth/csrf 200 in 89ms
+ POST /api/auth/callback/guest? 200 in 65ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1367ms (1100 modules)
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+[PRISMA] Client initialized.
+ GET / 200 in 2667ms
+ GET /api/auth/session 200 in 195ms
+ GET /api/auth/session 200 in 19ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ ○ Compiling /teams ...
+ ✓ Compiled /teams in 1586ms (1119 modules)
+[PRISMA] Client initialized.
+ GET /teams 200 in 2647ms
+ ○ Compiling /projects ...
+ ✓ Compiled /projects in 1564ms (1126 modules)
+[PRISMA] Client initialized.
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ GET /projects 200 in 2484ms
+ ○ Compiling /planning/bulk ...
+ ✓ Compiled /planning/bulk in 4.5s (1145 modules)
+[PRISMA] Client initialized.
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-22T23:00:00.000Z,
+    endDate: 2026-03-29T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-29T22:00:00.000Z,
+    endDate: 2026-04-05T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-05T22:00:00.000Z,
+    endDate: 2026-04-12T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-12T22:00:00.000Z,
+    endDate: 2026-04-19T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-19T22:00:00.000Z,
+    endDate: 2026-04-26T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-26T22:00:00.000Z,
+    endDate: 2026-05-03T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-03T22:00:00.000Z,
+    endDate: 2026-05-10T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-10T22:00:00.000Z,
+    endDate: 2026-05-17T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-17T22:00:00.000Z,
+    endDate: 2026-05-24T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org', status: 'ACTIVE' }
+ GET /planning/bulk 200 in 7609ms
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-22T23:00:00.000Z,
+    endDate: 2026-03-29T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-29T22:00:00.000Z,
+    endDate: 2026-04-05T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-05T22:00:00.000Z,
+    endDate: 2026-04-12T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-12T22:00:00.000Z,
+    endDate: 2026-04-19T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-19T22:00:00.000Z,
+    endDate: 2026-04-26T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-26T22:00:00.000Z,
+    endDate: 2026-05-03T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-03T22:00:00.000Z,
+    endDate: 2026-05-10T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-10T22:00:00.000Z,
+    endDate: 2026-05-17T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-17T22:00:00.000Z,
+    endDate: 2026-05-24T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org', status: 'ACTIVE' }
+ GET /planning/bulk 200 in 815ms
+ ✓ Compiled in 2.2s (882 modules)
+[PRISMA] Client initialized.
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-22T23:00:00.000Z,
+    endDate: 2026-03-29T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-29T22:00:00.000Z,
+    endDate: 2026-04-05T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-05T22:00:00.000Z,
+    endDate: 2026-04-12T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-12T22:00:00.000Z,
+    endDate: 2026-04-19T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-19T22:00:00.000Z,
+    endDate: 2026-04-26T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-26T22:00:00.000Z,
+    endDate: 2026-05-03T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-03T22:00:00.000Z,
+    endDate: 2026-05-10T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-10T22:00:00.000Z,
+    endDate: 2026-05-17T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-17T22:00:00.000Z,
+    endDate: 2026-05-24T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org', status: 'ACTIVE' }
+ GET /planning/bulk 200 in 1790ms
+ GET / 200 in 511ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 1019ms (887 modules)
+[PRISMA] Client initialized.
+ GET /api/auth/session 200 in 2850ms
+ GET / 200 in 2116ms
+ GET /api/auth/session 200 in 84ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /teams 200 in 3831ms
+ GET /teams 200 in 1156ms
+ GET /api/auth/session 200 in 128ms
+ GET /api/auth/session 200 in 61ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ GET /projects 200 in 1046ms
+ GET /api/auth/session 200 in 103ms
+ GET /api/auth/session 200 in 164ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-22T23:00:00.000Z,
+    endDate: 2026-03-29T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-29T22:00:00.000Z,
+    endDate: 2026-04-05T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-05T22:00:00.000Z,
+    endDate: 2026-04-12T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-12T22:00:00.000Z,
+    endDate: 2026-04-19T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-19T22:00:00.000Z,
+    endDate: 2026-04-26T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-26T22:00:00.000Z,
+    endDate: 2026-05-03T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-03T22:00:00.000Z,
+    endDate: 2026-05-10T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-10T22:00:00.000Z,
+    endDate: 2026-05-17T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-17T22:00:00.000Z,
+    endDate: 2026-05-24T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org', status: 'ACTIVE' }
+ GET /planning/bulk 200 in 4330ms
+ GET /api/auth/session 200 in 131ms
+ GET /api/auth/session 200 in 40ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /teams 200 in 740ms
+ GET /api/auth/session 200 in 119ms
+ GET /api/auth/session 200 in 69ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ GET /projects 200 in 3257ms
+ GET /api/auth/session 200 in 215ms
+ GET /api/auth/session 200 in 48ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /teams 200 in 499ms
+ GET /api/auth/session 200 in 215ms
+ GET /api/auth/session 200 in 86ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-22T23:00:00.000Z,
+    endDate: 2026-03-29T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-29T22:00:00.000Z,
+    endDate: 2026-04-05T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-05T22:00:00.000Z,
+    endDate: 2026-04-12T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-12T22:00:00.000Z,
+    endDate: 2026-04-19T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-19T22:00:00.000Z,
+    endDate: 2026-04-26T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-26T22:00:00.000Z,
+    endDate: 2026-05-03T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-03T22:00:00.000Z,
+    endDate: 2026-05-10T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-10T22:00:00.000Z,
+    endDate: 2026-05-17T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-17T22:00:00.000Z,
+    endDate: 2026-05-24T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org', status: 'ACTIVE' }
+ GET /planning/bulk 200 in 596ms
+ GET /api/auth/session 200 in 121ms
+ GET /api/auth/session 200 in 158ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /teams 200 in 899ms
+ GET /api/auth/session 200 in 118ms
+ GET /api/auth/session 200 in 27ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ ✓ Compiled in 1854ms (882 modules)
+[PRISMA] Client initialized.
+ GET /teams 200 in 2472ms
+ GET / 200 in 850ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 1494ms (887 modules)
+[PRISMA] Client initialized.
+ GET /api/auth/session 200 in 2784ms
+ GET / 200 in 1949ms
+ GET /api/auth/session 200 in 283ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /teams 200 in 1320ms
+ GET /api/auth/session 200 in 114ms
+ GET /api/auth/session 200 in 136ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ GET /projects 200 in 1804ms
+ GET /api/auth/session 200 in 162ms
+ GET /api/auth/session 200 in 62ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-22T23:00:00.000Z,
+    endDate: 2026-03-29T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-29T22:00:00.000Z,
+    endDate: 2026-04-05T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-05T22:00:00.000Z,
+    endDate: 2026-04-12T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-12T22:00:00.000Z,
+    endDate: 2026-04-19T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-19T22:00:00.000Z,
+    endDate: 2026-04-26T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-26T22:00:00.000Z,
+    endDate: 2026-05-03T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-03T22:00:00.000Z,
+    endDate: 2026-05-10T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-10T22:00:00.000Z,
+    endDate: 2026-05-17T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-17T22:00:00.000Z,
+    endDate: 2026-05-24T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org', status: 'ACTIVE' }
+ GET /planning/bulk 200 in 749ms
+ GET /api/auth/session 200 in 854ms
+ GET /api/auth/session 200 in 478ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ GET /projects 200 in 795ms
+ GET /api/auth/session 200 in 302ms
+ GET /api/auth/session 200 in 73ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ ✓ Compiled in 3.3s (882 modules)
+[PRISMA] Client initialized.
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ GET /projects 200 in 3145ms
+ GET / 200 in 512ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 755ms (887 modules)
+[PRISMA] Client initialized.
+ GET /api/auth/session 200 in 2447ms
+ GET /api/auth/session 200 in 1540ms
+ GET / 200 in 3280ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /teams 200 in 2633ms
+ GET /api/auth/session 200 in 88ms
+ GET /api/auth/session 200 in 50ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ GET /projects 200 in 2088ms
+ GET /api/auth/session 200 in 40ms
+ GET /api/auth/session 200 in 16ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-22T23:00:00.000Z,
+    endDate: 2026-03-29T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-29T22:00:00.000Z,
+    endDate: 2026-04-05T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-05T22:00:00.000Z,
+    endDate: 2026-04-12T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-12T22:00:00.000Z,
+    endDate: 2026-04-19T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-19T22:00:00.000Z,
+    endDate: 2026-04-26T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-26T22:00:00.000Z,
+    endDate: 2026-05-03T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-03T22:00:00.000Z,
+    endDate: 2026-05-10T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-10T22:00:00.000Z,
+    endDate: 2026-05-17T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-17T22:00:00.000Z,
+    endDate: 2026-05-24T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org', status: 'ACTIVE' }
+ GET /planning/bulk 200 in 1975ms
+ GET /api/auth/session 200 in 59ms
+ GET /api/auth/session 200 in 21ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ GET /projects 200 in 890ms
+ GET /api/auth/session 200 in 163ms
+ GET /api/auth/session 200 in 51ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ ✓ Compiled in 5.6s (887 modules)
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ GET /projects 200 in 1912ms
+ GET / 200 in 1166ms
+ GET /api/auth/session 200 in 704ms
+ GET /api/auth/session 200 in 27ms
+🛠️ [PRISMA] Running in MOCK MODE - Bypassing Cloud SQL.
+🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...
+[PRISMA] Client initialized.
+ GET /teams 200 in 851ms
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ GET /projects 200 in 558ms
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-22T23:00:00.000Z,
+    endDate: 2026-03-29T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-29T22:00:00.000Z,
+    endDate: 2026-04-05T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-05T22:00:00.000Z,
+    endDate: 2026-04-12T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-12T22:00:00.000Z,
+    endDate: 2026-04-19T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-19T22:00:00.000Z,
+    endDate: 2026-04-26T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-26T22:00:00.000Z,
+    endDate: 2026-05-03T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-03T22:00:00.000Z,
+    endDate: 2026-05-10T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-10T22:00:00.000Z,
+    endDate: 2026-05-17T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-17T22:00:00.000Z,
+    endDate: 2026-05-24T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org', status: 'ACTIVE' }
+ GET /planning/bulk 200 in 1310ms
+   Reload env: .env
+ ✓ Compiled in 4.5s (1140 modules)
+[PRISMA] Client initialized.
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-22T23:00:00.000Z,
+    endDate: 2026-03-29T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-03-29T22:00:00.000Z,
+    endDate: 2026-04-05T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-05T22:00:00.000Z,
+    endDate: 2026-04-12T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-12T22:00:00.000Z,
+    endDate: 2026-04-19T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-19T22:00:00.000Z,
+    endDate: 2026-04-26T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-04-26T22:00:00.000Z,
+    endDate: 2026-05-03T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-03T22:00:00.000Z,
+    endDate: 2026-05-10T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-10T22:00:00.000Z,
+    endDate: 2026-05-17T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] period.upsert {
+  organizationId_type_startDate_endDate: {
+    organizationId: 'mock-org',
+    type: 'WEEK',
+    startDate: 2026-05-17T22:00:00.000Z,
+    endDate: 2026-05-24T21:59:59.999Z
+  }
+}
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org', status: 'ACTIVE' }
+ GET /planning/bulk 200 in 4508ms

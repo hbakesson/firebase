@@ -7,6 +7,9 @@ export interface Project {
   teamId?: string;
   organizationId: string;
   status: string;
+  progress: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Period {
@@ -39,16 +42,16 @@ const mockUser = {
 };
 
 const mockTeams = [
-  { id: "t1", name: "Engineering Alpha", organizationId: "mock-org" },
-  { id: "t2", name: "Design Beta", organizationId: "mock-org" },
+  { id: "t1", name: "Engineering Alpha", organizationId: "mock-org", createdAt: "2026-03-27T10:00:00.000Z", isActive: true },
+  { id: "t2", name: "Design Beta", organizationId: "mock-org", createdAt: "2026-03-27T11:00:00.000Z", isActive: true },
 ];
 
 const mockProjects = [
-  { id: "p1", name: "Nebula Infrastructure", code: "NEB-01", status: "ACTIVE", organizationId: "mock-org", teamId: "t1", allocations: [], actualAllocations: [] },
-  { id: "p2", name: "Solaris Portal v2", code: "SOL-02", status: "ACTIVE", organizationId: "mock-org", teamId: "t1", allocations: [], actualAllocations: [] },
-  { id: "p3", name: "Quantum Analytics", code: "QUA-03", status: "ACTIVE", organizationId: "mock-org", teamId: "t2", allocations: [], actualAllocations: [] },
-  { id: "p4", name: "Titan Core", code: "TIT-04", status: "ACTIVE", organizationId: "mock-org", teamId: "t2", allocations: [], actualAllocations: [] },
-  { id: "p5", name: "Legacy Cleanup", code: "LEG-99", status: "COMPLETED", organizationId: "mock-org", teamId: "t1", allocations: [], actualAllocations: [] },
+  { id: "p1", name: "Nebula Infrastructure", code: "NEB-01", status: "ACTIVE", organizationId: "mock-org", teamId: "t1", allocations: [], actualAllocations: [], createdAt: "2026-03-27T12:00:00.000Z", updatedAt: "2026-03-28T09:00:00.000Z", progress: 45 },
+  { id: "p2", name: "Solaris Portal v2", code: "SOL-02", status: "ACTIVE", organizationId: "mock-org", teamId: "t1", allocations: [], actualAllocations: [], createdAt: "2026-03-27T13:00:00.000Z", updatedAt: "2026-03-28T10:30:00.000Z", progress: 78 },
+  { id: "p3", name: "Quantum Analytics", code: "QUA-03", status: "ACTIVE", organizationId: "mock-org", teamId: "t2", allocations: [], actualAllocations: [], createdAt: "2026-03-27T14:00:00.000Z", updatedAt: "2026-03-28T11:15:00.000Z", progress: 12 },
+  { id: "p4", name: "Titan Core", code: "TIT-04", status: "ACTIVE", organizationId: "mock-org", teamId: "t2", allocations: [], actualAllocations: [], createdAt: "2026-03-27T15:00:00.000Z", updatedAt: "2026-03-28T12:45:00.000Z", progress: 92 },
+  { id: "p5", name: "Legacy Cleanup", code: "LEG-99", status: "COMPLETED", organizationId: "mock-org", teamId: "t1", allocations: [], actualAllocations: [], createdAt: "2025-12-01T08:00:00.000Z", updatedAt: "2026-01-15T16:00:00.000Z", progress: 100 },
 ];
 
 const mockAllocations: Allocation[] = [];
@@ -63,15 +66,29 @@ export const createMockPrisma = () => {
       create: async ({ data }: any) => ({ ...mockUser, ...data }),
     },
     team: {
-      findMany: async () => mockTeams,
+      findMany: async () => mockTeams.map(t => ({ ...t, isActive: true })),
       count: async () => mockTeams.length,
     },
     project: {
-      findMany: async ({ where }: any) => {
+      findMany: async ({ where, include }: any) => {
         console.log("🛠️ [MOCK] project.findMany", where);
-        return mockProjects.filter(p => !where?.status || p.status === where.status);
+        let results = mockProjects.filter(p => !where?.status || p.status === where.status);
+        
+        if (include?.team) {
+          results = results.map(p => ({
+            ...p,
+            team: mockTeams.find(t => t.id === p.teamId)
+          }));
+        }
+        return results;
       },
-      findUnique: async ({ where }: any) => mockProjects.find(p => p.id === where.id),
+      findUnique: async ({ where }: any) => {
+        const p = mockProjects.find(project => project.id === where.id);
+        if (p) {
+          return { ...p, team: mockTeams.find(t => t.id === p.teamId) };
+        }
+        return null;
+      },
       count: async ({ where }: any) => {
         return mockProjects.filter(p => !where?.status || p.status === where.status).length;
       },

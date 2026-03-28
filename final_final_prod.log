@@ -311,3 +311,23 @@ Require stack:
   digest: '2522970103'
 }
  GET /projects 500 in 16501ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /api/auth/[...nextauth] in 658ms (820 modules)
+[PRISMA] Client initialized.
+ ⨯ [Error: Cannot find module './vendor-chunks/google-auth-library.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/api/auth/[...nextauth]/route.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/dev/static-paths-worker.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/compiled/jest-worker/processChild.js] {
+  type: 'Error',
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/api/auth/error'
+}
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 1338ms (1167 modules)
+ GET /api/auth/error?error=Configuration 500 in 3787ms
