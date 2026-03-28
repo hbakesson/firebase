@@ -7,7 +7,6 @@ import {
   Search, 
   Filter, 
   ArrowLeft,
-  Calendar,
   Layers,
   Activity
 } from "lucide-react";
@@ -97,11 +96,11 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Created This Week</span>
-                <span style={{ fontWeight: 700 }}>{logs.filter(l => l.action === 'CREATE').length}</span>
+                <span style={{ fontWeight: 700 }}>{logs.filter((l: (typeof logs)[0]) => l.action === 'CREATE').length}</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem' }}>
                 <span style={{ color: 'var(--text-muted)' }}>Critical Mutations</span>
-                <span style={{ fontWeight: 700, color: '#ef4444' }}>{logs.filter(l => l.action === 'DELETE').length}</span>
+                <span style={{ fontWeight: 700, color: '#ef4444' }}>{logs.filter((l: (typeof logs)[0]) => l.action === 'DELETE').length}</span>
               </div>
             </div>
           </div>
