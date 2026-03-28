@@ -1,27 +1,46 @@
 # Project Tracker 🚀
 
-A high-performance, glassmorphic Project Management System built with **Next.js**, **PostgreSQL**, and **Auth.js (NextAuth v5)**. Designed for speed, integrity, and a premium user experience.
+A high-performance, multi-tenant **Team Budgeting & Capacity Planning** platform built with **Next.js 15**, **Prisma**, and **Auth.js v5**. Designed for organizational transparency, strategic forecasting, and enterprise-grade accountability.
 
 ![Architecture](architecture.svg)
 
 ## ✨ Core Features
 
-- **Cloud-Native Database**: Deeply integrated with **Google Cloud SQL** using the official **Node.js Cloud SQL Connector** for secure, serverless-optimized connections.
-- **Relational Integrity**: Powered by PostgreSQL and Prisma ORM for zero data loss and strict schema enforcement.
-- **Advanced Search & Filtering**: Server-side filtering by project name, description, and status (`PLANNED`, `IN_PROGRESS`, etc.).
-- **Granular Progress Tracking**: Track project completion with precise percentage-based increments and visual feedback.
-- **Transactional Audit Trail**: Every project mutation (Create, Update, Delete) is recorded in a transactional audit log with JSON-based history.
-- **Next-Gen Authentication**: Multi-provider support (Google OAuth, Email/Password, Guest) with Auth.js v5 and Prisma Adapter.
-- **Premium Glass UI**: Modern, responsive design using 100% Vanilla CSS with smooth transitions and glassmorphic aesthetics.
+### 🏢 Multi-Tenant Management
+- **Organization Isolation**: Secure, top-level `Organization` partitioning for all data (Teams, Projects, Allocations).
+- **Hierarchical Teams**: Manage nested team structures with active/inactive status and cross-project assignments.
+- **Project Portfolios**: Categorize initiatives with metadata, status tracking, and department-level ownership.
+
+### 📅 Strategic Capacity Planning
+- **Interactive Planning Grid**: High-performance, spreadsheet-like interface for monthly capacity forecasting.
+- **Real-Time Totaling**: Instant feedback on team capacity utilization and project-level budget allocations.
+- **Auto-Save Resilience**: Durable, throttled server-side persistence for bulk grid updates.
+
+### 📊 Executive Reporting & Variance
+- **Plan vs. Actual Analysis**: Interactive **Recharts** dashboards contrast forecasted hours against real-world delivery.
+- **Resource Accuracy Layer**: High-level KPIs calculate organizational variance and forecasting precision.
+- **Team-Level Allocations**: Dynamic breakdowns showing resource distribution across the entire organization.
+
+### 📥 Data Ingestion & Actuals
+- **Bulk Actuals Importer**: Rapidly ingest work history from external tracking software via CSV using **PapaParse**.
+- **Data Validation**: Real-time column mapping and preview layer to ensure accurate historical attribution.
+
+### 🛡️ Enterprise Audit Trail
+- **Traceability Explorer**: Searchable history of every administrative mutation (Create, Update, Delete).
+- **Visual Change Inspector**: Side-by-side "Previous Value" vs. "New Value" diffing for absolute accountability.
+- **Tenant-Level Logs**: Securely partitioned audit records ensure data privacy and historical integrity.
 
 ## 🛠️ Tech Stack
 
 - **Framework**: [Next.js 15](https://nextjs.org/) (App Router, Server Actions)
 - **Database**: [Google Cloud SQL](https://cloud.google.com/sql/) (PostgreSQL)
-- **Connector**: [@google-cloud/cloud-sql-connector](https://github.com/GoogleCloudPlatform/cloud-sql-nodejs-connector)
-- **ORM**: [Prisma](https://www.prisma.io/) with Driver Adapter
-- **Auth**: [Auth.js v5](https://authjs.dev/)
-- **Styling**: Vanilla CSS (CSS Variables + CSS Modules)
+- **Connector**: Official [Node.js Cloud SQL Connector](https://github.com/GoogleCloudPlatform/cloud-sql-nodejs-connector)
+- **ORM**: [Prisma](https://www.prisma.io/) (v7.5.0) with Driver Adapters
+- **Auth**: [Auth.js v5](https://authjs.dev/) (Beta-25+)
+- **Charts**: [Recharts](https://recharts.org/)
+- **Parsing**: [PapaParse](https://www.papaparse.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Styling**: Premium Glassmorphic Vanilla CSS (CSS Variables)
 
 ## 🚀 Getting Started
 
@@ -34,7 +53,7 @@ Create a `.env` file in the root directory:
 
 ```env
 # Database (Cloud SQL Format)
-# Use the 'host=' parameter to specify the Instance Connection Name
+# Use the 'host=' parameter for the Instance Connection Name
 DATABASE_URL="postgresql://user:password@/dbname?host=PROJECT:REGION:INSTANCE"
 
 # Authentication
@@ -48,7 +67,7 @@ GOOGLE_CLIENT_ID="..."
 GOOGLE_CLIENT_SECRET="..."
 ```
 
-### 3. Installation & Build
+### 3. Installation & Local Development
 ```bash
 # Install dependencies
 npm install
@@ -62,20 +81,12 @@ npm run dev
 
 ## 🏗️ Deployment
 
-This project is optimized for deployment to **Firebase Hosting** and **Google Cloud Run** via the Firebase CLI:
+Optimized for **Firebase Hosting** and **Google Cloud Run** via the Firebase CLI:
 
 ```bash
-# Deploy to Production (Functions + Hosting)
+# Deploy to Production
 firebase deploy
 ```
 
-> [!IMPORTANT]
-> **Cloud SQL Connectivity**: In production, the Prisma Client uses the `@prisma/adapter-pg` driver adapter. A `Proxy`-based LazyPool is implemented in `src/lib/prisma.ts` to ensure the Cloud SQL Connector's asynchronous handshake only occurs upon the first query, avoiding cold-start latency issues.
-
-## ⚡ Performance Metrics
-- **Optimization**: Uses a lazy-initialized database pool to satisfy Prisma's synchronous requirements in a serverless context.
-- **Reliability**: Leverages the official Google Cloud SQL Connector for secure IAM/SSL handshakes.
-- **Observability**: Detailed diagnostic logging for database pool initialization and connection persistence.
-
 ---
-Developed with precision for the modern web.
+Developed with precision for modern organizational delivery.
