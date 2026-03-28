@@ -12,7 +12,8 @@ import {
   LogOut,
   ChevronRight,
   Upload,
-  ShieldCheck
+  ShieldCheck,
+  Zap
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 
@@ -32,6 +33,7 @@ export default function Sidebar({ user }: SidebarProps) {
     { label: "Dashboard", href: "/", icon: LayoutDashboard },
     { label: "Teams", href: "/teams", icon: Users },
     { label: "Projects", href: "/projects", icon: Briefcase },
+    { label: "Bulk Planning", href: "/planning/bulk", icon: Zap },
     { label: "Import", href: "/import", icon: Upload },
     { label: "Reports", href: "/reports", icon: BarChart3 },
     { label: "Audit Trail", href: "/audit", icon: ShieldCheck },
