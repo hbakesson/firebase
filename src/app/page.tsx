@@ -118,7 +118,7 @@ export default async function DashboardPage() {
             {recentLogs.length === 0 ? (
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>No recent activity found.</p>
             ) : (
-              recentLogs.map((log) => (
+              recentLogs.map((log: any) => (
                 <div key={log.id} style={{ fontSize: '0.875rem', borderBottom: '1px solid var(--card-border)', paddingBottom: '0.75rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <span style={{ fontWeight: 600 }}>{log.action} {log.entityType}</span>

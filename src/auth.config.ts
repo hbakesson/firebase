@@ -38,6 +38,7 @@ export const authConfig = {
   session: {
     strategy: "jwt",
   },
+  /* 
   cookies: {
     sessionToken: {
       name: "__session",
@@ -49,6 +50,7 @@ export const authConfig = {
       },
     },
   },
+  */
   callbacks: {
     authorized({ auth }) {
       return !!auth?.user;
