@@ -12,9 +12,13 @@ import {
   Table as TableIcon
 } from "lucide-react";
 
+interface CSVRow {
+  [key: string]: string | undefined;
+}
+
 export default function ImportPage() {
   const [file, setFile] = useState<File | null>(null);
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<CSVRow[]>([]);
   const [status, setStatus] = useState<'idle' | 'parsing' | 'ready' | 'importing' | 'success' | 'error'>('idle');
   const [error, setError] = useState<string | null>(null);
 
@@ -28,7 +32,7 @@ export default function ImportPage() {
         header: true,
         skipEmptyLines: true,
         complete: (results) => {
-          setData(results.data);
+          setData(results.data as CSVRow[]);
           setStatus('ready');
         },
         error: (err) => {
@@ -44,18 +48,18 @@ export default function ImportPage() {
     try {
       // Map data to the format expected by the server action
       // Expected columns: projectCode, periodId, hours
-      const rows = data.map((row: any) => ({
-        projectCode: row.projectCode || row.Code || row.ProjectCode,
-        periodId: row.periodId || row.Period || row.PeriodId,
-        hours: parseFloat(row.hours || row.Hours || row.ActualHours) || 0
+      const rows = data.map((row: CSVRow) => ({
+        projectCode: row.projectCode || row.Code || row.ProjectCode || "",
+        periodId: row.periodId || row.Period || row.PeriodId || "",
+        hours: parseFloat(row.hours || row.Hours || row.ActualHours || "0") || 0
       })).filter(r => r.projectCode && r.periodId);
 
       if (rows.length === 0) throw new Error("No valid data rows found. Check column headers (projectCode, periodId, hours).");
 
       await importActuals(rows);
       setStatus('success');
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : "An unknown error occurred during import.");
       setStatus('error');
     }
   };
@@ -147,7 +151,7 @@ export default function ImportPage() {
             <tbody>
               {data.slice(0, 5).map((row, i) => (
                 <tr key={i} style={{ borderBottom: '1px solid var(--card-border)', fontSize: '0.875rem' }}>
-                  {Object.values(row).map((v: any, j) => <td key={j} style={{ padding: '0.75rem 1rem' }}>{v}</td>)}
+                  {Object.values(row).map((v, j) => <td key={j} style={{ padding: '0.75rem 1rem' }}>{v}</td>)}
                 </tr>
               ))}
             </tbody>

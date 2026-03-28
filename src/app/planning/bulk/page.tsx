@@ -1,10 +1,9 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import prisma from "@/lib/prisma";
-import Sidebar from "@/components/Sidebar";
 import { getOrCreateWeeklyPeriods } from "@/lib/actions";
 import BulkPlanningGrid from "@/components/BulkPlanningGrid";
-import { Zap, LayoutGrid } from "lucide-react";
+import { Zap } from "lucide-react";
 
 export default async function BulkPlanningPage() {
   const session = await auth();
@@ -27,7 +26,7 @@ export default async function BulkPlanningPage() {
     orderBy: { name: 'asc' }
   });
 
-  const projectIds = projects.map(p => p.id);
+  const projectIds = projects.map((p: { id: string }) => p.id);
 
   // 3. Fetch Existing Allocations for these Projects/Periods
   const allocations = await prisma.budgetAllocation.findMany({

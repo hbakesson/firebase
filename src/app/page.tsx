@@ -13,6 +13,15 @@ import Link from "next/link";
 
 export const dynamic = "force-dynamic";
 
+interface AuditActivity {
+  id: string;
+  action: string;
+  entityType: string;
+  entityId: string;
+  timestamp: string | Date;
+  projectName?: string;
+}
+
 export default async function DashboardPage() {
   const session = await auth();
   if (!session?.user?.organizationId) redirect("/login");
@@ -118,7 +127,7 @@ export default async function DashboardPage() {
             {recentLogs.length === 0 ? (
               <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>No recent activity found.</p>
             ) : (
-              recentLogs.map((log: any) => (
+              recentLogs.map((log: AuditActivity) => (
                 <div key={log.id} style={{ fontSize: '0.875rem', borderBottom: '1px solid var(--card-border)', paddingBottom: '0.75rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                     <span style={{ fontWeight: 600 }}>{log.action} {log.entityType}</span>

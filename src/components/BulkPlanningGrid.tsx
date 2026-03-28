@@ -5,7 +5,9 @@ import {
   useReactTable, 
   getCoreRowModel, 
   flexRender, 
-  ColumnDef 
+  ColumnDef,
+  CellContext,
+  RowData
 } from "@tanstack/react-table";
 import { upsertAllocation } from "@/lib/actions";
 import { 
@@ -16,12 +18,38 @@ import {
   Search
 } from "lucide-react";
 
+declare module "@tanstack/react-table" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface TableMeta<TData extends RowData> {
+    updateData: (rowIndex: number, columnId: string, value: unknown) => void;
+  }
+}
+
+interface BulkProject {
+  id: string;
+  name: string;
+  code: string;
+  teamId?: string | null;
+}
+
+interface BulkPeriod {
+  id: string;
+  label: string;
+}
+
+interface BulkAllocation {
+  projectId: string;
+  periodId: string;
+  plannedHours: number;
+}
+
 const CompactEditableCell = ({ 
-  value: initialValue, 
+  getValue, 
   row, 
   column, 
   table 
-}: any) => {
+}: CellContext<BulkProject, any>) => {
+  const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
   const onBlur = () => {
@@ -60,13 +88,13 @@ export default function BulkPlanningGrid({
   initialPeriods,
   initialAllocations,
 }: {
-  initialProjects: any[];
-  initialPeriods: any[];
-  initialAllocations: any[];
+  initialProjects: BulkProject[];
+  initialPeriods: BulkPeriod[];
+  initialAllocations: BulkAllocation[];
 }) {
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const [search, setSearch] = useState("");
-  const [data, setData] = useState(() => initialProjects);
+  const [data] = useState(() => initialProjects);
   const [allocations, setAllocations] = useState<Record<string, number>>(() =>
     initialAllocations.reduce((acc, curr) => ({
       ...acc,
@@ -84,12 +112,12 @@ export default function BulkPlanningGrid({
     );
   }, [data, search]);
 
-  const columns = useMemo<ColumnDef<any>[]>(() => [
+  const columns = useMemo<ColumnDef<BulkProject, any>[]>(() => [
     {
       id: "project",
       header: "Project",
       accessorFn: (row) => row,
-      cell: ({ getValue }: any) => {
+      cell: ({ getValue }: CellContext<BulkProject, BulkProject>) => {
         const prj = getValue();
         return (
           <div style={{ padding: '0.25rem 0.5rem', minWidth: '180px' }}>
@@ -110,14 +138,14 @@ export default function BulkPlanningGrid({
           <div style={{ fontSize: '0.55rem', color: 'var(--text-muted)', fontWeight: 400 }}>{per.label.split(' (')[1]?.replace(')', '')}</div>
         </div>
       ),
-      accessorFn: (row: any) => allocations[`${row.id}-${per.id}`],
+      accessorFn: (row: BulkProject) => allocations[`${row.id}-${per.id}`],
       cell: CompactEditableCell,
       size: 70,
     })),
     {
       id: "total",
       header: "Σ",
-      cell: ({ row }: any) => {
+      cell: ({ row }: CellContext<BulkProject, any>) => {
         const total = initialPeriods.reduce((acc, per) => acc + (allocations[`${row.id}-${per.id}`] || 0), 0);
         return (
           <div style={{ textAlign: 'center', fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary-light)' }}>
@@ -137,7 +165,7 @@ export default function BulkPlanningGrid({
     meta: {
       updateData: (rowIndex: number, columnId: string, value: any) => {
         const prj = filteredData[rowIndex];
-        const val = parseFloat(value) || 0;
+        const val = parseFloat(value as string) || 0;
         const key = `${prj.id}-${columnId}`;
         
         setAllocations(prev => ({ ...prev, [key]: val }));
@@ -153,7 +181,7 @@ export default function BulkPlanningGrid({
             });
             setSavingStatus('saved');
             setTimeout(() => setSavingStatus('idle'), 2000);
-          } catch (e) {
+          } catch (_err) {
             setSavingStatus('error');
           }
         });
