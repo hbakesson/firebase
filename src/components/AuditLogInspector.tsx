@@ -27,7 +27,7 @@ export default function AuditLogInspector({ logs }: { logs: AuditLog[] }) {
     if (!str) return null;
     try {
       return JSON.parse(str);
-    } catch (e) {
+    } catch {
       return str;
     }
   };

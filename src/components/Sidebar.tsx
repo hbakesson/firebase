@@ -6,7 +6,6 @@ import {
   LayoutDashboard, 
   Users, 
   Briefcase, 
-  CalendarRange, 
   BarChart3, 
   Settings,
   LogOut,

@@ -1,22 +1,29 @@
 "use client";
 
-import { useState, useTransition, useMemo, useEffect, ReactNode } from "react";
+import { useState, useTransition, useMemo, useEffect } from "react";
 import { 
   useReactTable, 
   getCoreRowModel, 
   flexRender, 
   ColumnDef,
-  Row
+  CellContext,
+  RowData
 } from "@tanstack/react-table";
 import { upsertAllocation } from "@/lib/actions";
 import { 
-  Save, 
   AlertCircle, 
   Loader2,
   CalendarDays,
   CheckCircle2,
   Table as TableIcon
 } from "lucide-react";
+
+declare module "@tanstack/react-table" {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface TableMeta<TData extends RowData> {
+    updateData: (rowIndex: number, columnId: string, value: unknown) => void;
+  }
+}
 
 interface Project {
   id: string;
@@ -37,16 +44,12 @@ interface Allocation {
 
 // --- Specialized Editable Cell ---
 const EditableCell = ({ 
-  value: initialValue, 
+  getValue, 
   row, 
   column, 
   table 
-}: { 
-  value: any; 
-  row: any; 
-  column: any; 
-  table: any 
-}) => {
+}: CellContext<Project, any>) => {
+  const initialValue = getValue();
   const [value, setValue] = useState(initialValue);
 
   const onBlur = () => {
@@ -87,12 +90,12 @@ export default function PlanningGrid({
   initialAllocations,
 }: {
   teamId: string;
-  initialProjects: any[];
-  initialPeriods: any[];
-  initialAllocations: any[];
+  initialProjects: Project[];
+  initialPeriods: Period[];
+  initialAllocations: Allocation[];
 }) {
-  const [isPending, startTransition] = useTransition();
-  const [data, setData] = useState(() => initialProjects);
+  const [, startTransition] = useTransition();
+  const [data] = useState(() => initialProjects);
   const [allocations, setAllocations] = useState<Record<string, number>>(() =>
     initialAllocations.reduce((acc, curr) => ({
       ...acc,
@@ -103,12 +106,12 @@ export default function PlanningGrid({
   const [savingStatus, setSavingStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
   // --- Dynamic Column Definitions ---
-  const columns = useMemo<ColumnDef<any>[]>(() => [
+  const columns = useMemo<ColumnDef<Project, any>[]>(() => [
     {
       id: "projectInfo",
       header: "Project Detail",
       accessorFn: (row) => row,
-      cell: ({ getValue }: any) => {
+      cell: ({ getValue }: CellContext<Project, Project>) => {
         const prj = getValue();
         return (
           <div style={{ padding: '0.75rem 1rem' }}>
@@ -127,7 +130,7 @@ export default function PlanningGrid({
           <div style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 400 }}>{per.label.split(' ')[1]}</div>
         </div>
       ),
-      accessorFn: (row: any) => allocations[`${row.id}-${per.id}`],
+      accessorFn: (row: Project) => allocations[`${row.id}-${per.id}`],
       cell: EditableCell,
       size: 100,
     })),
@@ -135,7 +138,7 @@ export default function PlanningGrid({
       id: "projectTotal",
       header: "Project Total",
       accessorFn: (row) => initialPeriods.reduce((acc, per) => acc + (allocations[`${row.id}-${per.id}`] || 0), 0),
-      cell: ({ getValue }: any) => (
+      cell: ({ getValue }: CellContext<Project, number>) => (
         <div style={{ textAlign: 'center', fontWeight: 800, color: 'var(--primary-light)' }}>
           {getValue()}h
         </div>

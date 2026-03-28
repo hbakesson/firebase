@@ -18,7 +18,7 @@ export default function AddProjectForm() {
       } else {
         formRef.current?.reset();
       }
-    } catch (_) {
+    } catch {
       setError("Something went wrong");
     } finally {
       setLoading(false);

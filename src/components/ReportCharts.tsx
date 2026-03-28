@@ -9,16 +9,21 @@ import {
   Tooltip, 
   Legend, 
   ResponsiveContainer,
-  LineChart,
-  Line,
   Cell,
   PieChart,
   Pie
 } from "recharts";
 
 interface ReportChartsProps {
-  comparisonData: any[];
-  teamBreakdown: any[];
+  comparisonData: {
+    name: string;
+    planned: number;
+    actual: number;
+  }[];
+  teamBreakdown: {
+    name: string;
+    value: number;
+  }[];
 }
 
 export default function ReportCharts({ comparisonData, teamBreakdown }: ReportChartsProps) {
