@@ -3,6 +3,7 @@ import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { signOut } from "@/auth";
+import Sidebar from "@/components/Sidebar";
 
 export const metadata: Metadata = {
   title: "Project Tracker",
@@ -29,37 +30,25 @@ export default async function RootLayout({
       </head>
       <body>
         <SessionProvider>
-          <main className="container">
-            <header>
-              <div className="header-row">
-                <div>
-                  <h1>Project Tracker</h1>
-                  <p style={{ color: "var(--text-muted)" }}>Manage your projects with ease and style.</p>
+          {!session?.user ? (
+            <main className="container">{children}</main>
+          ) : (
+            <div className="app-shell">
+              <Sidebar 
+                user={{
+                  name: session.user.name,
+                  email: session.user.email,
+                  role: session.user.role,
+                  organizationId: session.user.organizationId
+                }} 
+              />
+              <main className="main-content">
+                <div className="container">
+                  {children}
                 </div>
-                {session?.user && (
-                  <div className="user-info">
-                    <span className="user-badge">
-                      {session.user.name ?? session.user.email}
-                      <span className={`role-tag role-${session.user.role}`}>
-                        {session.user.role}
-                      </span>
-                    </span>
-                    <form
-                      action={async () => {
-                        "use server";
-                        await signOut({ redirectTo: "/login" });
-                      }}
-                    >
-                      <button id="btn-signout" type="submit" className="secondary btn-sm">
-                        Sign out
-                      </button>
-                    </form>
-                  </div>
-                )}
-              </div>
-            </header>
-            {children}
-          </main>
+              </main>
+            </div>
+          )}
         </SessionProvider>
       </body>
     </html>

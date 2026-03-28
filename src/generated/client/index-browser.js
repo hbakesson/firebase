@@ -120,8 +120,16 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.OrganizationScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ProjectScalarFieldEnum = {
   id: 'id',
+  organizationId: 'organizationId',
   name: 'name',
   description: 'description',
   status: 'status',
@@ -135,7 +143,8 @@ exports.Prisma.ProjectScalarFieldEnum = {
 exports.Prisma.AuditLogScalarFieldEnum = {
   id: 'id',
   action: 'action',
-  projectId: 'projectId',
+  entityType: 'entityType',
+  entityId: 'entityId',
   projectName: 'projectName',
   previousValue: 'previousValue',
   newValue: 'newValue',
@@ -146,6 +155,7 @@ exports.Prisma.AuditLogScalarFieldEnum = {
 
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
+  organizationId: 'organizationId',
   name: 'name',
   email: 'email',
   emailVerified: 'emailVerified',
@@ -200,6 +210,7 @@ exports.Prisma.NullsOrder = {
 
 
 exports.Prisma.ModelName = {
+  Organization: 'Organization',
   Project: 'Project',
   AuditLog: 'AuditLog',
   User: 'User',

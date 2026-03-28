@@ -39,6 +39,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           email: user.email,
           name: user.name,
           role: user.role,
+          organizationId: user.organizationId,
         };
       },
     }),
@@ -51,12 +52,24 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         });
 
         if (!guestUser) {
+          // Ensure a default organization exists
+          let defaultOrg = await prisma.organization.findFirst({
+            where: { name: "Default Organization" },
+          });
+
+          if (!defaultOrg) {
+            defaultOrg = await prisma.organization.create({
+              data: { name: "Default Organization" },
+            });
+          }
+
           guestUser = await prisma.user.create({
             data: {
               name: "Guest User",
               email: "guest@example.com",
               isGuest: true,
               role: "user",
+              organizationId: defaultOrg.id,
             },
           });
         }
@@ -66,6 +79,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           email: guestUser.email,
           name: guestUser.name,
           role: guestUser.role,
+          organizationId: guestUser.organizationId,
         };
       },
     }),
@@ -75,14 +89,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user, trigger }) {
       if (user) {
         token.uid = user.id;
-        token.role = user.role || "user";
+        token.role = (user as any).role || "user";
+        token.orgId = (user as any).organizationId;
       }
       if (trigger === "update" && token.uid) {
         const dbUser = await prisma.user.findUnique({
           where: { id: token.uid as string },
-          select: { role: true },
+          select: { role: true, organizationId: true },
         });
         token.role = dbUser?.role ?? "user";
+        token.orgId = dbUser?.organizationId;
       }
       return token;
     },
@@ -90,6 +106,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (session.user) {
         session.user.id = token.uid as string;
         session.user.role = token.role as string;
+        session.user.organizationId = token.orgId as string;
       }
       return session;
     },
