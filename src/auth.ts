@@ -10,16 +10,20 @@ import bcrypt from "bcryptjs";
 const adapter = process.env.MOCK_DATABASE === 'true' ? undefined : PrismaAdapter(prisma as any);
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter,
   ...authConfig,
+  adapter,
   providers: [
     Google({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      checks: ["none"],
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      checks: ["none"], // Firebase compat
     }),
     Credentials({
       id: "credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
         
@@ -47,6 +51,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
     Credentials({
       id: "guest",
+      credentials: {},
       async authorize() {
         // Find or create a singular guest user
         let guestUser = await prisma.user.findFirst({

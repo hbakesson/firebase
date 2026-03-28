@@ -1,0 +1,215 @@
+[debug] [2026-03-28T11:35:03.518Z] ----------------------------------------------------------------------
+[debug] [2026-03-28T11:35:03.523Z] Command:       /opt/homebrew/Cellar/node/25.8.1_1/bin/node /opt/homebrew/bin/firebase deploy
+[debug] [2026-03-28T11:35:03.523Z] CLI Version:   15.12.0
+[debug] [2026-03-28T11:35:03.523Z] Platform:      darwin
+[debug] [2026-03-28T11:35:03.523Z] Node Version:  v25.8.1
+[debug] [2026-03-28T11:35:03.523Z] Time:          Sat Mar 28 2026 12:35:03 GMT+0100 (Central European Standard Time)
+[debug] [2026-03-28T11:35:03.523Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-03-28T11:35:04.357Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-03-28T11:35:04.357Z] > authorizing via signed-in user (hbakesson@gmail.com)
+[debug] [2026-03-28T11:35:04.357Z] [iam] checking project testapp-4f81d for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-03-28T11:35:04.358Z] Checked if tokens are valid: false, expires at: 1774693681320
+[debug] [2026-03-28T11:35:04.358Z] Checked if tokens are valid: false, expires at: 1774693681320
+[debug] [2026-03-28T11:35:04.358Z] > refreshing access token with scopes: []
+[debug] [2026-03-28T11:35:04.359Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-03-28T11:35:04.359Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-03-28T11:35:04.446Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-03-28T11:35:04.446Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-03-28T11:35:04.460Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions [none]
+[debug] [2026-03-28T11:35:04.460Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions  x-goog-user-project=testapp-4f81d
+[debug] [2026-03-28T11:35:04.460Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-28T11:35:04.701Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions 200
+[debug] [2026-03-28T11:35:04.701Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-28T11:35:04.703Z] Checked if tokens are valid: true, expires at: 1774701303447
+[debug] [2026-03-28T11:35:04.703Z] Checked if tokens are valid: true, expires at: 1774701303447
+[debug] [2026-03-28T11:35:04.703Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/testapp-4f81d [none]
+[debug] [2026-03-28T11:35:05.095Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/testapp-4f81d 200
+[debug] [2026-03-28T11:35:05.095Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/testapp-4f81d {"projectId":"testapp-4f81d","projectNumber":"633478779492","displayName":"TestApp","name":"projects/testapp-4f81d","resources":{"hostingSite":"testapp-4f81d"},"state":"ACTIVE","etag":"1_673716ef-e046-4816-a771-6efa316e57fb"}
+[debug] [2026-03-28T11:35:06.130Z] defaultcredentials: writing to file /Users/hbakesson/.config/firebase/hbakesson_gmail_com_application_default_credentials.json
+[debug] [2026-03-28T11:35:06.131Z] Checked if tokens are valid: true, expires at: 1774701303447
+[debug] [2026-03-28T11:35:06.131Z] Checked if tokens are valid: true, expires at: 1774701303447
+[debug] [2026-03-28T11:35:06.131Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites pageToken=&pageSize=10
+[debug] [2026-03-28T11:35:07.216Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites 200
+[debug] [2026-03-28T11:35:07.217Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites {"sites":[{"name":"projects/testapp-4f81d/sites/testapp-4f81d","defaultUrl":"https://testapp-4f81d.web.app","appId":"1:633478779492:web:49813096ce6e1d7b118571","type":"DEFAULT_SITE"}]}
+[debug] [2026-03-28T11:35:07.217Z] Checked if tokens are valid: true, expires at: 1774701303447
+[debug] [2026-03-28T11:35:07.218Z] Checked if tokens are valid: true, expires at: 1774701303447
+[debug] [2026-03-28T11:35:07.218Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:633478779492:web:49813096ce6e1d7b118571/config [none]
+[debug] [2026-03-28T11:35:08.129Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:633478779492:web:49813096ce6e1d7b118571/config 200
+[debug] [2026-03-28T11:35:08.130Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:633478779492:web:49813096ce6e1d7b118571/config {"projectId":"testapp-4f81d","appId":"1:633478779492:web:49813096ce6e1d7b118571","storageBucket":"testapp-4f81d.firebasestorage.app","apiKey":"AIzaSyD2Y28iVlnepVLLp-b3EA4l7yCF1L9BZtw","authDomain":"testapp-4f81d.firebaseapp.com","messagingSenderId":"633478779492","measurementId":"G-Q1D5TH26Y5","projectNumber":"633478779492","version":"2"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-03-28T11:35:09.814Z] Checked if tokens are valid: true, expires at: 1774701303447
+[debug] [2026-03-28T11:35:09.814Z] Checked if tokens are valid: true, expires at: 1774701303447
+[debug] [2026-03-28T11:35:09.814Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites/testapp-4f81d [none]
+[debug] [2026-03-28T11:35:10.728Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites/testapp-4f81d 200
+[debug] [2026-03-28T11:35:10.728Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites/testapp-4f81d {"name":"projects/testapp-4f81d/sites/testapp-4f81d","defaultUrl":"https://testapp-4f81d.web.app","appId":"1:633478779492:web:49813096ce6e1d7b118571","type":"DEFAULT_SITE"}
+[info]    ▲ Next.js 15.5.14
+
+[info]    - Environments: .env.local, .env
+
+
+[info]    Creating an optimized production build ...
+
+[info]  ✓ Compiled successfully in 6.7s
+
+[info]    Linting and checking validity of types ...
+
+[info] (node:79718) ESLintIgnoreWarning: The ".eslintignore" file is no longer supported. Switch to using the "ignores" property in "eslint.config.js": https://eslint.org/docs/latest/use/configure/migration-guide#ignoring-files
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[info] 
+./src/app/layout.tsx
+26:9  Warning: Custom fonts not added in `pages/_document.js` will only load for a single page. This is discouraged. See: https://nextjs.org/docs/messages/no-page-custom-font  @next/next/no-page-custom-font
+
+./src/auth.config.ts
+2:8  Warning: 'Google' is defined but never used.  @typescript-eslint/no-unused-vars
+3:8  Warning: 'Credentials' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/AuditLogInspector.tsx
+8:3  Warning: 'ArrowRight' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/BulkPlanningGrid.tsx
+140:17  Warning: Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+/Users/hbakesson/Coding/Firebase/src/components/BulkPlanningGrid.tsx:140:17
+  138 |   ], [allocations, initialPeriods]);
+  139 |
+> 140 |   const table = useReactTable({
+      |                 ^^^^^^^^^^^^^ TanStack Table's `useReactTable()` API returns functions that cannot be memoized safely
+  141 |     data: filteredData,
+  142 |     columns,
+  143 |     getCoreRowModel: getCoreRowModel(),  react-hooks/incompatible-library
+
+./src/components/PlanningGrid.tsx
+117:17  Warning: Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+/Users/hbakesson/Coding/Firebase/src/components/PlanningGrid.tsx:117:17
+  115 |   ], [allocations, initialPeriods]);
+  116 |
+> 117 |   const table = useReactTable({
+      |                 ^^^^^^^^^^^^^ TanStack Table's `useReactTable()` API returns functions that cannot be memoized safely
+  118 |     data: initialProjects,
+  119 |     columns,
+  120 |     getCoreRowModel: getCoreRowModel(),  react-hooks/incompatible-library
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+
+[info]    Collecting page data ...
+
+[info] [PRISMA] Instantiating Prisma Client with official Connector pattern...
+
+[info] [PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+
+[info] [PRISMA] Instantiating Prisma Client with official Connector pattern...
+
+[info] [PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+
+[info] [PRISMA] Instantiating Prisma Client with official Connector pattern...
+
+[info] [PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+
+[info] [PRISMA] Instantiating Prisma Client with official Connector pattern...
+
+[info] [PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+
+[info] [PRISMA] Client initialized.
+
+[info] [PRISMA] Client initialized.
+
+[info] [PRISMA] Client initialized.
+
+[info] [PRISMA] Instantiating Prisma Client with official Connector pattern...
+
+[info] [PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+
+[info] [PRISMA] Client initialized.
+
+[info] [PRISMA] Instantiating Prisma Client with official Connector pattern...
+
+[info] [PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+
+[info] [PRISMA] Credential Check -> Password Length: 15
+
+[info] [PRISMA] Client initialized.
+
+[info] [PRISMA] Instantiating Prisma Client with official Connector pattern...
+
+[info] [PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+
+[info] [PRISMA] Credential Check -> Password Length: 15
+
+[info] [PRISMA] Client initialized.
+
+[info]    Generating static pages (0/3) ...
+
+[info]  ✓ Generating static pages (3/3)
+
+[info]    Finalizing page optimization ...
+
+[info]    Collecting build traces ...
+
+[info] 
+
+[info] Route (app)                                 Size  First Load JS
+┌ ƒ /                                      176 B         106 kB
+├ ƒ /_not-found                            127 B         102 kB
+├ ƒ /api/auth/[...nextauth]                127 B         102 kB
+├ ƒ /audit                               1.88 kB         108 kB
+├ ƒ /import                              9.87 kB         112 kB
+├ ƒ /login                               1.01 kB         106 kB
+├ ƒ /planning/[teamId]                    1.8 kB         120 kB
+├ ƒ /planning/bulk                       2.78 kB         118 kB
+├ ƒ /projects                              806 B         103 kB
+├ ƒ /reports                              124 kB         226 kB
+└ ƒ /teams                                 176 B         106 kB
++ First Load JS shared by all             102 kB
+  ├ chunks/255-38b49df12a94ee57.js         46 kB
+  ├ chunks/4bd1b696-c023c6e3521b1417.js  54.2 kB
+  └ other shared chunks (total)          1.92 kB
+
+
+[info] 
+ƒ  (Dynamic)  server-rendered on demand
+
+
+[info] Building a Cloud Function to run this application. This is needed due to:
+[info]  • non-static component /_not-found/page
+[info]  • non-static component /api/auth/[...nextauth]/route
+[info]  • non-static component /audit/page
+[info]  • non-static component /import/page
+[info]  • non-static component /projects/page
+[debug] [2026-03-28T11:35:27.666Z]  • non-static component /reports/page
+[debug] [2026-03-28T11:35:27.666Z]  • non-static component /planning/bulk/page
+[debug] [2026-03-28T11:35:27.666Z]  • non-static component /teams/page
+[debug] [2026-03-28T11:35:27.666Z]  • non-static component /planning/[teamId]/page
+[debug] [2026-03-28T11:35:27.666Z]  • non-static component /page
+[debug] [2026-03-28T11:35:27.666Z]  • non-static component /login/page
+[debug] [2026-03-28T11:35:27.666Z]  • route with server action /import
+[info]  • and 7 other reasons, use --debug to see more
+[info] 
+[debug] [2026-03-28T11:35:29.064Z] Checked if tokens are valid: true, expires at: 1774701303447
+[debug] [2026-03-28T11:35:29.064Z] Checked if tokens are valid: true, expires at: 1774701303447
+[debug] [2026-03-28T11:35:29.064Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites/testapp-4f81d [none]
+[debug] [2026-03-28T11:35:29.876Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites/testapp-4f81d 200
+[debug] [2026-03-28T11:35:29.876Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites/testapp-4f81d {"name":"projects/testapp-4f81d/sites/testapp-4f81d","defaultUrl":"https://testapp-4f81d.web.app","appId":"1:633478779492:web:49813096ce6e1d7b118571","type":"DEFAULT_SITE"}
+[warn] ⚠  This integration expects Node version 20, 22, or 24. You're running version 25, problems may be encountered. 
