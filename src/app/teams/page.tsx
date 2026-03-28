@@ -8,6 +8,7 @@ import {
   Plus, 
   ChevronRight
 } from "lucide-react";
+import { formatDate } from "@/lib/utils";
 
 export default async function TeamsPage() {
   const session = await auth();
@@ -92,7 +93,7 @@ export default async function TeamsPage() {
                     </span>
                   </td>
                   <td style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                    {new Date(team.createdAt).toLocaleDateString()}
+                    {formatDate(team.createdAt)}
                   </td>
                   <td style={{ textAlign: 'right', paddingRight: '1.25rem' }}>
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>

@@ -925,3 +925,68 @@
 [PRISMA] Client initialized.
 🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
  GET / 200 in 3675ms
+ GET / 200 in 765ms
+ GET / 200 in 17861ms
+ GET / 200 in 4701ms
+🛠️ [MOCK] project.findMany { organizationId: 'mock-org' }
+ GET /projects 200 in 8692ms
+ GET /teams 200 in 4499ms
+   Reload env: .env
+ ✓ Compiled in 16.5s (1645 modules)
+ ✓ Compiled in 5.2s (882 modules)
+ ✓ Compiled in 990ms (883 modules)
+ ✓ Compiled in 1720ms (883 modules)
+ ✓ Compiled in 1173ms (883 modules)
+ ✓ Compiled in 20.4s (883 modules)
+ ✓ Compiled in 19.8s (883 modules)
+ ✓ Compiled in 59.6s (883 modules)
+ ✓ Compiled in 5.4s (883 modules)
+ ✓ Compiled in 798ms (883 modules)
+ ✓ Compiled in 2.2s (883 modules)
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 10s (278 modules)
+[PRISMA] Client initialized.
+ GET / 200 in 3523ms
+ ○ Compiling /api/auth/[...nextauth] ...
+ ✓ Compiled /reports in 4.6s (888 modules)
+ ✓ Compiled (1860 modules)
+[PRISMA] Client initialized.
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+ GET /import 200 in 32087ms
+ GET /planning/bulk 200 in 32095ms
+ GET /teams 200 in 32104ms
+ GET /reports 200 in 32094ms
+ GET /projects 200 in 32100ms
+ GET /api/auth/session 200 in 32716ms
+ GET /api/auth/session 200 in 81ms
+ ○ Compiling /_not-found ...
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+ ✓ Compiled /_not-found in 1068ms (1877 modules)
+ ✓ Compiled (1878 modules)
+ GET /settings 404 in 3942ms
+ GET /audit 200 in 3978ms
+[PRISMA] Client initialized.
+ GET /api/auth/session 200 in 2918ms
+ GET /api/auth/session 200 in 23ms
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+ GET /api/auth/session 200 in 167ms
+ GET /api/auth/session 200 in 39ms
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.
+ GET /api/auth/session 200 in 94ms
+ GET /api/auth/session 200 in 23ms
+[PRISMA] Instantiating Prisma Client with official Connector pattern...
+[PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
+[PRISMA] Credential Check -> Password Length: 15
+[PRISMA] Client initialized.

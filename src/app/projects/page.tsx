@@ -7,6 +7,7 @@ import {
   Plus, 
   Users
 } from "lucide-react";
+import { formatDate } from "@/lib/utils";
 
 export default async function ProjectsPage({
   searchParams,
@@ -92,7 +93,7 @@ export default async function ProjectsPage({
                   <td style={{ padding: '1.25rem' }}>
                     <div style={{ fontWeight: 600 }}>{project.name}</div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                      Code: <code className="sku">{project.code}</code> • Last updated {new Date(project.updatedAt).toLocaleDateString()}
+                      Code: <code className="sku">{project.code}</code> • Last updated {formatDate(project.updatedAt)}
                     </div>
                   </td>
                   <td>
