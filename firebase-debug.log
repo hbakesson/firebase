@@ -86,3 +86,86 @@ Type error: Parameter 'l' implicitly has an 'any' type.
 [debug] [2026-03-28T00:41:22.190Z] Error: ENOENT: no such file or directory, open '/Users/hbakesson/Coding/Firebase/.next/export-marker.json'
 [error] 
 [error] Error: An unexpected error has occurred.
+[debug] [2026-03-28T01:15:08.085Z] ----------------------------------------------------------------------
+[debug] [2026-03-28T01:15:08.092Z] Command:       /opt/homebrew/Cellar/node/25.8.1_1/bin/node /opt/homebrew/bin/firebase deploy
+[debug] [2026-03-28T01:15:08.093Z] CLI Version:   15.12.0
+[debug] [2026-03-28T01:15:08.093Z] Platform:      darwin
+[debug] [2026-03-28T01:15:08.093Z] Node Version:  v25.8.1
+[debug] [2026-03-28T01:15:08.093Z] Time:          Sat Mar 28 2026 02:15:08 GMT+0100 (Central European Standard Time)
+[debug] [2026-03-28T01:15:08.093Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-03-28T01:15:08.896Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-03-28T01:15:08.897Z] > authorizing via signed-in user (hbakesson@gmail.com)
+[debug] [2026-03-28T01:15:08.897Z] [iam] checking project testapp-4f81d for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-03-28T01:15:08.897Z] Checked if tokens are valid: true, expires at: 1774662053501
+[debug] [2026-03-28T01:15:08.897Z] Checked if tokens are valid: true, expires at: 1774662053501
+[debug] [2026-03-28T01:15:08.897Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions [none]
+[debug] [2026-03-28T01:15:08.898Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions  x-goog-user-project=testapp-4f81d
+[debug] [2026-03-28T01:15:08.898Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-28T01:15:09.732Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions 200
+[debug] [2026-03-28T01:15:09.732Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-28T01:15:09.733Z] Checked if tokens are valid: true, expires at: 1774662053501
+[debug] [2026-03-28T01:15:09.733Z] Checked if tokens are valid: true, expires at: 1774662053501
+[debug] [2026-03-28T01:15:09.733Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/testapp-4f81d [none]
+[debug] [2026-03-28T01:15:10.154Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/testapp-4f81d 200
+[debug] [2026-03-28T01:15:10.154Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/testapp-4f81d {"projectId":"testapp-4f81d","projectNumber":"633478779492","displayName":"TestApp","name":"projects/testapp-4f81d","resources":{"hostingSite":"testapp-4f81d"},"state":"ACTIVE","etag":"1_673716ef-e046-4816-a771-6efa316e57fb"}
+[debug] [2026-03-28T01:15:11.131Z] defaultcredentials: writing to file /Users/hbakesson/.config/firebase/hbakesson_gmail_com_application_default_credentials.json
+[debug] [2026-03-28T01:15:11.132Z] Checked if tokens are valid: true, expires at: 1774662053501
+[debug] [2026-03-28T01:15:11.132Z] Checked if tokens are valid: true, expires at: 1774662053501
+[debug] [2026-03-28T01:15:11.133Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites pageToken=&pageSize=10
+[debug] [2026-03-28T01:15:12.231Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites 200
+[debug] [2026-03-28T01:15:12.231Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites {"sites":[{"name":"projects/testapp-4f81d/sites/testapp-4f81d","defaultUrl":"https://testapp-4f81d.web.app","appId":"1:633478779492:web:49813096ce6e1d7b118571","type":"DEFAULT_SITE"}]}
+[debug] [2026-03-28T01:15:12.232Z] Checked if tokens are valid: true, expires at: 1774662053501
+[debug] [2026-03-28T01:15:12.232Z] Checked if tokens are valid: true, expires at: 1774662053501
+[debug] [2026-03-28T01:15:12.232Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:633478779492:web:49813096ce6e1d7b118571/config [none]
+[debug] [2026-03-28T01:15:12.935Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:633478779492:web:49813096ce6e1d7b118571/config 200
+[debug] [2026-03-28T01:15:12.935Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:633478779492:web:49813096ce6e1d7b118571/config {"projectId":"testapp-4f81d","appId":"1:633478779492:web:49813096ce6e1d7b118571","storageBucket":"testapp-4f81d.firebasestorage.app","apiKey":"AIzaSyD2Y28iVlnepVLLp-b3EA4l7yCF1L9BZtw","authDomain":"testapp-4f81d.firebaseapp.com","messagingSenderId":"633478779492","measurementId":"G-Q1D5TH26Y5","projectNumber":"633478779492","version":"2"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-03-28T01:15:14.620Z] Checked if tokens are valid: true, expires at: 1774662053501
+[debug] [2026-03-28T01:15:14.620Z] Checked if tokens are valid: true, expires at: 1774662053501
+[debug] [2026-03-28T01:15:14.621Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites/testapp-4f81d [none]
+[debug] [2026-03-28T01:15:15.266Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites/testapp-4f81d 200
+[debug] [2026-03-28T01:15:15.267Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites/testapp-4f81d {"name":"projects/testapp-4f81d/sites/testapp-4f81d","defaultUrl":"https://testapp-4f81d.web.app","appId":"1:633478779492:web:49813096ce6e1d7b118571","type":"DEFAULT_SITE"}
+[info]    ▲ Next.js 15.5.14
+
+[info]    - Environments: .env.local, .env
+
+
+[info]    Creating an optimized production build ...
+
+[info]  ✓ Compiled successfully in 6.2s
+
+[info]    Linting and checking validity of types ...
+
+[info] (node:67121) ESLintIgnoreWarning: The ".eslintignore" file is no longer supported. Switch to using the "ignores" property in "eslint.config.js": https://eslint.org/docs/latest/use/configure/migration-guide#ignoring-files
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[info] Failed to compile.
+
+
+[info] ./src/app/audit/page.tsx:100:64
+Type error: Parameter 'l' implicitly has an 'any' type.
+
+   98 |               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem' }}>
+   99 |                 <span style={{ color: 'var(--text-muted)' }}>Created This Week</span>
+> 100 |                 <span style={{ fontWeight: 700 }}>{logs.filter(l => l.action === 'CREATE').length}</span>
+      |                                                                ^
+  101 |               </div>
+  102 |               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem' }}>
+  103 |                 <span style={{ color: 'var(--text-muted)' }}>Critical Mutations</span>
+
+[info] Next.js build worker exited with code: 1 and signal: null
+
+[debug] [2026-03-28T01:15:26.471Z] Error: ENOENT: no such file or directory, open '/Users/hbakesson/Coding/Firebase/.next/export-marker.json'
+[error] 
+[error] Error: An unexpected error has occurred.
