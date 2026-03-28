@@ -169,3 +169,194 @@ Type error: Parameter 'l' implicitly has an 'any' type.
 [debug] [2026-03-28T01:15:26.471Z] Error: ENOENT: no such file or directory, open '/Users/hbakesson/Coding/Firebase/.next/export-marker.json'
 [error] 
 [error] Error: An unexpected error has occurred.
+[debug] [2026-03-28T01:35:44.881Z] ----------------------------------------------------------------------
+[debug] [2026-03-28T01:35:44.889Z] Command:       /opt/homebrew/Cellar/node/25.8.1_1/bin/node /opt/homebrew/bin/firebase deploy
+[debug] [2026-03-28T01:35:44.890Z] CLI Version:   15.12.0
+[debug] [2026-03-28T01:35:44.890Z] Platform:      darwin
+[debug] [2026-03-28T01:35:44.890Z] Node Version:  v25.8.1
+[debug] [2026-03-28T01:35:44.890Z] Time:          Sat Mar 28 2026 02:35:44 GMT+0100 (Central European Standard Time)
+[debug] [2026-03-28T01:35:44.890Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-03-28T01:35:45.733Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-03-28T01:35:45.733Z] > authorizing via signed-in user (hbakesson@gmail.com)
+[debug] [2026-03-28T01:35:45.733Z] [iam] checking project testapp-4f81d for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-03-28T01:35:45.733Z] Checked if tokens are valid: false, expires at: 1774662053501
+[debug] [2026-03-28T01:35:45.734Z] Checked if tokens are valid: false, expires at: 1774662053501
+[debug] [2026-03-28T01:35:45.734Z] > refreshing access token with scopes: []
+[debug] [2026-03-28T01:35:45.735Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-03-28T01:35:45.735Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-03-28T01:35:45.826Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-03-28T01:35:45.826Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-03-28T01:35:45.838Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions [none]
+[debug] [2026-03-28T01:35:45.838Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions  x-goog-user-project=testapp-4f81d
+[debug] [2026-03-28T01:35:45.838Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-28T01:35:46.598Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions 200
+[debug] [2026-03-28T01:35:46.599Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/testapp-4f81d:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-03-28T01:35:46.600Z] Checked if tokens are valid: true, expires at: 1774665344827
+[debug] [2026-03-28T01:35:46.600Z] Checked if tokens are valid: true, expires at: 1774665344827
+[debug] [2026-03-28T01:35:46.600Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/testapp-4f81d [none]
+[debug] [2026-03-28T01:35:47.081Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/testapp-4f81d 200
+[debug] [2026-03-28T01:35:47.082Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/testapp-4f81d {"projectId":"testapp-4f81d","projectNumber":"633478779492","displayName":"TestApp","name":"projects/testapp-4f81d","resources":{"hostingSite":"testapp-4f81d"},"state":"ACTIVE","etag":"1_673716ef-e046-4816-a771-6efa316e57fb"}
+[debug] [2026-03-28T01:35:48.110Z] defaultcredentials: writing to file /Users/hbakesson/.config/firebase/hbakesson_gmail_com_application_default_credentials.json
+[debug] [2026-03-28T01:35:48.111Z] Checked if tokens are valid: true, expires at: 1774665344827
+[debug] [2026-03-28T01:35:48.111Z] Checked if tokens are valid: true, expires at: 1774665344827
+[debug] [2026-03-28T01:35:48.111Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites pageToken=&pageSize=10
+[debug] [2026-03-28T01:35:49.196Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites 200
+[debug] [2026-03-28T01:35:49.197Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites {"sites":[{"name":"projects/testapp-4f81d/sites/testapp-4f81d","defaultUrl":"https://testapp-4f81d.web.app","appId":"1:633478779492:web:49813096ce6e1d7b118571","type":"DEFAULT_SITE"}]}
+[debug] [2026-03-28T01:35:49.197Z] Checked if tokens are valid: true, expires at: 1774665344827
+[debug] [2026-03-28T01:35:49.197Z] Checked if tokens are valid: true, expires at: 1774665344827
+[debug] [2026-03-28T01:35:49.198Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:633478779492:web:49813096ce6e1d7b118571/config [none]
+[debug] [2026-03-28T01:35:49.879Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:633478779492:web:49813096ce6e1d7b118571/config 200
+[debug] [2026-03-28T01:35:49.879Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/-/webApps/1:633478779492:web:49813096ce6e1d7b118571/config {"projectId":"testapp-4f81d","appId":"1:633478779492:web:49813096ce6e1d7b118571","storageBucket":"testapp-4f81d.firebasestorage.app","apiKey":"AIzaSyD2Y28iVlnepVLLp-b3EA4l7yCF1L9BZtw","authDomain":"testapp-4f81d.firebaseapp.com","messagingSenderId":"633478779492","measurementId":"G-Q1D5TH26Y5","projectNumber":"633478779492","version":"2"}
+[info] 
+   Thank you for trying our early preview of Next.js support on Firebase Hosting.
+   During the preview, support is best-effort and breaking changes can be expected. Proceed with caution.
+   The integration is known to work with Next.js version 12 - 15.0. You may encounter errors.
+
+   Documentation: https://firebase.google.com/docs/hosting/frameworks/nextjs
+   File a bug: https://github.com/firebase/firebase-tools/issues/new?template=bug_report.md
+   Submit a feature request: https://github.com/firebase/firebase-tools/issues/new?template=feature_request.md
+
+   We'd love to learn from you. Express your interest in helping us shape the future of Firebase Hosting: https://goo.gle/41enW5X
+
+[debug] [2026-03-28T01:35:51.815Z] Checked if tokens are valid: true, expires at: 1774665344827
+[debug] [2026-03-28T01:35:51.815Z] Checked if tokens are valid: true, expires at: 1774665344827
+[debug] [2026-03-28T01:35:51.815Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites/testapp-4f81d [none]
+[debug] [2026-03-28T01:35:52.660Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites/testapp-4f81d 200
+[debug] [2026-03-28T01:35:52.661Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/testapp-4f81d/sites/testapp-4f81d {"name":"projects/testapp-4f81d/sites/testapp-4f81d","defaultUrl":"https://testapp-4f81d.web.app","appId":"1:633478779492:web:49813096ce6e1d7b118571","type":"DEFAULT_SITE"}
+[info]    ▲ Next.js 15.5.14
+
+[info]    - Environments: .env.local, .env
+
+
+[info]    Creating an optimized production build ...
+
+[info]  ✓ Compiled successfully in 3.3s
+
+[info]    Linting and checking validity of types ...
+
+[info] (node:69478) ESLintIgnoreWarning: The ".eslintignore" file is no longer supported. Switch to using the "ignores" property in "eslint.config.js": https://eslint.org/docs/latest/use/configure/migration-guide#ignoring-files
+(Use `node --trace-warnings ...` to show where the warning was created)
+
+[info] 
+Failed to compile.
+
+./src/app/AddProjectForm.tsx
+21:14  Warning: '_' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/audit/page.tsx
+10:3  Warning: 'Calendar' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/import/page.tsx
+17:36  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+47:35  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+57:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+150:47  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/layout.tsx
+5:10  Warning: 'signOut' is defined but never used.  @typescript-eslint/no-unused-vars
+25:10  Warning: Unused eslint-disable directive (no problems were reported from '@next/next/no-page-custom-font').
+
+./src/app/page.tsx
+121:36  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/app/planning/[teamId]/page.tsx
+9:3  Warning: 'Settings' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/planning/bulk/page.tsx
+4:8  Warning: 'Sidebar' is defined but never used.  @typescript-eslint/no-unused-vars
+7:15  Warning: 'LayoutGrid' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/projects/page.tsx
+4:40  Warning: 'deleteProject' is defined but never used.  @typescript-eslint/no-unused-vars
+8:3  Warning: 'Filter' is defined but never used.  @typescript-eslint/no-unused-vars
+9:3  Warning: 'MoreVertical' is defined but never used.  @typescript-eslint/no-unused-vars
+10:3  Warning: 'ExternalLink' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/app/teams/page.tsx
+9:3  Warning: 'MapPin' is defined but never used.  @typescript-eslint/no-unused-vars
+10:3  Warning: 'ShieldCheck' is defined but never used.  @typescript-eslint/no-unused-vars
+11:3  Warning: 'Building2' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/AuditLogInspector.tsx
+8:3  Warning: 'ArrowRight' is defined but never used.  @typescript-eslint/no-unused-vars
+30:14  Warning: 'e' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/BulkPlanningGrid.tsx
+24:4  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+63:20  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+64:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+65:23  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+67:10  Warning: 'isPending' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+69:16  Warning: 'setData' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+87:37  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+92:28  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+113:25  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+120:23  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+132:17  Warning: Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+/Users/hbakesson/Coding/Firebase/src/components/BulkPlanningGrid.tsx:132:17
+  130 |   ], [allocations, initialPeriods]);
+  131 |
+> 132 |   const table = useReactTable({
+      |                 ^^^^^^^^^^^^^ TanStack Table's `useReactTable()` API returns functions that cannot be memoized safely
+  133 |     data: filteredData,
+  134 |     columns,
+  135 |     getCoreRowModel: getCoreRowModel(),  react-hooks/incompatible-library
+138:63  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+156:20  Warning: 'e' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/PlanningGrid.tsx
+3:55  Warning: 'ReactNode' is defined but never used.  @typescript-eslint/no-unused-vars
+9:3  Warning: 'Row' is defined but never used.  @typescript-eslint/no-unused-vars
+13:3  Warning: 'Save' is defined but never used.  @typescript-eslint/no-unused-vars
+21:11  Warning: 'Project' is defined but never used.  @typescript-eslint/no-unused-vars
+27:11  Warning: 'Period' is defined but never used.  @typescript-eslint/no-unused-vars
+32:11  Warning: 'Allocation' is defined but never used.  @typescript-eslint/no-unused-vars
+45:10  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+46:8  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+47:11  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+48:10  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+90:20  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+91:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+92:23  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+94:10  Warning: 'isPending' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+95:16  Warning: 'setData' is assigned a value but never used.  @typescript-eslint/no-unused-vars
+106:37  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+111:28  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+130:25  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+138:28  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+148:17  Warning: Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+/Users/hbakesson/Coding/Firebase/src/components/PlanningGrid.tsx:148:17
+  146 |
+  147 |   // --- React Table Instance ---
+> 148 |   const table = useReactTable({
+      |                 ^^^^^^^^^^^^^ TanStack Table's `useReactTable()` API returns functions that cannot be memoized safely
+  149 |     data,
+  150 |     columns,
+  151 |     getCoreRowModel: getCoreRowModel(),  react-hooks/incompatible-library
+153:63  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+171:20  Warning: 'e' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/components/ReportCharts.tsx
+12:3  Warning: 'LineChart' is defined but never used.  @typescript-eslint/no-unused-vars
+13:3  Warning: 'Line' is defined but never used.  @typescript-eslint/no-unused-vars
+20:19  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+21:18  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+./src/components/Sidebar.tsx
+9:3  Warning: 'CalendarRange' is defined but never used.  @typescript-eslint/no-unused-vars
+
+./src/lib/actions.ts
+96:55  Error: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+info  - Need to disable some ESLint rules? Learn more here: https://nextjs.org/docs/app/api-reference/config/eslint#disabling-rules
+
+[debug] [2026-03-28T01:36:01.316Z] Error: ENOENT: no such file or directory, open '/Users/hbakesson/Coding/Firebase/.next/export-marker.json'
+[error] 
+[error] Error: An unexpected error has occurred.
