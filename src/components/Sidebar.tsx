@@ -10,7 +10,8 @@ import {
   BarChart3, 
   Settings,
   LogOut,
-  ChevronRight
+  ChevronRight,
+  Upload
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 
@@ -27,10 +28,10 @@ export default function Sidebar({ user }: SidebarProps) {
   const pathname = usePathname();
 
   const navItems = [
-    { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { label: "Dashboard", href: "/", icon: LayoutDashboard },
     { label: "Teams", href: "/teams", icon: Users },
     { label: "Projects", href: "/projects", icon: Briefcase },
-    { label: "Planning", href: "/planning", icon: CalendarRange },
+    { label: "Import", href: "/import", icon: Upload },
     { label: "Reports", href: "/reports", icon: BarChart3 },
     { label: "Settings", href: "/settings", icon: Settings },
   ];

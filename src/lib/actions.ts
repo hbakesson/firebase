@@ -19,6 +19,7 @@ export async function createTeam(data: { name: string; code: string; parentTeamI
 
   await prisma.auditLog.create({
     data: {
+      organizationId: session.user.organizationId,
       action: "CREATE",
       entityType: "Team",
       entityId: team.id,
@@ -45,6 +46,7 @@ export async function updateTeam(id: string, data: Partial<{ name: string; code:
 
   await prisma.auditLog.create({
     data: {
+      organizationId: session.user.organizationId,
       action: "UPDATE",
       entityType: "Team",
       entityId: team.id,
@@ -76,6 +78,7 @@ export async function createProject(data: { name: string; code: string; descript
 
   await prisma.auditLog.create({
     data: {
+      organizationId: session.user.organizationId,
       action: "CREATE",
       entityType: "Project",
       entityId: project.id,
@@ -102,6 +105,7 @@ export async function updateProject(id: string, data: any) {
 
   await prisma.auditLog.create({
     data: {
+      organizationId: session.user.organizationId,
       action: "UPDATE",
       entityType: "Project",
       entityId: project.id,
@@ -128,6 +132,7 @@ export async function deleteProject(id: string) {
 
   await prisma.auditLog.create({
     data: {
+      organizationId: session.user.organizationId,
       action: "DELETE",
       entityType: "Project",
       entityId: project.id,
@@ -170,6 +175,7 @@ export async function createYearPeriods(year: number) {
 
   await prisma.auditLog.create({
     data: {
+      organizationId: session.user.organizationId,
       action: "CREATE",
       entityType: "Period",
       entityId: "BATCH",
@@ -201,6 +207,7 @@ export async function upsertAllocation(data: { teamId: string; projectId: string
 
   await prisma.auditLog.create({
     data: {
+      organizationId: session.user.organizationId,
       action: "UPDATE",
       entityType: "BudgetAllocation",
       entityId: allocation.id,
@@ -212,4 +219,59 @@ export async function upsertAllocation(data: { teamId: string; projectId: string
   });
 
   return allocation;
+}
+
+export async function importActuals(rows: { projectCode: string; periodId: string; hours: number }[]) {
+  const session = await auth();
+  if (!session?.user?.organizationId) throw new Error("Unauthorized");
+
+  const orgId = session.user.organizationId;
+  const results = [];
+
+  for (const row of rows) {
+    // Find project by code within the organization
+    const project = await prisma.project.findFirst({
+      where: { code: row.projectCode, organizationId: orgId }
+    });
+
+    if (!project) continue;
+
+    // We need a teamId for the allocation. 
+    // If the project is already assigned to a team, use that.
+    // Otherwise, we might need to skip or handle logically.
+    if (!project.teamId) continue;
+
+    const allocation = await prisma.actualAllocation.upsert({
+      where: {
+        teamId_projectId_periodId: {
+          teamId: project.teamId,
+          projectId: project.id,
+          periodId: row.periodId,
+        },
+      },
+      update: { actualHours: row.hours },
+      create: {
+        teamId: project.teamId,
+        projectId: project.id,
+        periodId: row.periodId,
+        actualHours: row.hours,
+      },
+    });
+    results.push(allocation);
+  }
+
+  await prisma.auditLog.create({
+    data: {
+      organizationId: session.user.organizationId,
+      action: "CREATE",
+      entityType: "ActualAllocation",
+      entityId: "BATCH_IMPORT",
+      projectName: `Imported ${results.length} actuals`,
+      userId: session.user.id!,
+      userEmail: session.user.email!,
+    },
+  });
+
+  revalidatePath("/reports");
+  return results;
 }

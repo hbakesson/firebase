@@ -172,8 +172,18 @@ exports.Prisma.BudgetAllocationScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ActualAllocationScalarFieldEnum = {
+  id: 'id',
+  teamId: 'teamId',
+  projectId: 'projectId',
+  periodId: 'periodId',
+  actualHours: 'actualHours',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.AuditLogScalarFieldEnum = {
   id: 'id',
+  organizationId: 'organizationId',
   action: 'action',
   entityType: 'entityType',
   entityId: 'entityId',
@@ -247,6 +257,7 @@ exports.Prisma.ModelName = {
   Project: 'Project',
   Period: 'Period',
   BudgetAllocation: 'BudgetAllocation',
+  ActualAllocation: 'ActualAllocation',
   AuditLog: 'AuditLog',
   User: 'User',
   Account: 'Account',

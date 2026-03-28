@@ -26,6 +26,7 @@ model Organization {
   projects  Project[]
   teams     Team[]
   periods   Period[]
+  auditLogs AuditLog[]
 }
 
 model Team {
@@ -43,6 +44,7 @@ model Team {
   childTeams     Team[]        @relation("TeamHierarchy")
   projects       Project[]
   allocations    BudgetAllocation[]
+  actualAllocations ActualAllocation[]
 }
 
 model Project {
@@ -63,6 +65,7 @@ model Project {
   team           Team?         @relation(fields: [teamId], references: [id])
   logs           AuditLog[]
   allocations    BudgetAllocation[]
+  actualAllocations ActualAllocation[]
 }
 
 model Period {
@@ -75,6 +78,7 @@ model Period {
   isLocked       Boolean       @default(false)
   organization   Organization  @relation(fields: [organizationId], references: [id])
   allocations    BudgetAllocation[]
+  actualAllocations ActualAllocation[]
 }
 
 model BudgetAllocation {
@@ -92,18 +96,36 @@ model BudgetAllocation {
   @@unique([teamId, projectId, periodId])
 }
 
+model ActualAllocation {
+  id           String   @id @default(cuid())
+  teamId       String
+  projectId    String
+  periodId     String
+  actualHours  Float    @default(0)
+  updatedAt    DateTime @updatedAt
+
+  team         Team     @relation(fields: [teamId], references: [id])
+  project      Project  @relation(fields: [projectId], references: [id])
+  period       Period   @relation(fields: [periodId], references: [id])
+
+  @@unique([teamId, projectId, periodId])
+}
+
 model AuditLog {
-  id            String   @id @default(cuid())
-  action        String   // CREATE | UPDATE | DELETE
-  entityType    String   @default("Project") // Project | Team | Budget
-  entityId      String?
-  projectName   String
-  previousValue String?  // Stores JSON string of changed values
-  newValue      String?  // Stores JSON string of changed values
-  userId        String
-  userEmail     String
-  timestamp     DateTime @default(now())
-  project       Project? @relation(fields: [entityId], references: [id], map: "AuditLog_projectId_fkey")
+  id             String        @id @default(cuid())
+  organizationId String?
+  action         String        // CREATE | UPDATE | DELETE
+  entityType     String        @default("Project") // Project | Team | Budget
+  entityId       String?
+  projectName    String
+  previousValue  String?       @db.Text
+  newValue       String?       @db.Text
+  userId         String
+  userEmail      String
+  timestamp      DateTime      @default(now())
+
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  project        Project?      @relation(fields: [entityId], references: [id], map: "AuditLog_projectId_fkey")
 }
 
 // ─── NextAuth Models ─────────────────────────────────────────────────────────
