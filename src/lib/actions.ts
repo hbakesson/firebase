@@ -31,7 +31,7 @@ export async function createTeam(data: { name: string; code: string; parentTeamI
   });
 
   revalidatePath("/teams");
-  return team;
+  return JSON.parse(JSON.stringify(team));
 }
 
 export async function updateTeam(id: string, data: Partial<{ name: string; code: string; parentTeamId: string; isActive: boolean }>) {
@@ -59,7 +59,7 @@ export async function updateTeam(id: string, data: Partial<{ name: string; code:
   });
 
   revalidatePath("/teams");
-  return team;
+  return JSON.parse(JSON.stringify(team));
 }
 
 // ─── Project Actions ────────────────────────────────────────────────────────
@@ -90,7 +90,7 @@ export async function createProject(data: { name: string; code: string; descript
   });
 
   revalidatePath("/projects");
-  return project;
+  return JSON.parse(JSON.stringify(project));
 }
 
 export async function updateProject(id: string, data: Record<string, unknown>) {
@@ -119,7 +119,7 @@ export async function updateProject(id: string, data: Record<string, unknown>) {
 
   revalidatePath("/projects");
   revalidatePath("/dashboard");
-  return project;
+  return JSON.parse(JSON.stringify(project));
 }
 
 export async function deleteProject(id: string) {
@@ -145,7 +145,7 @@ export async function deleteProject(id: string) {
 
   revalidatePath("/projects");
   revalidatePath("/dashboard");
-  return project;
+  return JSON.parse(JSON.stringify(project));
 }
 
 // ─── Planning Actions ────────────────────────────────────────────────────────
@@ -218,7 +218,7 @@ export async function upsertAllocation(data: { teamId: string; projectId: string
     },
   });
 
-  return allocation;
+  return JSON.parse(JSON.stringify(allocation));
 }
 
 export async function getOrCreateWeeklyPeriods() {

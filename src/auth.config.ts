@@ -51,12 +51,14 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
       const isOnLoginPage = nextUrl.pathname.startsWith("/login");
-      
+
       if (isOnLoginPage) {
         if (isLoggedIn) return Response.redirect(new URL("/", nextUrl));
-        return true;
+        return true; // Allow access to login if NOT logged in
       }
 
+      // If not logged in and not on login page, middleware redirects naturally
+      // If logged in, we must explicitly allow access to prevent loops on root/matcher paths.
       return isLoggedIn;
     },
   },

@@ -1013,3 +1013,46 @@
 <w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, stat '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/edge-server-development/0.pack.gz'
  ✓ Compiled in 9.7s (883 modules)
  ✓ Compiled in 2.1s (883 modules)
+ ✓ Compiled in 39s (1924 modules)
+ ✓ Compiled in 6.5s (1646 modules)
+[Error: ENOENT: no such file or directory, stat '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/server-development/0.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/server-development/0.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/server-development/0.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/server-development/0.pack.gz'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, stat '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/server-development/0.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/server-development/0.pack.gz'
+}
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, stat '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/server-development/0.pack.gz'
+[Error: ENOENT: no such file or directory, stat '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/client-development/0.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/client-development/0.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/client-development/0.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/client-development/0.pack.gz'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, stat '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/client-development/0.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/client-development/0.pack.gz'
+}
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, stat '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/client-development/0.pack.gz'
+ ✓ Compiled in 3.6s (1646 modules)
+ ✓ Compiled in 6.8s (883 modules)
+ ✓ Compiled in 3.5s (883 modules)
