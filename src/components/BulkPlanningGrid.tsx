@@ -26,14 +26,21 @@ interface BulkProject {
   teamId?: string;
 }
 
-// --- Specialized Compact Editable Cell ---
+// --- Specialized Compact Editable Cell (MEMOIZED) ---
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const CompactEditableCell = ({ getValue, row, column, table }: CellContext<BulkProject, any>) => {
+const CompactEditableCell = React.memo(({ getValue, row, column, table }: CellContext<BulkProject, any>) => {
   const initialValue = getValue() as number;
   const [value, setValue] = useState<string | number>(initialValue);
 
+  // Sync internal value if global state changes externally (e.g. from total recalculation or Undo)
+  React.useEffect(() => {
+    setValue(initialValue);
+  }, [initialValue]);
+
   const onBlur = () => {
-    table.options.meta?.updateData(row.index, column.id, value);
+    if (value !== initialValue) {
+      table.options.meta?.updateData(row.index, column.id, value);
+    }
   };
 
   return (
@@ -59,7 +66,9 @@ const CompactEditableCell = ({ getValue, row, column, table }: CellContext<BulkP
       className="hover:bg-white/5 focus:bg-white/10"
     />
   );
-};
+});
+
+CompactEditableCell.displayName = "CompactEditableCell";
 
 interface BulkPlanningGridProps {
   initialProjects: Project[];
@@ -126,6 +135,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
       header: "Σ",
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       cell: ({ row }: CellContext<BulkProject, any>) => {
+        // total is already memoized implicitly within allocations dependency of columns
         const total = initialPeriods.reduce((acc, per) => acc + (allocations[`${row.id}-${per.id}`] || 0), 0);
         return (
           <div style={{ textAlign: 'center', fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary-light)' }}>
@@ -135,7 +145,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
       },
       size: 60,
     }
-  ], [allocations, initialPeriods]);
+  ], [allocations, initialPeriods]); // Only recompute columns if allocations change
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
@@ -236,9 +246,8 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
                       borderRight: '1px solid var(--card-border)',
                       position: cell.column.id === 'project' ? 'sticky' : 'static',
                       left: 0,
-                      background: cell.column.id === 'project' ? 'rgba(20,20,30,0.95)' : 'transparent',
+                      background: cell.column.id === 'project' ? 'rgba(23, 23, 33, 1)' : 'transparent',
                       zIndex: cell.column.id === 'project' ? 10 : 1,
-                      backdropFilter: 'blur(10px)'
                     }}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

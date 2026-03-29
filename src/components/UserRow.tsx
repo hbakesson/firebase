@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import React, { useState, useTransition } from "react";
 import { Mail, CheckCircle2, Trash2, ShieldAlert } from "lucide-react";
 import { updateUserRole, removeUser } from "@/lib/actions";
 
@@ -11,7 +11,7 @@ interface User {
   role: string;
 }
 
-export default function UserRow({ user, currentUserId }: { user: User; currentUserId: string }) {
+const UserRow = React.memo(({ user, currentUserId }: { user: User; currentUserId: string }) => {
   const [isPending, startTransition] = useTransition();
   const [isRemoving, setIsRemoving] = useState(false);
 
@@ -101,4 +101,8 @@ export default function UserRow({ user, currentUserId }: { user: User; currentUs
       </td>
     </tr>
   );
-}
+});
+
+UserRow.displayName = "UserRow";
+
+export default UserRow;

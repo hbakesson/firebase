@@ -8,7 +8,7 @@
   --text-muted: #94a3b8;
   --danger: #ef4444;
   --success: #22c55e;
-  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --glass-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.25);
 }
 
 * {
@@ -48,7 +48,9 @@ body {
   top: 0;
   height: 100vh;
   z-index: 50;
+  z-index: 50;
   transition: all 0.3s ease;
+  will-change: transform, width;
 }
 
 .sidebar-header {
@@ -127,13 +129,14 @@ h1 {
 
 .card {
   background: var(--card-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid var(--card-border);
   border-radius: 1rem;
   padding: 2rem;
   margin-bottom: 2rem;
   box-shadow: var(--glass-shadow);
+  will-change: auto;
 }
 
 .form-grid {

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import React, { useState, useTransition, useMemo } from "react";
 import { ChevronRight, Edit2, CheckCircle2, X } from "lucide-react";
 import { updateTeam, deleteTeam } from "@/lib/actions";
 
@@ -13,11 +13,17 @@ interface Team {
   parentTeam?: { id: string; name: string } | null;
 }
 
-export default function TeamRow({ team, parentOptions }: { team: Team; parentOptions: { id: string; name: string }[] }) {
+const TeamRow = React.memo(({ team, parentOptions }: { team: Team; parentOptions: { id: string; name: string }[] }) => {
   const [isPending, startTransition] = useTransition();
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(team.name);
   const [editParentId, setEditParentId] = useState(team.parentTeamId || "");
+
+  // Memoize filtered options to avoid constant array creation during render
+  const filteredParentOptions = useMemo(() => 
+    parentOptions.filter(opt => opt.id !== team.id),
+    [parentOptions, team.id]
+  );
 
   const handleUpdate = () => {
     startTransition(async () => {
@@ -70,7 +76,7 @@ export default function TeamRow({ team, parentOptions }: { team: Team; parentOpt
             style={{ width: '100%', background: 'rgba(255,255,255,0.05)' }}
           >
             <option value="">No Parent (Root)</option>
-            {parentOptions.filter(opt => opt.id !== team.id).map(opt => (
+            {filteredParentOptions.map(opt => (
               <option key={opt.id} value={opt.id}>{opt.name}</option>
             ))}
           </select>
@@ -117,4 +123,8 @@ export default function TeamRow({ team, parentOptions }: { team: Team; parentOpt
       </td>
     </tr>
   );
-}
+});
+
+TeamRow.displayName = "TeamRow";
+
+export default TeamRow;
