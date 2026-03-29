@@ -104,19 +104,19 @@ export default async function DashboardPage() {
             <h3 style={{ fontWeight: 700 }}>Quick Navigation</h3>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-            <Link href="/teams" className="card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', textDecoration: 'none', background: 'rgba(255,255,255,0.03)' }}>
+            <Link href="/teams" className="card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', textDecoration: 'none', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <Users size={20} className="text-indigo-400" />
-                <span style={{ fontWeight: 600 }}>Manage Teams</span>
+                <Users size={20} style={{ color: '#cbd5e1' }} />
+                <span style={{ fontWeight: 600, color: '#e2e8f0', fontFamily: "'Outfit', sans-serif" }}>Manage Teams</span>
               </div>
-              <ExternalLink size={16} />
+              <ExternalLink size={16} style={{ color: '#94a3b8' }} />
             </Link>
-            <Link href="/projects" className="card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', textDecoration: 'none', background: 'rgba(255,255,255,0.03)' }}>
+            <Link href="/projects" className="card" style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', textDecoration: 'none', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <Briefcase size={20} className="text-indigo-400" />
-                <span style={{ fontWeight: 600 }}>Project Inventory</span>
+                <Briefcase size={20} style={{ color: '#cbd5e1' }} />
+                <span style={{ fontWeight: 600, color: '#e2e8f0', fontFamily: "'Outfit', sans-serif" }}>Project Inventory</span>
               </div>
-              <ExternalLink size={16} />
+              <ExternalLink size={16} style={{ color: '#94a3b8' }} />
             </Link>
           </div>
         </div>
