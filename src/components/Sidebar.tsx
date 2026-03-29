@@ -31,6 +31,7 @@ export default function Sidebar({ user }: SidebarProps) {
   const navItems = [
     { label: "Dashboard", href: "/", icon: LayoutDashboard },
     { label: "Teams", href: "/teams", icon: Users },
+    { label: "Users", href: "/users", icon: Zap }, // Using Zap for now as a prominent admin feature
     { label: "Projects", href: "/projects", icon: Briefcase },
     { label: "Bulk Planning", href: "/planning/bulk", icon: Zap },
     { label: "Import", href: "/import", icon: Upload },

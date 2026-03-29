@@ -5,6 +5,7 @@ import Credentials from "next-auth/providers/credentials";
 export const authConfig = {
   secret: process.env.AUTH_SECRET,
   trustHost: true,
+  useSecureCookies: false, // Prevent NextAuth from prefixing cookies with '__Secure-'
   cookies: {
     sessionToken: {
       name: `__session`,
@@ -15,6 +16,10 @@ export const authConfig = {
         secure: true,
       },
     },
+    // We remove explicit naming for callbackUrl, csrfToken, state, etc.
+    // Firebase Hosting strips ALL cookies except '__session'.
+    // By using 'checks: ["none"]' in the Google provider (auth.ts),
+    // we bypass the need for these temporary handshaking cookies.
   },
   providers: [
     Google({
@@ -35,12 +40,12 @@ export const authConfig = {
       const isOnLoginPage = nextUrl.pathname.startsWith("/login");
 
       if (isOnLoginPage) {
-        if (isLoggedIn) return Response.redirect(new URL("/", nextUrl));
+        if (isLoggedIn) return true; // Let the login page handle the redirect to home or vice-versa
         return true; // Allow access to login if NOT logged in
       }
 
-      // If not logged in and not on login page, middleware redirects naturally
-      // If logged in, we must explicitly allow access to prevent loops on root/matcher paths.
+      // If not logged in, returning false will trigger NextAuth's default redirect to signIn page.
+      // If logged in, return true to grant access.
       return isLoggedIn;
     },
   },

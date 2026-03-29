@@ -5,7 +5,6 @@ import {
   History, 
   User, 
   Calendar, 
-  ArrowRight,
   X
 } from "lucide-react";
 

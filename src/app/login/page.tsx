@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -12,6 +12,27 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Definitive fix for Firebase Hosting redirect loops:
+    // Clear legacy cookies that were renamed to __session.*
+    const cookiesToClear = [
+      "authjs.session-token",
+      "authjs.callback-url",
+      "authjs.csrf-token",
+      "authjs.state",
+      "authjs.pkce.code_verifier",
+      "authjs.nonce"
+    ];
+
+    cookiesToClear.forEach(name => {
+      // Clear both normal and __Secure- prefixed variants
+      document.cookie = `${name}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
+      document.cookie = `__Secure-${name}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;`;
+    });
+
+    console.log("Cleanup: Purged legacy Auth.js cookies to prevent redirect loops.");
+  }, []);
 
   async function handleEmailSignIn(e: React.FormEvent) {
     e.preventDefault();

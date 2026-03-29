@@ -279,3 +279,17 @@ export async function importActuals(rows: { projectCode: string; periodId: strin
   revalidatePath("/reports");
   return null;
 }
+
+// ─── User Actions ────────────────────────────────────────────────────────────
+
+export async function getUsers() {
+  const session = await auth();
+  if (!session?.user?.organizationId) throw new Error("Unauthorized");
+
+  const users = await prisma.user.findMany({
+    where: { organizationId: session.user.organizationId },
+    orderBy: { name: 'asc' },
+  });
+
+  return sanitize(users);
+}
