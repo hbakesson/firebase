@@ -8,7 +8,7 @@ import {
   Plus, 
   ChevronRight
 } from "lucide-react";
-import { formatDate } from "@/lib/utils";
+import { formatDate, sanitize } from "@/lib/utils";
 
 export default async function TeamsPage() {
   const session = await auth();
@@ -17,13 +17,16 @@ export default async function TeamsPage() {
   const orgId = session.user.organizationId;
 
   // 1. Fetch main teams list with parent inclusion (for the table)
-  const teams = await prisma.team.findMany({
+  const rawTeams = await prisma.team.findMany({
     where: { organizationId: orgId },
     include: { parentTeam: true },
     orderBy: { name: 'asc' }
   });
 
-  // 2. Fetch simple list for parent selection (no includes to reduce serialization depth)
+  // 2. Sanitize the data tree to ensure no Date objects survive! (Next.js 15 revalidation fix)
+  const teams = sanitize(rawTeams);
+
+  // 3. Fetch simple list for parent selection (no includes to reduce serialization depth)
   const parentOptions = await prisma.team.findMany({
     where: { organizationId: orgId, isActive: true },
     select: { id: true, name: true },

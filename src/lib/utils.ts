@@ -21,3 +21,13 @@ export function formatDate(date: Date | string | number | null | undefined): str
 
   return `${month}/${day}/${year}`;
 }
+
+/**
+ * Recursively removes non-serializable data (like Dates) from an object
+ * by converting it to a plain JSON structure. This is critical for 
+ * Next.js 15 Server Action revalidation cycles.
+ */
+export function sanitize<T>(obj: T): T {
+  if (!obj) return obj;
+  return JSON.parse(JSON.stringify(obj));
+}

@@ -3,9 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
-
-// Helper to sanitize returns
-const sanitize = <T>(obj: T): T => JSON.parse(JSON.stringify(obj));
+import { sanitize } from "@/lib/utils";
 
 // ─── Team Actions ───────────────────────────────────────────────────────────
 
