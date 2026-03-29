@@ -4,6 +4,50 @@ A high-performance, multi-tenant **Team Budgeting & Capacity Planning** platform
 
 ![Architecture](architecture.svg)
 
+## 🧩 Logical Architecture
+
+```mermaid
+graph TD
+    subgraph "Client Layer (Next.js 15.5 App Router)"
+        UI["Administrative UI / Planning Grid"]
+        UI_State["Optimistic UI & Client State"]
+        ImportCLI["Bulk Import (PapaParse)"]
+    end
+
+    subgraph "Authentication & Security (Auth.js v5)"
+        Middleware["Edge Middleware (Session Verification)"]
+        GoogleAuth["Google OAuth 2.0 Provider"]
+        CredentialAuth["Credential / Guest Auth"]
+    end
+
+    subgraph "Server Layer (Next.js Server Actions)"
+        AuthAction["auth() / Session Validation"]
+        ProjectCRUD["Project CRUD Actions"]
+        TeamCRUD["Team CRUD Actions (Hierarchical)"]
+        AuditLogAction["AuditLogging (createAuditLog)"]
+        FiscalAction["Fiscal Governance (Period Locking)"]
+    end
+
+    subgraph "Data & Persistence Layer (Prisma 7.6 / PostgreSQL)"
+        PrismaClient["Prisma Client with Driver Adapters"]
+        CloudSQL["Google Cloud SQL (PostgreSQL)"]
+        Schema["Schema: Org | Project | Team | Allocation | User"]
+    end
+
+    %% Logical Flow
+    UI -- "Invoke Action" --> AuthAction
+    AuthAction -- "Valid Session" --> ProjectCRUD
+    AuthAction -- "Valid Session" --> TeamCRUD
+    ProjectCRUD -- "Audit & Persist" --> AuditLogAction
+    TeamCRUD -- "Audit & Persist" --> AuditLogAction
+    AuditLogAction -- "Mutation" --> PrismaClient
+    PrismaClient -- "Query/Execute" --> CloudSQL
+    Middleware -- "Intercept" --> UI
+    GoogleAuth -- "JWT/Session" --> Middleware
+    UI_State -- "Optimistic Update" --> UI
+    ImportCLI -- "Map & Ingest" --> ProjectCRUD
+```
+
 ## ✨ Core Features
 
 ### 🛡️ Administrative Command Center
