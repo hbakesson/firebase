@@ -27,11 +27,12 @@ export default async function TeamsPage() {
   const teams = sanitize(rawTeams);
 
   // 3. Fetch simple list for parent selection (no includes to reduce serialization depth)
-  const parentOptions = await prisma.team.findMany({
+  const rawParentOptions = await prisma.team.findMany({
     where: { organizationId: orgId, isActive: true },
     select: { id: true, name: true },
     orderBy: { name: 'asc' }
   });
+  const parentOptions = sanitize(rawParentOptions);
 
   return (
     <div className="space-y-8">
@@ -92,9 +93,10 @@ export default async function TeamsPage() {
                   </td>
                   <td><code className="sku">{team.code}</code></td>
                   <td>
-                    {team.parentTeam ? (
+                    {team.parentTeam && (team.parentTeam as { name: string }).name ? (
                       <span className="user-badge" style={{ fontSize: '0.8rem' }}>
-                        {team.parentTeam.name} <ChevronRight size={12} /> {team.name}
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                        {(team.parentTeam as any).name} <ChevronRight size={12} /> {team.name}
                       </span>
                     ) : (
                       <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Root Level</span>

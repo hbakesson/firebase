@@ -23,11 +23,10 @@ export async function createTeam(data: { name: string; code: string; parentTeamI
       organizationId: session.user.organizationId,
       action: "CREATE",
       entityType: "Team",
-      entityId: team.id,
-      projectName: team.name,
+      projectName: team.name, // Using projectName field for Team name as per schema
       userId: session.user.id!,
       userEmail: session.user.email!,
-      newValue: JSON.stringify(team),
+      newValue: JSON.stringify(sanitize(team)),
     },
   });
 
@@ -50,12 +49,11 @@ export async function updateTeam(id: string, data: Partial<{ name: string; code:
       organizationId: session.user.organizationId,
       action: "UPDATE",
       entityType: "Team",
-      entityId: team.id,
       projectName: team.name,
       userId: session.user.id!,
       userEmail: session.user.email!,
-      previousValue: JSON.stringify(previous),
-      newValue: JSON.stringify(team),
+      previousValue: JSON.stringify(sanitize(previous)),
+      newValue: JSON.stringify(sanitize(team)),
     },
   });
 
