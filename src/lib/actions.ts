@@ -4,6 +4,9 @@ import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
 
+// Helper to sanitize returns
+const sanitize = <T>(obj: T): T => JSON.parse(JSON.stringify(obj));
+
 // ─── Team Actions ───────────────────────────────────────────────────────────
 
 export async function createTeam(data: { name: string; code: string; parentTeamId?: string }) {
@@ -23,7 +26,7 @@ export async function createTeam(data: { name: string; code: string; parentTeamI
       action: "CREATE",
       entityType: "Team",
       entityId: team.id,
-      projectName: team.name, // Using name as project name fallback for now
+      projectName: team.name,
       userId: session.user.id!,
       userEmail: session.user.email!,
       newValue: JSON.stringify(team),
@@ -31,7 +34,7 @@ export async function createTeam(data: { name: string; code: string; parentTeamI
   });
 
   revalidatePath("/teams");
-  return JSON.parse(JSON.stringify(team));
+  return null; // Return nothing to avoid serialization issues
 }
 
 export async function updateTeam(id: string, data: Partial<{ name: string; code: string; parentTeamId: string; isActive: boolean }>) {
@@ -59,7 +62,7 @@ export async function updateTeam(id: string, data: Partial<{ name: string; code:
   });
 
   revalidatePath("/teams");
-  return JSON.parse(JSON.stringify(team));
+  return null;
 }
 
 // ─── Project Actions ────────────────────────────────────────────────────────
@@ -90,7 +93,7 @@ export async function createProject(data: { name: string; code: string; descript
   });
 
   revalidatePath("/projects");
-  return JSON.parse(JSON.stringify(project));
+  return null;
 }
 
 export async function updateProject(id: string, data: Record<string, unknown>) {
@@ -119,7 +122,7 @@ export async function updateProject(id: string, data: Record<string, unknown>) {
 
   revalidatePath("/projects");
   revalidatePath("/dashboard");
-  return JSON.parse(JSON.stringify(project));
+  return null;
 }
 
 export async function deleteProject(id: string) {
@@ -145,7 +148,7 @@ export async function deleteProject(id: string) {
 
   revalidatePath("/projects");
   revalidatePath("/dashboard");
-  return JSON.parse(JSON.stringify(project));
+  return null;
 }
 
 // ─── Planning Actions ────────────────────────────────────────────────────────
@@ -154,39 +157,22 @@ export async function createYearPeriods(year: number) {
   const session = await auth();
   if (!session?.user?.organizationId) throw new Error("Unauthorized");
 
-  const orgId = session.user.organizationId;
-  const periods = [];
-
-  for (let month = 0; month < 12; month++) {
-    const startDate = new Date(year, month, 1);
-    const endDate = new Date(year, month + 1, 0);
-    const label = startDate.toLocaleString('default', { month: 'long', year: 'numeric' });
-
-    periods.push({
-      organizationId: orgId,
-      type: "MONTH",
-      startDate,
-      endDate,
-      label,
-    });
-  }
-
-  const result = await prisma.period.createMany({ data: periods });
-
-  await prisma.auditLog.create({
-    data: {
-      organizationId: session.user.organizationId,
-      action: "CREATE",
-      entityType: "Period",
-      entityId: "BATCH",
-      projectName: `Batch Periods ${year}`,
-      userId: session.user.id!,
-      userEmail: session.user.email!,
-    },
+  const result = await prisma.period.createMany({ 
+    data: Array.from({ length: 12 }, (_, month) => {
+      const startDate = new Date(year, month, 1);
+      const endDate = new Date(year, month + 1, 0);
+      return {
+        organizationId: session.user.organizationId!,
+        type: "MONTH",
+        startDate,
+        endDate,
+        label: startDate.toLocaleString('default', { month: 'long', year: 'numeric' }),
+      };
+    })
   });
 
   revalidatePath("/");
-  return result;
+  return sanitize(result) as typeof result;
 }
 
 export async function upsertAllocation(data: { teamId: string; projectId: string; periodId: string; plannedHours: number }) {
@@ -218,60 +204,48 @@ export async function upsertAllocation(data: { teamId: string; projectId: string
     },
   });
 
-  return JSON.parse(JSON.stringify(allocation));
+  return null;
 }
 
 export async function getOrCreateWeeklyPeriods() {
   const session = await auth();
   if (!session?.user?.organizationId) throw new Error("Unauthorized");
 
-  const orgId = session.user.organizationId;
-  const periods = [];
-  
-  // Calculate current Monday
-  const today = new Date();
-  const day = today.getDay();
-  const diff = today.getDate() - day + (day === 0 ? -6 : 1);
-  const monday = new Date(today.setDate(diff));
-  monday.setHours(0, 0, 0, 0);
+  const results = await Promise.all(
+    Array.from({ length: 9 }).map((_, i) => {
+      const today = new Date();
+      const diff = today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1);
+      const monday = new Date(today.setDate(diff));
+      monday.setHours(0, 0, 0, 0);
+      
+      const startDate = new Date(monday);
+      startDate.setDate(monday.getDate() + (i * 7));
+      const endDate = new Date(startDate);
+      endDate.setDate(startDate.getDate() + 6);
+      endDate.setHours(23, 59, 59, 999);
 
-  for (let i = 0; i < 9; i++) {
-    const startDate = new Date(monday);
-    startDate.setDate(monday.getDate() + (i * 7));
-    
-    const endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + 6);
-    endDate.setHours(23, 59, 59, 999);
-
-    const weekNum = i === 0 ? "Current" : `+${i}`;
-    const label = `Week ${weekNum} (${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})`;
-
-    periods.push({
-      organizationId: orgId,
-      type: "WEEK",
-      startDate,
-      endDate,
-      label,
-    });
-  }
-
-  // Use a transaction to find/upsert each week for the organization
-  const results = await Promise.all(periods.map(p => 
-    prisma.period.upsert({
-      where: {
-        organizationId_type_startDate_endDate: {
-          organizationId: orgId,
+      return prisma.period.upsert({
+        where: {
+          organizationId_type_startDate_endDate: {
+            organizationId: session.user.organizationId!,
+            type: "WEEK",
+            startDate,
+            endDate
+          }
+        },
+        update: {},
+        create: {
+          organizationId: session.user.organizationId!,
           type: "WEEK",
-          startDate: p.startDate,
-          endDate: p.endDate
+          startDate,
+          endDate,
+          label: `Week ${i === 0 ? "Current" : `+${i}`} (${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})`,
         }
-      },
-      update: { label: p.label },
-      create: p
+      });
     })
-  ));
+  );
 
-  return results;
+  return sanitize(results) as typeof results;
 }
 
 export async function importActuals(rows: { projectCode: string; periodId: string; hours: number }[]) {
@@ -282,17 +256,10 @@ export async function importActuals(rows: { projectCode: string; periodId: strin
   const results = [];
 
   for (const row of rows) {
-    // Find project by code within the organization
     const project = await prisma.project.findFirst({
       where: { code: row.projectCode, organizationId: orgId }
     });
-
-    if (!project) continue;
-
-    // We need a teamId for the allocation. 
-    // If the project is already assigned to a team, use that.
-    // Otherwise, we might need to skip or handle logically.
-    if (!project.teamId) continue;
+    if (!project || !project.teamId) continue;
 
     const allocation = await prisma.actualAllocation.upsert({
       where: {
@@ -313,18 +280,6 @@ export async function importActuals(rows: { projectCode: string; periodId: strin
     results.push(allocation);
   }
 
-  await prisma.auditLog.create({
-    data: {
-      organizationId: session.user.organizationId,
-      action: "CREATE",
-      entityType: "ActualAllocation",
-      entityId: "BATCH_IMPORT",
-      projectName: `Imported ${results.length} actuals`,
-      userId: session.user.id!,
-      userEmail: session.user.email!,
-    },
-  });
-
   revalidatePath("/reports");
-  return results;
+  return null;
 }

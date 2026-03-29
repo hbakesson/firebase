@@ -14,9 +14,10 @@ export function formatDate(date: Date | string | number | null | undefined): str
     return "N/A";
   }
 
-  return d.toLocaleDateString('en-US', {
-    month: 'numeric',
-    day: 'numeric',
-    year: 'numeric'
-  });
+  // Stable, non-locale dependent format to prevent hydration errors: MM/DD/YYYY
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  const year = d.getFullYear();
+
+  return `${month}/${day}/${year}`;
 }

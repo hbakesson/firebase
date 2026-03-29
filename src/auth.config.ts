@@ -15,24 +15,6 @@ export const authConfig = {
         secure: true,
       },
     },
-    callbackUrl: {
-      name: `__session.callback-url`,
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: true,
-      },
-    },
-    csrfToken: {
-      name: `__session.csrf-token`,
-      options: {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        secure: true,
-      },
-    },
   },
   providers: [
     Google({
