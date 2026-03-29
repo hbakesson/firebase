@@ -1155,3 +1155,243 @@
  ✓ Compiled in 348ms (883 modules)
  ✓ Compiled in 6.6s (1646 modules)
  ✓ Compiled in 3.1s (1669 modules)
+ ✓ Compiled in 1954ms (896 modules)
+ ✓ Compiled in 3s (896 modules)
+ ✓ Compiled in 2.5s (1669 modules)
+ ✓ Compiled in 232ms (896 modules)
+ ✓ Compiled in 344ms (896 modules)
+ ✓ Compiled in 242ms (896 modules)
+ ✓ Compiled in 531ms (896 modules)
+ ✓ Compiled in 1122ms (1669 modules)
+ ✓ Compiled in 212ms (896 modules)
+ ✓ Compiled in 318ms (896 modules)
+ ✓ Compiled in 238ms (896 modules)
+ ✓ Compiled in 273ms (896 modules)
+ ✓ Compiled in 243ms (896 modules)
+ ✓ Compiled in 306ms (896 modules)
+ ⨯ ./src/lib/actions.ts
+Module parse failed: Identifier 'updateTeam' has already been declared (369:22)
+|     return null;
+| }
+> export async function updateTeam(teamId, data) {
+|     const session = await auth();
+|     if (session?.user?.role !== "admin") throw new Error("Unauthorized");
+
+Import trace for requested module:
+./src/lib/actions.ts
+./src/app/planning/bulk/page.tsx
+ ⨯ ./src/lib/actions.ts
+Module parse failed: Identifier 'updateTeam' has already been declared (369:22)
+|     return null;
+| }
+> export async function updateTeam(teamId, data) {
+|     const session = await auth();
+|     if (session?.user?.role !== "admin") throw new Error("Unauthorized");
+
+Import trace for requested module:
+./src/lib/actions.ts
+./src/app/planning/bulk/page.tsx
+ ⨯ ./src/lib/actions.ts
+Module parse failed: Identifier 'updateTeam' has already been declared (369:22)
+|     return null;
+| }
+> export async function updateTeam(teamId, data) {
+|     const session = await auth();
+|     if (session?.user?.role !== "admin") throw new Error("Unauthorized");
+
+Import trace for requested module:
+./src/lib/actions.ts
+./src/app/planning/bulk/page.tsx
+ ○ Compiling /_not-found ...
+ ⨯ ./src/lib/actions.ts
+Module parse failed: Identifier 'updateTeam' has already been declared (369:22)
+|     return null;
+| }
+> export async function updateTeam(teamId, data) {
+|     const session = await auth();
+|     if (session?.user?.role !== "admin") throw new Error("Unauthorized");
+
+Import trace for requested module:
+./src/lib/actions.ts
+./src/app/planning/bulk/page.tsx
+ ⨯ ./src/lib/actions.ts
+Module parse failed: Identifier 'updateTeam' has already been declared (369:22)
+|     return null;
+| }
+> export async function updateTeam(teamId, data) {
+|     const session = await auth();
+|     if (session?.user?.role !== "admin") throw new Error("Unauthorized");
+
+Import trace for requested module:
+./src/lib/actions.ts
+./src/app/teams/page.tsx
+ GET /login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2Fteams 500 in 4991ms
+ GET /login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2F 500 in 40ms
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled /_error in 12.4s (2023 modules)
+ GET /login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2F 200 in 498ms
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/hbakesson/Coding/Firebase/.next/server/vendor-chunks/google-auth-library.js'
+    at <unknown> (.next/server/app/login/page.js:839:47)
+    at Object.<anonymous> (.next/server/app/login/page.js:842:3) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/hbakesson/Coding/Firebase/.next/server/vendor-chunks/google-auth-library.js',
+  page: '/login'
+}
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/hbakesson/Coding/Firebase/.next/server/vendor-chunks/google-auth-library.js'
+    at <unknown> (.next/server/app/login/page.js:839:47)
+    at Object.<anonymous> (.next/server/app/login/page.js:842:3) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/hbakesson/Coding/Firebase/.next/server/vendor-chunks/google-auth-library.js',
+  page: '/login'
+}
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/hbakesson/Coding/Firebase/.next/server/vendor-chunks/google-auth-library.js'
+    at <unknown> (.next/server/app/login/page.js:839:47)
+    at Object.<anonymous> (.next/server/app/login/page.js:842:3) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/hbakesson/Coding/Firebase/.next/server/vendor-chunks/google-auth-library.js',
+  page: '/login'
+}
+ GET /login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2F 500 in 290ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 3.1s (1100 modules)
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/hbakesson/Coding/Firebase/.next/server/vendor-chunks/@opentelemetry.js'
+    at <unknown> (.next/server/app/favicon.ico/route.js:123:47)
+    at Object.<anonymous> (.next/server/app/favicon.ico/route.js:126:3) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/hbakesson/Coding/Firebase/.next/server/vendor-chunks/@opentelemetry.js',
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 5258ms
+ ✓ Compiled in 8.1s (2028 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/hbakesson/Coding/Firebase/.next/server/vendor-chunks/@opentelemetry.js'
+    at <unknown> (.next/server/app/login/page.js:839:47)
+    at Object.<anonymous> (.next/server/app/login/page.js:842:3) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/hbakesson/Coding/Firebase/.next/server/vendor-chunks/@opentelemetry.js',
+  page: '/login'
+}
+ GET /login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2F 500 in 1008ms
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/hbakesson/Coding/Firebase/.next/server/vendor-chunks/@opentelemetry.js'
+    at <unknown> (.next/server/app/favicon.ico/route.js:123:47)
+    at Object.<anonymous> (.next/server/app/favicon.ico/route.js:126:3) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/hbakesson/Coding/Firebase/.next/server/vendor-chunks/@opentelemetry.js',
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 39ms
+ ✓ Compiled in 6.6s (1100 modules)
+ ✓ Compiled in 6s (1100 modules)
+ ✓ Compiled in 7.3s (1095 modules)
+ ✓ Compiled in 6.7s (2023 modules)
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ⨯ Error: ENOENT: no such file or directory, open '/Users/hbakesson/Coding/Firebase/.next/server/vendor-chunks/google-auth-library.js'
+    at <unknown> (.next/server/app/login/page.js:839:47)
+    at Object.<anonymous> (.next/server/app/login/page.js:842:3) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/hbakesson/Coding/Firebase/.next/server/vendor-chunks/google-auth-library.js',
+  page: '/login'
+}
+ ⨯ Error: Cannot find module './611.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/login/page.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/options.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/index.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-server.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/start-server.js
+    at <unknown> (.next/server/pages/_document.js:1:376)
+    at Object.<anonymous> (.next/server/pages/_document.js:1:422) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+Error: ENOENT: no such file or directory, open '/Users/hbakesson/Coding/Firebase/.next/server/vendor-chunks/google-auth-library.js'
+    at <unknown> (.next/server/app/login/page.js:839:47)
+    at Object.<anonymous> (.next/server/app/login/page.js:842:3) {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/hbakesson/Coding/Firebase/.next/server/vendor-chunks/google-auth-library.js',
+  page: '/login'
+}
+ ⨯ Error: Cannot find module './611.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/login/page.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/options.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/index.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-server.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/start-server.js
+    at <unknown> (.next/server/pages/_document.js:1:376)
+    at Object.<anonymous> (.next/server/pages/_document.js:1:422) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array]
+}
+[Error: ENOENT: no such file or directory, open '/Users/hbakesson/Coding/Firebase/.next/routes-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/hbakesson/Coding/Firebase/.next/routes-manifest.json'
+}
+ GET /login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2F 500 in 1799ms
+ GET /login?callbackUrl=http%3A%2F%2Flocalhost%3A3000%2F 500 in 128ms
+ ○ Compiling /favicon.ico ...
+ ✓ Compiled /favicon.ico in 2.7s (1100 modules)
+ ⨯ Error: Cannot find module './745.js'
+Require stack:
+- /Users/hbakesson/Coding/Firebase/.next/server/webpack-runtime.js
+- /Users/hbakesson/Coding/Firebase/.next/server/app/favicon.ico/route.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/require.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/load-components.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/utils.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/options.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/swc/index.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/parse-module.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/build/analysis/get-page-static-info.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-utils/setup-dev-bundler.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/router-server.js
+- /Users/hbakesson/Coding/Firebase/node_modules/next/dist/server/lib/start-server.js
+    at <unknown> (.next/server/app/favicon.ico/route.js:1:41970)
+    at Object.<anonymous> (.next/server/app/favicon.ico/route.js:1:42016) {
+  code: 'MODULE_NOT_FOUND',
+  requireStack: [Array],
+  page: '/favicon.ico'
+}
+ GET /favicon.ico 500 in 3128ms
+ ✓ Compiled in 530ms (1100 modules)
+ ✓ Compiled in 21.9s (1100 modules)
+ ✓ Compiled in 15.2s (1100 modules)
+ ✓ Compiled in 28.4s (2023 modules)
+ ✓ Compiled in 12.9s (1095 modules)
+ ✓ Compiled in 2.2s (1095 modules)
+ ✓ Compiled in 1415ms (1095 modules)
+ ✓ Compiled in 3.5s (1095 modules)
+ ✓ Compiled in 11.8s (1095 modules)
+ ✓ Compiled in 20.1s (1095 modules)

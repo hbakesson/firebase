@@ -137,6 +137,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
     }
   ], [allocations, initialPeriods]);
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: filteredData,
     columns,

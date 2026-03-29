@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Users, MoreVertical, Edit2, CheckCircle2, PlayCircle } from "lucide-react";
+import { Users, Edit2, CheckCircle2, PlayCircle } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { updateProject } from "@/lib/actions";
 import EditProjectModal from "./EditProjectModal";
@@ -25,7 +25,6 @@ interface Team {
 
 export default function ProjectList({ initialProjects, teams }: { initialProjects: Project[]; teams: Team[] }) {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [dropdownId, setDropdownId] = useState<string | null>(null);
 
   const toggleStatus = async (project: Project) => {
     const nextStatus = project.status === "ACTIVE" ? "COMPLETED" : "ACTIVE";

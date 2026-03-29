@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useTransition } from "react";
-import { Lock, Unlock, ShieldCheck } from "lucide-react";
+import { useTransition } from "react";
+import { Lock, Unlock } from "lucide-react";
 import { togglePeriodLock } from "@/lib/actions";
 
 interface Period {

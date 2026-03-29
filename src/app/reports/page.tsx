@@ -18,7 +18,6 @@ export default async function ReportsPage() {
   if (!session?.user?.organizationId) redirect("/login");
 
   const orgId = session.user.organizationId;
-  const isAdmin = session.user.role === "admin";
 
   // Fetch Comparison Data, Teams, etc... (keep existing logic)
   const projects = await prisma.project.findMany({
@@ -26,24 +25,26 @@ export default async function ReportsPage() {
     include: { allocations: true, actualAllocations: true, team: true }
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const comparisonData = projects.map((p: any) => {
-    const planned = p.allocations.reduce((acc: number, curr: any) => acc + (curr.plannedHours || 0), 0);
-    const actual = p.actualAllocations.reduce((acc: number, curr: any) => acc + (curr.actualHours || 0), 0);
+    const planned = p.allocations.reduce((acc: number, curr: { plannedHours: number | null }) => acc + (curr.plannedHours || 0), 0);
+    const actual = p.actualAllocations.reduce((acc: number, curr: { actualHours: number | null }) => acc + (curr.actualHours || 0), 0);
     return { name: p.name, planned, actual };
-  }).filter((d: any) => d.planned > 0 || d.actual > 0);
+  }).filter((d: { planned: number; actual: number }) => d.planned > 0 || d.actual > 0);
 
   const teams = await prisma.team.findMany({
     where: { organizationId: orgId },
     include: { allocations: true }
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const teamBreakdown = teams.map((t: any) => ({
     name: t.name,
-    value: t.allocations.reduce((acc: number, curr: any) => acc + (curr.plannedHours || 0), 0)
-  })).filter((t: any) => t.value > 0);
+    value: t.allocations.reduce((acc: number, curr: { plannedHours: number | null }) => acc + (curr.plannedHours || 0), 0)
+  })).filter((t: { value: number }) => t.value > 0);
 
-  const totalPlanned = comparisonData.reduce((acc: number, curr: any) => acc + curr.planned, 0);
-  const totalActual = comparisonData.reduce((acc: number, curr: any) => acc + curr.actual, 0);
+  const totalPlanned = comparisonData.reduce((acc: number, curr: { planned: number }) => acc + curr.planned, 0);
+  const totalActual = comparisonData.reduce((acc: number, curr: { actual: number }) => acc + curr.actual, 0);
   const variance = totalActual - totalPlanned;
 
   // New: Fetch recent periods for Governance
@@ -114,6 +115,7 @@ export default async function ReportsPage() {
           </p>
           
           <div className="space-y-2">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {recentPeriods.map((p: any) => (
               <PeriodLockToggle key={p.id} period={p} />
             ))}

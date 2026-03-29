@@ -1,12 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { UserPlus, X, Mail, Shield } from "lucide-react";
+import { inviteUser } from "@/lib/actions";
 
 export default function InviteUserModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("user");
+  const [isPending, startTransition] = useTransition();
+
+  const handleInvite = (e: React.FormEvent) => {
+    e.preventDefault();
+    startTransition(async () => {
+      try {
+        await inviteUser({ email, role });
+        setIsOpen(false);
+        setEmail("");
+        alert(`Invitation sent to ${email}`);
+      } catch {
+        alert("Failed to send invitation. Please try again.");
+      }
+    });
+  };
 
   if (!isOpen) {
     return (
@@ -37,8 +53,9 @@ export default function InviteUserModal() {
       }}>
         <div className="card" style={{ maxWidth: '450px', width: '100%', position: 'relative' }}>
           <button 
+            disabled={isPending}
             onClick={() => setIsOpen(false)}
-            style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'transparent', border: 'none', color: 'var(--text-muted)' }}
+            style={{ position: 'absolute', top: '1rem', right: '1rem', background: 'transparent', border: 'none', color: 'var(--text-muted)', cursor: 'pointer' }}
           >
             <X size={20} />
           </button>
@@ -51,13 +68,14 @@ export default function InviteUserModal() {
             Send an invitation email to join your organization.
           </p>
 
-          <form className="login-form" onSubmit={(e) => { e.preventDefault(); alert('Invitation sent (Mock)'); setIsOpen(false); }}>
+          <form className="login-form" onSubmit={handleInvite}>
             <div className="form-group">
               <label>Email Address</label>
               <div style={{ position: 'relative' }}>
                 <input 
                   type="email" 
                   value={email}
+                  disabled={isPending}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@company.com" 
                   required 
@@ -72,6 +90,7 @@ export default function InviteUserModal() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                 <button 
                   type="button"
+                  disabled={isPending}
                   className={role === 'user' ? 'primary btn-sm' : 'secondary btn-sm'}
                   onClick={() => setRole('user')}
                   style={{ justifyContent: 'center' }}
@@ -80,6 +99,7 @@ export default function InviteUserModal() {
                 </button>
                 <button 
                   type="button"
+                  disabled={isPending}
                   className={role === 'admin' ? 'primary btn-sm' : 'secondary btn-sm'}
                   onClick={() => setRole('admin')}
                   style={{ justifyContent: 'center' }}
@@ -110,11 +130,11 @@ export default function InviteUserModal() {
             </div>
 
             <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
-              <button type="button" className="secondary" style={{ flex: 1 }} onClick={() => setIsOpen(false)}>
+              <button type="button" disabled={isPending} className="secondary" style={{ flex: 1 }} onClick={() => setIsOpen(false)}>
                 Cancel
               </button>
-              <button type="submit" className="primary" style={{ flex: 2 }}>
-                Send Invitation
+              <button type="submit" disabled={isPending} className="primary" style={{ flex: 2 }}>
+                {isPending ? "Sending..." : "Send Invitation"}
               </button>
             </div>
           </form>

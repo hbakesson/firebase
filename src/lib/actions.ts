@@ -46,7 +46,7 @@ export async function updateTeam(id: string, data: Partial<{ name: string; code:
 
   await prisma.auditLog.create({
     data: {
-      organizationId: session.user.organizationId,
+      organizationId: session.user.organizationId!,
       action: "UPDATE",
       entityType: "Team",
       projectName: team.name,
@@ -373,4 +373,59 @@ export async function togglePeriodLock(id: string, isLocked: boolean) {
   revalidatePath("/reports");
   revalidatePath("/planning/bulk");
   return null;
+}
+
+export async function deleteTeam(teamId: string) {
+  const session = await auth();
+  if (session?.user?.role !== "admin") throw new Error("Unauthorized");
+
+  const team = await prisma.team.findUnique({ where: { id: teamId } });
+  
+  await prisma.team.delete({
+    where: { id: teamId },
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      organizationId: session.user.organizationId!,
+      action: "DELETE",
+      entityType: "Team",
+      projectName: team?.name || "Deleted Team",
+      userId: session.user.id!,
+      userEmail: session.user.email!,
+    },
+  });
+
+  revalidatePath("/teams");
+  return { success: true };
+}
+
+export async function inviteUser(data: { email: string; role: string }) {
+  const session = await auth();
+  if (session?.user?.role !== "admin") throw new Error("Unauthorized");
+
+  const user = await prisma.user.upsert({
+    where: { email: data.email },
+    update: { role: data.role },
+    create: {
+      email: data.email,
+      role: data.role,
+      organizationId: session.user.organizationId!,
+    },
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      organizationId: session.user.organizationId!,
+      action: "INVITE",
+      entityType: "User",
+      projectName: data.email,
+      userId: session.user.id!,
+      userEmail: session.user.email!,
+      newValue: JSON.stringify(user),
+    },
+  });
+
+  revalidatePath("/users");
+  return { success: true };
 }

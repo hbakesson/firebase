@@ -1,14 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { createTeam, updateTeam } from "@/lib/actions";
-import Link from "next/link";
+import { createTeam } from "@/lib/actions";
 import { 
   Users, 
-  Plus, 
-  ChevronRight
+  Plus
 } from "lucide-react";
-import { formatDate, sanitize } from "@/lib/utils";
+import { sanitize } from "@/lib/utils";
+import TeamRow from "@/components/TeamRow";
 
 export default async function TeamsPage() {
   const session = await auth();
@@ -23,16 +22,9 @@ export default async function TeamsPage() {
     orderBy: { name: 'asc' }
   });
 
-  // 2. Sanitize the data tree to ensure no Date objects survive! (Next.js 15 revalidation fix)
+  // 2. Sanitize and prepare options
   const teams = sanitize(rawTeams);
-
-  // 3. Fetch simple list for parent selection (no includes to reduce serialization depth)
-  const rawParentOptions = await prisma.team.findMany({
-    where: { organizationId: orgId, isActive: true },
-    select: { id: true, name: true },
-    orderBy: { name: 'asc' }
-  });
-  const parentOptions = sanitize(rawParentOptions);
+  const parentOptions = teams.map((t: { id: string; name: string }) => ({ id: t.id, name: t.name }));
 
   return (
     <div className="space-y-8">
@@ -49,7 +41,7 @@ export default async function TeamsPage() {
           "use server";
           const name = formData.get("name") as string;
           const code = formData.get("code") as string;
-          const parentTeamId = formData.get("parentTeamId") as string || undefined;
+          const parentTeamId = (formData.get("parentTeamId") as string) || undefined;
           await createTeam({ name, code, parentTeamId });
         }}>
           <div className="card" style={{ padding: '1rem', marginTop: '1rem', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -73,59 +65,19 @@ export default async function TeamsPage() {
               <th>Code</th>
               <th>Hierarchy</th>
               <th>Status</th>
-              <th>Created</th>
               <th style={{ textAlign: 'right', paddingRight: '1.25rem' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {teams.length === 0 ? (
               <tr>
-                <td colSpan={6} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+                <td colSpan={5} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
                   No teams found. Create your first team above.
                 </td>
               </tr>
             ) : (
-              teams.map((team: (typeof teams)[0]) => (
-                <tr key={team.id} style={{ borderBottom: '1px solid var(--card-border)', transition: 'background 0.2s' }}>
-                  <td style={{ padding: '1.25rem', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: team.isActive ? '#4ade80' : '#94a3b8' }} />
-                    <span style={{ fontWeight: 600 }}>{team.name}</span>
-                  </td>
-                  <td><code className="sku">{team.code}</code></td>
-                  <td>
-                    {team.parentTeam && (team.parentTeam as { name: string }).name ? (
-                      <span className="user-badge" style={{ fontSize: '0.8rem' }}>
-                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                        {(team.parentTeam as any).name} <ChevronRight size={12} /> {team.name}
-                      </span>
-                    ) : (
-                      <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Root Level</span>
-                    )}
-                  </td>
-                  <td>
-                    <span className={`role-tag ${team.isActive ? 'role-admin' : 'role-staff'}`}>
-                      {team.isActive ? "Active" : "Inactive"}
-                    </span>
-                  </td>
-                  <td style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-                    {formatDate(team.createdAt)}
-                  </td>
-                  <td style={{ textAlign: 'right', paddingRight: '1.25rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
-                      <Link href={`/planning/${team.id}`} className="btn-sm" style={{ textDecoration: 'none', background: 'var(--primary)', color: 'white' }}>
-                        Plan Capacity
-                      </Link>
-                      <form action={async () => {
-                        "use server";
-                        await updateTeam(team.id, { isActive: !team.isActive });
-                      }}>
-                        <button type="submit" className="secondary btn-sm">
-                          {team.isActive ? "Deactivate" : "Activate"}
-                        </button>
-                      </form>
-                    </div>
-                  </td>
-                </tr>
+              teams.map((team: { id: string; name: string; code: string; isActive: boolean; parentTeam: { id: string; name: string } | null }) => (
+                <TeamRow key={team.id} team={team} parentOptions={parentOptions} />
               ))
             )}
           </tbody>

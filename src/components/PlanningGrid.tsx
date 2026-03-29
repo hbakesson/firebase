@@ -114,6 +114,7 @@ export function PlanningGrid({ teamId, initialProjects, initialAllocations, init
     }
   ], [allocations, initialPeriods]);
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: initialProjects,
     columns,
