@@ -1395,3 +1395,30 @@ Require stack:
  ✓ Compiled in 3.5s (1095 modules)
  ✓ Compiled in 11.8s (1095 modules)
  ✓ Compiled in 20.1s (1095 modules)
+ ✓ Compiled in 21.8s (1095 modules)
+ ✓ Compiled in 32s (1095 modules)
+[Error: ENOENT: no such file or directory, stat '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/server-development/5.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/server-development/5.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/server-development/5.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/server-development/5.pack.gz'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, stat '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/server-development/5.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/server-development/5.pack.gz'
+}
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, stat '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/server-development/5.pack.gz'
+ ✓ Compiled in 27s (2280 modules)
+ ✓ Compiled in 2.8s (1074 modules)
+ ✓ Compiled in 5.8s (1074 modules)
+ ✓ Compiled in 5.4s (1074 modules)
+ ✓ Compiled in 2.2s (1074 modules)
+ ✓ Compiled in 1018ms (1074 modules)
