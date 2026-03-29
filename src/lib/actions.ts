@@ -1,5 +1,7 @@
 "use server";
 
+
+
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { revalidatePath } from "next/cache";
@@ -153,7 +155,7 @@ export async function createYearPeriods(year: number) {
   const session = await auth();
   if (!session?.user?.organizationId) throw new Error("Unauthorized");
 
-  const result = await prisma.period.createMany({ 
+  const result = await prisma.period.createMany({
     data: Array.from({ length: 12 }, (_, month) => {
       const startDate = new Date(year, month, 1);
       const endDate = new Date(year, month + 1, 0);
@@ -213,7 +215,7 @@ export async function getOrCreateWeeklyPeriods() {
       const diff = today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1);
       const monday = new Date(today.setDate(diff));
       monday.setHours(0, 0, 0, 0);
-      
+
       const startDate = new Date(monday);
       startDate.setDate(monday.getDate() + (i * 7));
       const endDate = new Date(startDate);
@@ -380,7 +382,7 @@ export async function deleteTeam(teamId: string) {
   if (session?.user?.role !== "admin") throw new Error("Unauthorized");
 
   const team = await prisma.team.findUnique({ where: { id: teamId } });
-  
+
   await prisma.team.delete({
     where: { id: teamId },
   });
