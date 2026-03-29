@@ -12,6 +12,7 @@ const adapter = process.env.MOCK_DATABASE === 'true' ? undefined : PrismaAdapter
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
   adapter,
+  debug: true,
   providers: [
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,

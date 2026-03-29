@@ -59,7 +59,10 @@ function createLazyPool(): pg.Pool {
   
   if (!config) {
     console.log('[PRISMA] Standard TCP mode detected.');
-    return new pg.Pool({ connectionString: DATABASE_URL });
+    return new pg.Pool({ 
+      connectionString: DATABASE_URL,
+      connectionTimeoutMillis: 5000,
+    });
   }
 
   let realPool: pg.Pool | null = null;

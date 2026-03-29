@@ -990,3 +990,26 @@
 [PRISMA] Parsed Config -> User: "postgres", DB: "project-tracker", Instance: "testapp-4f81d:europe-north1:project-tracker"
 [PRISMA] Credential Check -> Password Length: 15
 [PRISMA] Client initialized.
+ ✓ Compiled in 13.6s (1161 modules)
+ ✓ Compiled in 18.5s (883 modules)
+[Error: ENOENT: no such file or directory, stat '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/edge-server-development/0.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/edge-server-development/0.pack.gz'
+}
+ ⨯ unhandledRejection: [Error: ENOENT: no such file or directory, stat '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/edge-server-development/0.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/edge-server-development/0.pack.gz'
+}
+ ⨯ unhandledRejection:  [Error: ENOENT: no such file or directory, stat '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/edge-server-development/0.pack.gz'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'stat',
+  path: '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/edge-server-development/0.pack.gz'
+}
+<w> [webpack.cache.PackFileCacheStrategy] Caching failed for pack: Error: ENOENT: no such file or directory, stat '/Users/hbakesson/Coding/Firebase/.next/cache/webpack/edge-server-development/0.pack.gz'
+ ✓ Compiled in 9.7s (883 modules)
+ ✓ Compiled in 2.1s (883 modules)
