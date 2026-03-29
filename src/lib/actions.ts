@@ -293,3 +293,84 @@ export async function getUsers() {
 
   return sanitize(users);
 }
+
+export async function updateUserRole(userId: string, role: string) {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== "admin") throw new Error("Unauthorized");
+
+  const previous = await prisma.user.findUnique({ where: { id: userId } });
+  const user = await prisma.user.update({
+    where: { id: userId },
+    data: { role },
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      organizationId: session.user.organizationId,
+      action: "ROLE_CHANGE",
+      entityType: "User",
+      projectName: user.email || user.name || "Unknown User",
+      userId: session.user.id!,
+      userEmail: session.user.email!,
+      previousValue: previous?.role,
+      newValue: role,
+    },
+  });
+
+  revalidatePath("/users");
+  return null;
+}
+
+export async function removeUser(userId: string) {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== "admin") throw new Error("Unauthorized");
+
+  const user = await prisma.user.update({
+    where: { id: userId },
+    data: { organizationId: null },
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      organizationId: session.user.organizationId,
+      action: "REMOVE",
+      entityType: "User",
+      projectName: user.email || user.name || "Removed User",
+      userId: session.user.id!,
+      userEmail: session.user.email!,
+      previousValue: "Associated",
+      newValue: "Disconnected",
+    },
+  });
+
+  revalidatePath("/users");
+  return null;
+}
+
+// ─── Governance Actions ──────────────────────────────────────────────────────
+
+export async function togglePeriodLock(id: string, isLocked: boolean) {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== "admin") throw new Error("Unauthorized");
+
+  const period = await prisma.period.update({
+    where: { id },
+    data: { isLocked },
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      organizationId: session.user.organizationId,
+      action: "LOCK_CHANGE",
+      entityType: "Period",
+      projectName: period.label,
+      userId: session.user.id!,
+      userEmail: session.user.email!,
+      newValue: isLocked ? "LOCKED" : "UNLOCKED",
+    },
+  });
+
+  revalidatePath("/reports");
+  revalidatePath("/planning/bulk");
+  return null;
+}

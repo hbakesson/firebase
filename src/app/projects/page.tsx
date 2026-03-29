@@ -1,13 +1,12 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { createProject, updateProject } from "@/lib/actions";
+import { createProject } from "@/lib/actions";
 import { 
   Briefcase, 
-  Plus, 
-  Users
+  Plus
 } from "lucide-react";
-import { formatDate } from "@/lib/utils";
+import ProjectList from "@/components/ProjectList";
 
 export default async function ProjectsPage({
   searchParams,
@@ -69,74 +68,7 @@ export default async function ProjectsPage({
         </form>
       </div>
 
-      <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-          <thead>
-            <tr style={{ textAlign: 'left', borderBottom: '1px solid var(--card-border)' }}>
-              <th style={{ padding: '1.25rem' }}>Project Details</th>
-              <th>Status</th>
-              <th>Assigned Team</th>
-              <th>Progress</th>
-              <th style={{ textAlign: 'right', paddingRight: '1.25rem' }}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {projects.length === 0 ? (
-              <tr>
-                <td colSpan={5} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
-                  No projects found. Use the form above to add an initiative.
-                </td>
-              </tr>
-            ) : (
-              projects.map((project: (typeof projects)[0]) => (
-                <tr key={project.id} style={{ borderBottom: '1px solid var(--card-border)' }}>
-                  <td style={{ padding: '1.25rem' }}>
-                    <div style={{ fontWeight: 600 }}>{project.name}</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                      Code: <code className="sku">{project.code}</code> • Last updated {formatDate(project.updatedAt)}
-                    </div>
-                  </td>
-                  <td>
-                    <span className={`role-tag role-${project.status.toLowerCase()}`}>
-                      {project.status}
-                    </span>
-                  </td>
-                  <td>
-                    {project.team ? (
-                      <div className="user-badge" style={{ gap: '0.5rem' }}>
-                        <Users size={14} /> {project.team.name}
-                      </div>
-                    ) : (
-                      <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Unassigned</span>
-                    )}
-                  </td>
-                  <td style={{ width: '150px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <div style={{ flex: 1, height: '6px', background: 'rgba(255,255,255,0.05)', borderRadius: '3px', overflow: 'hidden' }}>
-                        <div style={{ width: `${project.progress}%`, height: '100%', background: 'var(--primary)' }} />
-                      </div>
-                      <span style={{ fontSize: '0.75rem' }}>{project.progress}%</span>
-                    </div>
-                  </td>
-                  <td style={{ textAlign: 'right', paddingRight: '1.25rem' }}>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
-                      <form action={async () => {
-                        "use server";
-                        const nextStatus = project.status === "ACTIVE" ? "COMPLETED" : "ACTIVE";
-                        await updateProject(project.id, { status: nextStatus });
-                      }}>
-                        <button type="submit" className="secondary btn-sm">
-                          Toggle Status
-                        </button>
-                      </form>
-                    </div>
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+      <ProjectList initialProjects={projects} teams={teams} />
     </div>
   );
 }

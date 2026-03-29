@@ -1,13 +1,19 @@
 import { getUsers } from "@/lib/actions";
-import { Users, Shield, MoreHorizontal, Mail, CheckCircle2, Clock } from "lucide-react";
+import { Users, Shield, Mail, CheckCircle2, Clock } from "lucide-react";
 import { Metadata } from "next";
 import InviteUserModal from "@/components/InviteUserModal";
+import UserRow from "@/components/UserRow";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "User Management | Project Tracker",
 };
 
 export default async function UsersPage() {
+  const session = await auth();
+  if (!session?.user?.organizationId) redirect("/login");
+  
   const users = await getUsers();
 
   return (
@@ -38,50 +44,8 @@ export default async function UsersPage() {
               </tr>
             </thead>
             <tbody>
-              {users.map((user: { id: string; name?: string | null; email?: string | null; role: string }) => (
-                <tr key={user.id}>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                      <div style={{ 
-                        width: '32px', 
-                        height: '32px', 
-                        borderRadius: '50%', 
-                        background: 'linear-gradient(45deg, #6366f1, #c084fc)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '0.8rem',
-                        fontWeight: 700,
-                        color: 'white'
-                      }}>
-                        {user.name?.[0] || user.email?.[0].toUpperCase()}
-                      </div>
-                      <span style={{ fontWeight: 600 }}>{user.name || "Unnamed User"}</span>
-                    </div>
-                  </td>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)' }}>
-                      <Mail size={14} />
-                      {user.email}
-                    </div>
-                  </td>
-                  <td>
-                    <span className={`role-tag role-${user.role === 'admin' ? 'admin' : 'staff'}`}>
-                      {user.role}
-                    </span>
-                  </td>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--success)', fontSize: '0.875rem' }}>
-                      <CheckCircle2 size={14} />
-                      Active
-                    </div>
-                  </td>
-                  <td style={{ textAlign: 'right' }}>
-                    <button className="secondary btn-sm" style={{ display: 'inline-flex' }}>
-                      <MoreHorizontal size={16} />
-                    </button>
-                  </td>
-                </tr>
+              {users.map((user: any) => (
+                <UserRow key={user.id} user={user} currentUserId={session.user.id!} />
               ))}
             </tbody>
           </table>
