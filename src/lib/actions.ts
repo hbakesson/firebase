@@ -104,6 +104,7 @@ export async function updateProject(id: string, data: Record<string, unknown>) {
   if (!session?.user?.id) throw new Error("Unauthorized");
 
   const { teamIds, ...restData } = data;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const updateData: any = { ...restData };
   
   if (teamIds && Array.isArray(teamIds)) {

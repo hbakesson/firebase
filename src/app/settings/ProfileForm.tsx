@@ -19,7 +19,7 @@ export default function ProfileForm({ initialName, email }: { initialName: strin
           setStatus({ type: "success", message: "Profile updated successfully" });
           setTimeout(() => setStatus({ type: null }), 3000);
         }
-      } catch (err) {
+      } catch {
         setStatus({ type: "error", message: "Failed to update profile" });
       }
     });
