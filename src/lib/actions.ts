@@ -36,14 +36,24 @@ export async function createTeam(data: { name: string; code: string; parentTeamI
   return null; // Return nothing to avoid serialization issues
 }
 
-export async function updateTeam(id: string, data: Partial<{ name: string; code: string; parentTeamId: string; isActive: boolean }>) {
+export async function updateTeam(id: string, data: Partial<{ name: string; code: string; parentTeamId: string; isActive: boolean; projectIds: string[] }>) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
+
+  const { projectIds, ...restData } = data;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const updateData: any = { ...restData };
+
+  if (projectIds && Array.isArray(projectIds)) {
+    updateData.projects = {
+      set: projectIds.map((pid: string) => ({ id: pid }))
+    };
+  }
 
   const previous = await prisma.team.findUnique({ where: { id } });
   const team = await prisma.team.update({
     where: { id },
-    data,
+    data: updateData,
   });
 
   await prisma.auditLog.create({
@@ -60,6 +70,8 @@ export async function updateTeam(id: string, data: Partial<{ name: string; code:
   });
 
   revalidatePath("/teams");
+  revalidatePath("/projects");
+  revalidatePath("/dashboard");
   return null;
 }
 

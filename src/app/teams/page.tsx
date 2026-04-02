@@ -15,15 +15,22 @@ export default async function TeamsPage() {
 
   const orgId = session.user.organizationId;
 
-  // 1. Fetch main teams list with parent inclusion (for the table)
+  // 1. Fetch main teams list with parent and projects inclusion
   const rawTeams = await prisma.team.findMany({
     where: { organizationId: orgId },
-    include: { parentTeam: true },
+    include: { parentTeam: true, projects: true },
+    orderBy: { name: 'asc' }
+  });
+
+  // 2. Fetch all projects for selection in the management modal
+  const rawAllProjects = await prisma.project.findMany({
+    where: { organizationId: orgId },
     orderBy: { name: 'asc' }
   });
 
   // 2. Sanitize and prepare options
   const teams = sanitize(rawTeams);
+  const allProjects = sanitize(rawAllProjects);
   const parentOptions = teams.map((t: { id: string; name: string }) => ({ id: t.id, name: t.name }));
 
   return (
@@ -65,19 +72,20 @@ export default async function TeamsPage() {
               <th>Code</th>
               <th>Hierarchy</th>
               <th>Status</th>
+              <th>Assigned Projects</th>
               <th style={{ textAlign: 'right', paddingRight: '1.25rem' }}>Actions</th>
             </tr>
           </thead>
           <tbody>
             {teams.length === 0 ? (
               <tr>
-                <td colSpan={5} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+                <td colSpan={6} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
                   No teams found. Create your first team above.
                 </td>
               </tr>
             ) : (
-              teams.map((team: { id: string; name: string; code: string; isActive: boolean; parentTeam: { id: string; name: string } | null }) => (
-                <TeamRow key={team.id} team={team} parentOptions={parentOptions} />
+              teams.map((team: any) => (
+                <TeamRow key={team.id} team={team} parentOptions={parentOptions} allProjects={allProjects} />
               ))
             )}
           </tbody>

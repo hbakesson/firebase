@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useTransition, useMemo } from "react";
-import { ChevronRight, Edit2, CheckCircle2, X } from "lucide-react";
+import { ChevronRight, Edit2, CheckCircle2, X, Briefcase } from "lucide-react";
 import { updateTeam, deleteTeam } from "@/lib/actions";
+import ManageTeamProjectsModal from "./ManageTeamProjectsModal";
 
 interface Team {
   id: string;
@@ -11,11 +12,13 @@ interface Team {
   isActive: boolean;
   parentTeamId?: string | null;
   parentTeam?: { id: string; name: string } | null;
+  projects?: { id: string; name: string; code: string }[];
 }
 
-const TeamRow = React.memo(({ team, parentOptions }: { team: Team; parentOptions: { id: string; name: string }[] }) => {
+const TeamRow = React.memo(({ team, parentOptions, allProjects }: { team: Team; parentOptions: { id: string; name: string }[]; allProjects: any[] }) => {
   const [isPending, startTransition] = useTransition();
   const [isEditing, setIsEditing] = useState(false);
+  const [isManagingProjects, setIsManagingProjects] = useState(false);
   const [editName, setEditName] = useState(team.name);
   const [editParentId, setEditParentId] = useState(team.parentTeamId || "");
 
@@ -95,6 +98,14 @@ const TeamRow = React.memo(({ team, parentOptions }: { team: Team; parentOptions
           {team.isActive ? "Active" : "Inactive"}
         </span>
       </td>
+      <td>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+          <div className="icon-box" style={{ background: 'rgba(255,255,255,0.05)', padding: '0.2rem', borderRadius: '4px' }}>
+            <Briefcase size={14} className="text-muted" />
+          </div>
+          <span style={{ fontSize: '0.85rem' }}>{team.projects?.length || 0} Projects</span>
+        </div>
+      </td>
       <td style={{ textAlign: 'right', paddingRight: '1.25rem' }}>
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
           {isEditing ? (
@@ -111,6 +122,14 @@ const TeamRow = React.memo(({ team, parentOptions }: { team: Team; parentOptions
               <button onClick={() => setIsEditing(true)} className="secondary btn-sm" title="Edit Structure">
                 <Edit2 size={16} />
               </button>
+              <button 
+                onClick={() => setIsManagingProjects(true)} 
+                className="secondary btn-sm"
+                style={{ color: 'var(--primary-light)' }}
+                title="Manage Projects"
+              >
+                <Briefcase size={16} />
+              </button>
               <button onClick={handleToggleStatus} disabled={isPending} className="secondary btn-sm">
                 {team.isActive ? "Deactivate" : "Activate"}
               </button>
@@ -120,6 +139,14 @@ const TeamRow = React.memo(({ team, parentOptions }: { team: Team; parentOptions
             </>
           )}
         </div>
+
+        {isManagingProjects && (
+          <ManageTeamProjectsModal 
+             team={team} 
+             allProjects={allProjects} 
+             onClose={() => setIsManagingProjects(false)} 
+          />
+        )}
       </td>
     </tr>
   );

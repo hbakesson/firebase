@@ -46,12 +46,12 @@ const mockTeams = [
   { id: "t2", name: "Design Beta", organizationId: "mock-org", createdAt: "2026-03-27T11:00:00.000Z", isActive: true },
 ];
 
-const mockProjects = [
-  { id: "p1", name: "Nebula Infrastructure", code: "NEB-01", status: "ACTIVE", organizationId: "mock-org", teamId: "t1", allocations: [], actualAllocations: [], createdAt: "2026-03-27T12:00:00.000Z", updatedAt: "2026-03-28T09:00:00.000Z", progress: 45 },
-  { id: "p2", name: "Solaris Portal v2", code: "SOL-02", status: "ACTIVE", organizationId: "mock-org", teamId: "t1", allocations: [], actualAllocations: [], createdAt: "2026-03-27T13:00:00.000Z", updatedAt: "2026-03-28T10:30:00.000Z", progress: 78 },
-  { id: "p3", name: "Quantum Analytics", code: "QUA-03", status: "ACTIVE", organizationId: "mock-org", teamId: "t2", allocations: [], actualAllocations: [], createdAt: "2026-03-27T14:00:00.000Z", updatedAt: "2026-03-28T11:15:00.000Z", progress: 12 },
-  { id: "p4", name: "Titan Core", code: "TIT-04", status: "ACTIVE", organizationId: "mock-org", teamId: "t2", allocations: [], actualAllocations: [], createdAt: "2026-03-27T15:00:00.000Z", updatedAt: "2026-03-28T12:45:00.000Z", progress: 92 },
-  { id: "p5", name: "Legacy Cleanup", code: "LEG-99", status: "COMPLETED", organizationId: "mock-org", teamId: "t1", allocations: [], actualAllocations: [], createdAt: "2025-12-01T08:00:00.000Z", updatedAt: "2026-01-15T16:00:00.000Z", progress: 100 },
+const mockProjects: any[] = [
+  { id: "p1", name: "Nebula Infrastructure", code: "NEB-01", status: "ACTIVE", organizationId: "mock-org", teamIds: ["t1"], allocations: [], actualAllocations: [], createdAt: "2026-03-27T10:00:00.000Z", updatedAt: "2026-03-27T10:00:00.000Z", progress: 45 },
+  { id: "p2", name: "Solaris Portal v2", code: "SOL-02", status: "ACTIVE", organizationId: "mock-org", teamIds: ["t1"], allocations: [], actualAllocations: [], createdAt: "2026-03-27T11:00:00.000Z", updatedAt: "2026-03-27T11:00:00.000Z", progress: 78 },
+  { id: "p3", name: "Quantum Analytics", code: "QUA-03", status: "ACTIVE", organizationId: "mock-org", teamIds: ["t2"], allocations: [], actualAllocations: [], createdAt: "2026-03-27T12:00:00.000Z", updatedAt: "2026-03-27T12:00:00.000Z", progress: 12 },
+  { id: "p4", name: "Titan Core", code: "TIT-04", status: "ACTIVE", organizationId: "mock-org", teamIds: ["t2"], allocations: [], actualAllocations: [], createdAt: "2026-03-27T13:00:00.000Z", updatedAt: "2026-03-27T13:00:00.000Z", progress: 92 },
+  { id: "p5", name: "Legacy Cleanup", code: "LEG-99", status: "COMPLETED", organizationId: "mock-org", teamIds: ["t1"], allocations: [], actualAllocations: [], createdAt: "2025-12-01T08:00:00.000Z", updatedAt: "2026-01-15T16:00:00.000Z", progress: 100 },
 ];
 
 const mockAllocations: Allocation[] = [];
@@ -63,6 +63,7 @@ export const createMockPrisma = () => {
     user: {
       findFirst: async () => mockUser,
       findUnique: async () => mockUser,
+      findMany: async () => [mockUser],
       create: async ({ data }: any) => ({ ...mockUser, ...data }),
     },
     team: {
@@ -72,7 +73,11 @@ export const createMockPrisma = () => {
           if (include?.parentTeam && (t as any).parentTeamId) {
             parentTeam = mockTeams.find(p => p.id === (t as any).parentTeamId) || null;
           }
-          return { ...t, isActive: true, parentTeam };
+          const team = { ...t, isActive: true, parentTeam };
+          if (include?.projects) {
+            (team as any).projects = mockProjects.filter(p => p.teamIds?.includes(t.id));
+          }
+          return team;
         });
       },
       count: async () => mockTeams.length,
@@ -84,7 +89,21 @@ export const createMockPrisma = () => {
       update: async ({ where, data }: any) => {
         const idx = mockTeams.findIndex(t => t.id === where.id);
         if (idx >= 0) {
-          mockTeams[idx] = { ...mockTeams[idx], ...data };
+          const { projects, ...rest } = data;
+          if (projects?.set) {
+            const projectIds = projects.set.map((p: any) => p.id);
+            // Updating a team's projects means updating the teamIds inside mockProjects
+            mockProjects.forEach(p => {
+              const hasTeam = p.teamIds?.includes(where.id);
+              const shouldHaveTeam = projectIds.includes(p.id);
+              if (shouldHaveTeam && !hasTeam) {
+                p.teamIds = [...(p.teamIds || []), where.id];
+              } else if (!shouldHaveTeam && hasTeam) {
+                p.teamIds = p.teamIds.filter((id: string) => id !== where.id);
+              }
+            });
+          }
+          mockTeams[idx] = { ...mockTeams[idx], ...rest };
           return mockTeams[idx];
         }
         return null;
@@ -93,35 +112,86 @@ export const createMockPrisma = () => {
         const idx = mockTeams.findIndex(t => t.id === where.id);
         if (idx >= 0) {
           const removed = mockTeams.splice(idx, 1)[0];
+          // Remove this team from any projects
+          mockProjects.forEach(p => {
+            if (p.teamIds?.includes(where.id)) {
+              p.teamIds = p.teamIds.filter((id: string) => id !== where.id);
+            }
+          });
           return removed;
         }
         return null;
       },
-      findUnique: async ({ where }: any) => mockTeams.find(t => t.id === where.id) || null,
+      findUnique: async ({ where, include }: any) => {
+        const t = mockTeams.find(team => team.id === where.id);
+        if (t) {
+          const team = { ...t };
+          if (include?.projects) {
+            (team as any).projects = mockProjects.filter(p => p.teamIds?.includes(t.id));
+          }
+          return team;
+        }
+        return null;
+      },
     },
     project: {
-      findMany: async ({ where, include }: any) => {
-        console.log("🛠️ [MOCK] project.findMany", where);
+      findMany: async ({ where, include }: any = {}) => {
         let results = mockProjects.filter(p => !where?.status || p.status === where.status);
         
-        if (include?.team) {
+        if (include?.teams) {
           results = results.map(p => ({
             ...p,
-            team: mockTeams.find(t => t.id === p.teamId)
+            teams: (p.teamIds || []).map((id: string) => mockTeams.find(t => t.id === id)).filter(Boolean)
           }));
         }
         return results;
       },
-      findUnique: async ({ where }: any) => {
+      findUnique: async ({ where, include }: any) => {
         const p = mockProjects.find(project => project.id === where.id);
         if (p) {
-          return { ...p, team: mockTeams.find(t => t.id === p.teamId) };
+          const project = { ...p };
+          if (include?.teams) {
+            (project as any).teams = (p.teamIds || []).map((id: string) => mockTeams.find(t => t.id === id)).filter(Boolean);
+          }
+          return project;
         }
         return null;
       },
       count: async ({ where }: any) => {
         return mockProjects.filter(p => !where?.status || p.status === where.status).length;
       },
+      create: async ({ data }: any) => {
+        const { teams, ...rest } = data;
+        const teamIds = teams?.connect ? teams.connect.map((c: any) => c.id) : [];
+        const newProject = { 
+          id: `p-${Date.now()}`, 
+          ...rest, 
+          teamIds, 
+          status: "ACTIVE", 
+          progress: 0, 
+          createdAt: new Date().toISOString(), 
+          updatedAt: new Date().toISOString() 
+        };
+        mockProjects.push(newProject);
+        return newProject;
+      },
+      update: async ({ where, data }: any) => {
+        const idx = mockProjects.findIndex(p => p.id === where.id);
+        if (idx >= 0) {
+          const { teams, ...rest } = data;
+          if (teams?.set) {
+            mockProjects[idx].teamIds = teams.set.map((s: any) => s.id);
+          }
+          mockProjects[idx] = { ...mockProjects[idx], ...rest, updatedAt: new Date().toISOString() };
+          return mockProjects[idx];
+        }
+        return null;
+      },
+      delete: async ({ where }: any) => {
+        const idx = mockProjects.findIndex(p => p.id === where.id);
+        if (idx >= 0) return mockProjects.splice(idx, 1)[0];
+        return null;
+      }
     },
     period: {
       findMany: async () => [],
