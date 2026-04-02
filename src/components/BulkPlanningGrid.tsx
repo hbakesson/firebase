@@ -74,10 +74,12 @@ interface BulkPlanningGridProps {
   initialProjects: Project[];
   initialAllocations: Allocation[];
   initialPeriods: Period[];
+  initialTeams: { id: string; name: string }[];
 }
 
-export function BulkPlanningGrid({ initialProjects, initialAllocations, initialPeriods }: BulkPlanningGridProps) {
+export function BulkPlanningGrid({ initialProjects, initialAllocations, initialPeriods, initialTeams }: BulkPlanningGridProps) {
   const [search, setSearch] = useState('');
+  const [selectedTeamId, setSelectedTeamId] = useState<string>('all');
   const [, startTransition] = useTransition();
   const [allocations, setAllocations] = useState<Record<string, number>>(() => 
     initialAllocations.reduce((acc, curr) => ({
@@ -90,12 +92,21 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
 
   // --- Filtered Data ---
   const filteredData = useMemo(() => {
-    if (!search) return initialProjects;
-    return initialProjects.filter(p => 
-      p.name.toLowerCase().includes(search.toLowerCase()) || 
-      p.code.toLowerCase().includes(search.toLowerCase())
-    );
-  }, [initialProjects, search]);
+    let result = initialProjects;
+    
+    if (selectedTeamId !== 'all') {
+      result = result.filter(p => p.teamId === selectedTeamId);
+    }
+    
+    if (search) {
+      result = result.filter(p => 
+        p.name.toLowerCase().includes(search.toLowerCase()) || 
+        p.code.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+    
+    return result;
+  }, [initialProjects, search, selectedTeamId]);
 
   // --- Column Definitions ---
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -183,14 +194,26 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
   return (
     <div className="bg-[#14141e] border border-white/5 rounded-xl overflow-hidden shadow-2xl">
       <div className="p-3 border-b border-white/5 flex items-center justify-between gap-4">
-        <div className="relative flex-1 max-w-md">
+        <div className="relative flex-1 max-w-md flex items-center gap-3">
           <input
             type="text"
             placeholder="Search projects..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs focus:ring-1 focus:ring-primary outline-none transition-all"
+            className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs focus:ring-1 focus:ring-primary outline-none transition-all"
+            style={{ width: '100%' }}
           />
+          <select
+            value={selectedTeamId}
+            onChange={e => setSelectedTeamId(e.target.value)}
+            className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs focus:ring-1 focus:ring-primary outline-none transition-all"
+            style={{ color: 'var(--text-main)', minWidth: '150px' }}
+          >
+            <option value="all">All Teams</option>
+            {initialTeams?.map(t => (
+              <option key={t.id} value={t.id} style={{ color: 'black' }}>{t.name}</option>
+            ))}
+          </select>
         </div>
         
         <div style={{ 

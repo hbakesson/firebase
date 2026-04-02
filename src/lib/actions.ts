@@ -431,3 +431,37 @@ export async function inviteUser(data: { email: string; role: string }) {
   revalidatePath("/users");
   return { success: true };
 }
+
+export async function updateMyProfile(formData: FormData) {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Unauthorized");
+
+  const name = formData.get("name") as string;
+  if (!name || name.trim() === "") return { error: "Name is required" };
+
+  const previous = await prisma.user.findUnique({ where: { id: session.user.id } });
+  
+  const user = await prisma.user.update({
+    where: { id: session.user.id },
+    data: { name: name.trim() },
+  });
+
+  if (session.user.organizationId) {
+    await prisma.auditLog.create({
+      data: {
+        organizationId: session.user.organizationId,
+        action: "UPDATE",
+        entityType: "User",
+        projectName: user.email || user.name || "Self Profile Update",
+        userId: session.user.id,
+        userEmail: session.user.email!,
+        previousValue: previous?.name || "",
+        newValue: user.name || "",
+      },
+    });
+  }
+
+  revalidatePath("/settings");
+  revalidatePath("/");
+  return { success: true };
+}

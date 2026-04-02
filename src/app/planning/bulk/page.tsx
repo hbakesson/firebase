@@ -36,6 +36,14 @@ export default async function BulkPlanningPage() {
     }
   });
 
+  // 4. Fetch Teams to populate the filter dropdown
+  const teams = await prisma.team.findMany({
+    where: {
+      organizationId: orgId
+    },
+    orderBy: { name: 'asc' }
+  });
+
   return (
     <main>
       <header className="page-header" style={{ marginBottom: '1.5rem' }}>
@@ -55,6 +63,7 @@ export default async function BulkPlanningPage() {
           initialProjects={projects}
           initialPeriods={periods}
           initialAllocations={allocations}
+          initialTeams={teams}
         />
       </div>
     </main>
