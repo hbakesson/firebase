@@ -66,8 +66,38 @@ export const createMockPrisma = () => {
       create: async ({ data }: any) => ({ ...mockUser, ...data }),
     },
     team: {
-      findMany: async () => mockTeams.map(t => ({ ...t, isActive: true })),
+      findMany: async ({ include }: any = {}) => {
+        return mockTeams.map(t => {
+          let parentTeam = null;
+          if (include?.parentTeam && (t as any).parentTeamId) {
+            parentTeam = mockTeams.find(p => p.id === (t as any).parentTeamId) || null;
+          }
+          return { ...t, isActive: true, parentTeam };
+        });
+      },
       count: async () => mockTeams.length,
+      create: async ({ data }: any) => {
+        const newTeam = { id: `mock-team-${Date.now()}`, ...data, isActive: true, createdAt: new Date().toISOString() };
+        mockTeams.push(newTeam);
+        return newTeam;
+      },
+      update: async ({ where, data }: any) => {
+        const idx = mockTeams.findIndex(t => t.id === where.id);
+        if (idx >= 0) {
+          mockTeams[idx] = { ...mockTeams[idx], ...data };
+          return mockTeams[idx];
+        }
+        return null;
+      },
+      delete: async ({ where }: any) => {
+        const idx = mockTeams.findIndex(t => t.id === where.id);
+        if (idx >= 0) {
+          const removed = mockTeams.splice(idx, 1)[0];
+          return removed;
+        }
+        return null;
+      },
+      findUnique: async ({ where }: any) => mockTeams.find(t => t.id === where.id) || null,
     },
     project: {
       findMany: async ({ where, include }: any) => {
