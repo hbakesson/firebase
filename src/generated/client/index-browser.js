@@ -141,7 +141,6 @@ exports.Prisma.TeamScalarFieldEnum = {
 exports.Prisma.ProjectScalarFieldEnum = {
   id: 'id',
   organizationId: 'organizationId',
-  teamId: 'teamId',
   name: 'name',
   code: 'code',
   description: 'description',

@@ -4,7 +4,7 @@ export interface Project {
   id: string;
   name: string;
   code: string;
-  teamId?: string;
+  teams?: { id: string; name: string }[];
   organizationId: string;
   status: string;
   progress: number;

@@ -11,7 +11,7 @@ interface Project {
   description: string | null;
   status: string;
   progress: number;
-  teamId: string | null;
+  teams?: { id: string; name: string }[];
 }
 
 interface Team {
@@ -34,7 +34,7 @@ export default function EditProjectModal({
     description: project.description || "",
     status: project.status,
     progress: project.progress,
-    teamId: project.teamId || ""
+    teamIds: project.teams?.map(t => t.id) || []
   });
   const [isPending, startTransition] = useTransition();
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -43,7 +43,7 @@ export default function EditProjectModal({
     startTransition(async () => {
       await updateProject(project.id, {
         ...formData,
-        teamId: formData.teamId || null
+        teamIds: formData.teamIds
       });
       onClose();
     });
@@ -123,16 +123,44 @@ export default function EditProjectModal({
           </div>
 
           <div className="space-y-1">
-            <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)' }}>ASSIGNED TEAM</label>
-            <select 
-              className="btn-sm w-full"
-              value={formData.teamId}
-              onChange={e => setFormData(prev => ({ ...prev, teamId: e.target.value }))}
-              style={{ background: 'rgba(0,0,0,0.2)', color: 'white', borderRadius: '0.5rem', border: '1px solid var(--card-border)' }}
-            >
-              <option value="">Unassigned</option>
-              {teams.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
-            </select>
+            <label style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-muted)' }}>ASSIGNED TEAMS</label>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', padding: '0.75rem', background: 'rgba(0,0,0,0.2)', borderRadius: '0.5rem', border: '1px solid var(--card-border)' }}>
+              {teams.length === 0 ? (
+                <span className="text-xs text-slate-500 italic">No teams available</span>
+              ) : (
+                teams.map(t => {
+                  const isSelected = formData.teamIds.includes(t.id);
+                  return (
+                    <button
+                      key={t.id}
+                      type="button"
+                      onClick={() => {
+                        setFormData(prev => ({
+                          ...prev,
+                          teamIds: isSelected 
+                            ? prev.teamIds.filter(id => id !== t.id)
+                            : [...prev.teamIds, t.id]
+                        }))
+                      }}
+                      style={{
+                        padding: '0.35rem 0.85rem',
+                        borderRadius: '9999px',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        border: `1px solid ${isSelected ? '#818cf8' : 'rgba(255,255,255,0.1)'}`,
+                        background: isSelected ? 'rgba(79, 70, 229, 0.2)' : 'rgba(255,255,255,0.05)',
+                        color: isSelected ? '#818cf8' : 'var(--text-muted)',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease-in-out'
+                      }}
+                      className="hover:scale-105"
+                    >
+                      {t.name}
+                    </button>
+                  );
+                })
+              )}
+            </div>
           </div>
 
           <div className="space-y-1">

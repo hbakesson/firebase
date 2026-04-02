@@ -52,12 +52,14 @@ graph TD
 
 ### 🛡️ Administrative Command Center
 - **Full CRUD Suite**: Integrated management for **Projects**, **Teams**, and **Users** with real-time optimistic UI updates.
+- **Multi-Team Architecture**: Projects support flexible many-to-many relationships, allowing cross-functional initiatives across multiple teams.
 - **Hierarchical Teams**: Visual, editable team structures supporting parentage management and organizational nesting.
 - **Secure Onboarding**: Administrative invitation system with role pre-assignment and organizational isolation.
 
 ### 📅 Strategic Capacity Planning (Bulk Mode)
 - **9-Week Rolling Window**: High-performance planning horizon (Today + 8 Weeks) with **TanStack Table v8**.
 - **Real-Time Totaling**: Instant feedback on team capacity utilization (Σ) and project-level budget allocations.
+- **Cross-Team Allocations**: Track project allocations for specific teams across shared initiatives.
 - **Blur-Sync Persistence**: Durable, throttled server-side persistence for bulk grid updates.
 
 ### 📊 Executive Reporting & Variance
@@ -107,6 +109,7 @@ Create a `.env` file in the root directory:
 ```env
 # Database (Cloud SQL Format)
 DATABASE_URL="postgresql://user:password@/dbname?host=PROJECT:REGION:INSTANCE"
+MOCK_DATABASE="true" # Set to true to bypass Cloud SQL for local UI development
 
 # Authentication
 AUTH_SECRET="..." # Generate with: npx auth secret

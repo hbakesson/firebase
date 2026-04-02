@@ -1901,12 +1901,14 @@ export namespace Prisma {
    */
 
   export type ProjectCountOutputType = {
+    teams: number
     logs: number
     allocations: number
     actualAllocations: number
   }
 
   export type ProjectCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    teams?: boolean | ProjectCountOutputTypeCountTeamsArgs
     logs?: boolean | ProjectCountOutputTypeCountLogsArgs
     allocations?: boolean | ProjectCountOutputTypeCountAllocationsArgs
     actualAllocations?: boolean | ProjectCountOutputTypeCountActualAllocationsArgs
@@ -1921,6 +1923,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the ProjectCountOutputType
      */
     select?: ProjectCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ProjectCountOutputType without action
+   */
+  export type ProjectCountOutputTypeCountTeamsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TeamWhereInput
   }
 
   /**
@@ -4471,7 +4480,6 @@ export namespace Prisma {
   export type ProjectMinAggregateOutputType = {
     id: string | null
     organizationId: string | null
-    teamId: string | null
     name: string | null
     code: string | null
     description: string | null
@@ -4486,7 +4494,6 @@ export namespace Prisma {
   export type ProjectMaxAggregateOutputType = {
     id: string | null
     organizationId: string | null
-    teamId: string | null
     name: string | null
     code: string | null
     description: string | null
@@ -4501,7 +4508,6 @@ export namespace Prisma {
   export type ProjectCountAggregateOutputType = {
     id: number
     organizationId: number
-    teamId: number
     name: number
     code: number
     description: number
@@ -4528,7 +4534,6 @@ export namespace Prisma {
   export type ProjectMinAggregateInputType = {
     id?: true
     organizationId?: true
-    teamId?: true
     name?: true
     code?: true
     description?: true
@@ -4543,7 +4548,6 @@ export namespace Prisma {
   export type ProjectMaxAggregateInputType = {
     id?: true
     organizationId?: true
-    teamId?: true
     name?: true
     code?: true
     description?: true
@@ -4558,7 +4562,6 @@ export namespace Prisma {
   export type ProjectCountAggregateInputType = {
     id?: true
     organizationId?: true
-    teamId?: true
     name?: true
     code?: true
     description?: true
@@ -4660,7 +4663,6 @@ export namespace Prisma {
   export type ProjectGroupByOutputType = {
     id: string
     organizationId: string | null
-    teamId: string | null
     name: string
     code: string
     description: string | null
@@ -4694,7 +4696,6 @@ export namespace Prisma {
   export type ProjectSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     organizationId?: boolean
-    teamId?: boolean
     name?: boolean
     code?: boolean
     description?: boolean
@@ -4704,8 +4705,8 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     createdBy?: boolean
+    teams?: boolean | Project$teamsArgs<ExtArgs>
     organization?: boolean | Project$organizationArgs<ExtArgs>
-    team?: boolean | Project$teamArgs<ExtArgs>
     logs?: boolean | Project$logsArgs<ExtArgs>
     allocations?: boolean | Project$allocationsArgs<ExtArgs>
     actualAllocations?: boolean | Project$actualAllocationsArgs<ExtArgs>
@@ -4715,7 +4716,6 @@ export namespace Prisma {
   export type ProjectSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     organizationId?: boolean
-    teamId?: boolean
     name?: boolean
     code?: boolean
     description?: boolean
@@ -4726,13 +4726,11 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     organization?: boolean | Project$organizationArgs<ExtArgs>
-    team?: boolean | Project$teamArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
   export type ProjectSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     organizationId?: boolean
-    teamId?: boolean
     name?: boolean
     code?: boolean
     description?: boolean
@@ -4743,13 +4741,11 @@ export namespace Prisma {
     updatedAt?: boolean
     createdBy?: boolean
     organization?: boolean | Project$organizationArgs<ExtArgs>
-    team?: boolean | Project$teamArgs<ExtArgs>
   }, ExtArgs["result"]["project"]>
 
   export type ProjectSelectScalar = {
     id?: boolean
     organizationId?: boolean
-    teamId?: boolean
     name?: boolean
     code?: boolean
     description?: boolean
@@ -4761,10 +4757,10 @@ export namespace Prisma {
     createdBy?: boolean
   }
 
-  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "teamId" | "name" | "code" | "description" | "status" | "priority" | "progress" | "createdAt" | "updatedAt" | "createdBy", ExtArgs["result"]["project"]>
+  export type ProjectOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "organizationId" | "name" | "code" | "description" | "status" | "priority" | "progress" | "createdAt" | "updatedAt" | "createdBy", ExtArgs["result"]["project"]>
   export type ProjectInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    teams?: boolean | Project$teamsArgs<ExtArgs>
     organization?: boolean | Project$organizationArgs<ExtArgs>
-    team?: boolean | Project$teamArgs<ExtArgs>
     logs?: boolean | Project$logsArgs<ExtArgs>
     allocations?: boolean | Project$allocationsArgs<ExtArgs>
     actualAllocations?: boolean | Project$actualAllocationsArgs<ExtArgs>
@@ -4772,18 +4768,16 @@ export namespace Prisma {
   }
   export type ProjectIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | Project$organizationArgs<ExtArgs>
-    team?: boolean | Project$teamArgs<ExtArgs>
   }
   export type ProjectIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     organization?: boolean | Project$organizationArgs<ExtArgs>
-    team?: boolean | Project$teamArgs<ExtArgs>
   }
 
   export type $ProjectPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Project"
     objects: {
+      teams: Prisma.$TeamPayload<ExtArgs>[]
       organization: Prisma.$OrganizationPayload<ExtArgs> | null
-      team: Prisma.$TeamPayload<ExtArgs> | null
       logs: Prisma.$AuditLogPayload<ExtArgs>[]
       allocations: Prisma.$BudgetAllocationPayload<ExtArgs>[]
       actualAllocations: Prisma.$ActualAllocationPayload<ExtArgs>[]
@@ -4791,7 +4785,6 @@ export namespace Prisma {
     scalars: $Extensions.GetPayloadResult<{
       id: string
       organizationId: string | null
-      teamId: string | null
       name: string
       code: string
       description: string | null
@@ -5195,8 +5188,8 @@ export namespace Prisma {
    */
   export interface Prisma__ProjectClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    teams<T extends Project$teamsArgs<ExtArgs> = {}>(args?: Subset<T, Project$teamsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     organization<T extends Project$organizationArgs<ExtArgs> = {}>(args?: Subset<T, Project$organizationArgs<ExtArgs>>): Prisma__OrganizationClient<$Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    team<T extends Project$teamArgs<ExtArgs> = {}>(args?: Subset<T, Project$teamArgs<ExtArgs>>): Prisma__TeamClient<$Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     logs<T extends Project$logsArgs<ExtArgs> = {}>(args?: Subset<T, Project$logsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     allocations<T extends Project$allocationsArgs<ExtArgs> = {}>(args?: Subset<T, Project$allocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BudgetAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     actualAllocations<T extends Project$actualAllocationsArgs<ExtArgs> = {}>(args?: Subset<T, Project$actualAllocationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$ActualAllocationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -5231,7 +5224,6 @@ export namespace Prisma {
   interface ProjectFieldRefs {
     readonly id: FieldRef<"Project", 'String'>
     readonly organizationId: FieldRef<"Project", 'String'>
-    readonly teamId: FieldRef<"Project", 'String'>
     readonly name: FieldRef<"Project", 'String'>
     readonly code: FieldRef<"Project", 'String'>
     readonly description: FieldRef<"Project", 'String'>
@@ -5642,6 +5634,30 @@ export namespace Prisma {
   }
 
   /**
+   * Project.teams
+   */
+  export type Project$teamsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Team
+     */
+    select?: TeamSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Team
+     */
+    omit?: TeamOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TeamInclude<ExtArgs> | null
+    where?: TeamWhereInput
+    orderBy?: TeamOrderByWithRelationInput | TeamOrderByWithRelationInput[]
+    cursor?: TeamWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TeamScalarFieldEnum | TeamScalarFieldEnum[]
+  }
+
+  /**
    * Project.organization
    */
   export type Project$organizationArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5658,25 +5674,6 @@ export namespace Prisma {
      */
     include?: OrganizationInclude<ExtArgs> | null
     where?: OrganizationWhereInput
-  }
-
-  /**
-   * Project.team
-   */
-  export type Project$teamArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Team
-     */
-    select?: TeamSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Team
-     */
-    omit?: TeamOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: TeamInclude<ExtArgs> | null
-    where?: TeamWhereInput
   }
 
   /**
@@ -14801,7 +14798,6 @@ export namespace Prisma {
   export const ProjectScalarFieldEnum: {
     id: 'id',
     organizationId: 'organizationId',
-    teamId: 'teamId',
     name: 'name',
     code: 'code',
     description: 'description',
@@ -15170,7 +15166,6 @@ export namespace Prisma {
     NOT?: ProjectWhereInput | ProjectWhereInput[]
     id?: StringFilter<"Project"> | string
     organizationId?: StringNullableFilter<"Project"> | string | null
-    teamId?: StringNullableFilter<"Project"> | string | null
     name?: StringFilter<"Project"> | string
     code?: StringFilter<"Project"> | string
     description?: StringNullableFilter<"Project"> | string | null
@@ -15180,8 +15175,8 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
     createdBy?: StringFilter<"Project"> | string
+    teams?: TeamListRelationFilter
     organization?: XOR<OrganizationNullableScalarRelationFilter, OrganizationWhereInput> | null
-    team?: XOR<TeamNullableScalarRelationFilter, TeamWhereInput> | null
     logs?: AuditLogListRelationFilter
     allocations?: BudgetAllocationListRelationFilter
     actualAllocations?: ActualAllocationListRelationFilter
@@ -15190,7 +15185,6 @@ export namespace Prisma {
   export type ProjectOrderByWithRelationInput = {
     id?: SortOrder
     organizationId?: SortOrderInput | SortOrder
-    teamId?: SortOrderInput | SortOrder
     name?: SortOrder
     code?: SortOrder
     description?: SortOrderInput | SortOrder
@@ -15200,8 +15194,8 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     createdBy?: SortOrder
+    teams?: TeamOrderByRelationAggregateInput
     organization?: OrganizationOrderByWithRelationInput
-    team?: TeamOrderByWithRelationInput
     logs?: AuditLogOrderByRelationAggregateInput
     allocations?: BudgetAllocationOrderByRelationAggregateInput
     actualAllocations?: ActualAllocationOrderByRelationAggregateInput
@@ -15215,7 +15209,6 @@ export namespace Prisma {
     OR?: ProjectWhereInput[]
     NOT?: ProjectWhereInput | ProjectWhereInput[]
     organizationId?: StringNullableFilter<"Project"> | string | null
-    teamId?: StringNullableFilter<"Project"> | string | null
     description?: StringNullableFilter<"Project"> | string | null
     status?: StringFilter<"Project"> | string
     priority?: IntFilter<"Project"> | number
@@ -15223,8 +15216,8 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
     createdBy?: StringFilter<"Project"> | string
+    teams?: TeamListRelationFilter
     organization?: XOR<OrganizationNullableScalarRelationFilter, OrganizationWhereInput> | null
-    team?: XOR<TeamNullableScalarRelationFilter, TeamWhereInput> | null
     logs?: AuditLogListRelationFilter
     allocations?: BudgetAllocationListRelationFilter
     actualAllocations?: ActualAllocationListRelationFilter
@@ -15233,7 +15226,6 @@ export namespace Prisma {
   export type ProjectOrderByWithAggregationInput = {
     id?: SortOrder
     organizationId?: SortOrderInput | SortOrder
-    teamId?: SortOrderInput | SortOrder
     name?: SortOrder
     code?: SortOrder
     description?: SortOrderInput | SortOrder
@@ -15256,7 +15248,6 @@ export namespace Prisma {
     NOT?: ProjectScalarWhereWithAggregatesInput | ProjectScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"Project"> | string
     organizationId?: StringNullableWithAggregatesFilter<"Project"> | string | null
-    teamId?: StringNullableWithAggregatesFilter<"Project"> | string | null
     name?: StringWithAggregatesFilter<"Project"> | string
     code?: StringWithAggregatesFilter<"Project"> | string
     description?: StringNullableWithAggregatesFilter<"Project"> | string | null
@@ -15912,7 +15903,7 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutTeamsInput
     parentTeam?: TeamCreateNestedOneWithoutChildTeamsInput
     childTeams?: TeamCreateNestedManyWithoutParentTeamInput
-    projects?: ProjectCreateNestedManyWithoutTeamInput
+    projects?: ProjectCreateNestedManyWithoutTeamsInput
     allocations?: BudgetAllocationCreateNestedManyWithoutTeamInput
     actualAllocations?: ActualAllocationCreateNestedManyWithoutTeamInput
   }
@@ -15927,7 +15918,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     childTeams?: TeamUncheckedCreateNestedManyWithoutParentTeamInput
-    projects?: ProjectUncheckedCreateNestedManyWithoutTeamInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutTeamsInput
     allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutTeamInput
     actualAllocations?: ActualAllocationUncheckedCreateNestedManyWithoutTeamInput
   }
@@ -15942,7 +15933,7 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutTeamsNestedInput
     parentTeam?: TeamUpdateOneWithoutChildTeamsNestedInput
     childTeams?: TeamUpdateManyWithoutParentTeamNestedInput
-    projects?: ProjectUpdateManyWithoutTeamNestedInput
+    projects?: ProjectUpdateManyWithoutTeamsNestedInput
     allocations?: BudgetAllocationUpdateManyWithoutTeamNestedInput
     actualAllocations?: ActualAllocationUpdateManyWithoutTeamNestedInput
   }
@@ -15957,7 +15948,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     childTeams?: TeamUncheckedUpdateManyWithoutParentTeamNestedInput
-    projects?: ProjectUncheckedUpdateManyWithoutTeamNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutTeamsNestedInput
     allocations?: BudgetAllocationUncheckedUpdateManyWithoutTeamNestedInput
     actualAllocations?: ActualAllocationUncheckedUpdateManyWithoutTeamNestedInput
   }
@@ -16004,8 +15995,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: string
+    teams?: TeamCreateNestedManyWithoutProjectsInput
     organization?: OrganizationCreateNestedOneWithoutProjectsInput
-    team?: TeamCreateNestedOneWithoutProjectsInput
     logs?: AuditLogCreateNestedManyWithoutProjectInput
     allocations?: BudgetAllocationCreateNestedManyWithoutProjectInput
     actualAllocations?: ActualAllocationCreateNestedManyWithoutProjectInput
@@ -16014,7 +16005,6 @@ export namespace Prisma {
   export type ProjectUncheckedCreateInput = {
     id?: string
     organizationId?: string | null
-    teamId?: string | null
     name: string
     code?: string
     description?: string | null
@@ -16024,6 +16014,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: string
+    teams?: TeamUncheckedCreateNestedManyWithoutProjectsInput
     logs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutProjectInput
     actualAllocations?: ActualAllocationUncheckedCreateNestedManyWithoutProjectInput
@@ -16040,8 +16031,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
+    teams?: TeamUpdateManyWithoutProjectsNestedInput
     organization?: OrganizationUpdateOneWithoutProjectsNestedInput
-    team?: TeamUpdateOneWithoutProjectsNestedInput
     logs?: AuditLogUpdateManyWithoutProjectNestedInput
     allocations?: BudgetAllocationUpdateManyWithoutProjectNestedInput
     actualAllocations?: ActualAllocationUpdateManyWithoutProjectNestedInput
@@ -16050,7 +16041,6 @@ export namespace Prisma {
   export type ProjectUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
-    teamId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16060,6 +16050,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
+    teams?: TeamUncheckedUpdateManyWithoutProjectsNestedInput
     logs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     allocations?: BudgetAllocationUncheckedUpdateManyWithoutProjectNestedInput
     actualAllocations?: ActualAllocationUncheckedUpdateManyWithoutProjectNestedInput
@@ -16068,7 +16059,6 @@ export namespace Prisma {
   export type ProjectCreateManyInput = {
     id?: string
     organizationId?: string | null
-    teamId?: string | null
     name: string
     code?: string
     description?: string | null
@@ -16096,7 +16086,6 @@ export namespace Prisma {
   export type ProjectUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
-    teamId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -16948,7 +16937,6 @@ export namespace Prisma {
   export type ProjectCountOrderByAggregateInput = {
     id?: SortOrder
     organizationId?: SortOrder
-    teamId?: SortOrder
     name?: SortOrder
     code?: SortOrder
     description?: SortOrder
@@ -16968,7 +16956,6 @@ export namespace Prisma {
   export type ProjectMaxOrderByAggregateInput = {
     id?: SortOrder
     organizationId?: SortOrder
-    teamId?: SortOrder
     name?: SortOrder
     code?: SortOrder
     description?: SortOrder
@@ -16983,7 +16970,6 @@ export namespace Prisma {
   export type ProjectMinOrderByAggregateInput = {
     id?: SortOrder
     organizationId?: SortOrder
-    teamId?: SortOrder
     name?: SortOrder
     code?: SortOrder
     description?: SortOrder
@@ -17676,10 +17662,9 @@ export namespace Prisma {
     connect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
   }
 
-  export type ProjectCreateNestedManyWithoutTeamInput = {
-    create?: XOR<ProjectCreateWithoutTeamInput, ProjectUncheckedCreateWithoutTeamInput> | ProjectCreateWithoutTeamInput[] | ProjectUncheckedCreateWithoutTeamInput[]
-    connectOrCreate?: ProjectCreateOrConnectWithoutTeamInput | ProjectCreateOrConnectWithoutTeamInput[]
-    createMany?: ProjectCreateManyTeamInputEnvelope
+  export type ProjectCreateNestedManyWithoutTeamsInput = {
+    create?: XOR<ProjectCreateWithoutTeamsInput, ProjectUncheckedCreateWithoutTeamsInput> | ProjectCreateWithoutTeamsInput[] | ProjectUncheckedCreateWithoutTeamsInput[]
+    connectOrCreate?: ProjectCreateOrConnectWithoutTeamsInput | ProjectCreateOrConnectWithoutTeamsInput[]
     connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
   }
 
@@ -17704,10 +17689,9 @@ export namespace Prisma {
     connect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
   }
 
-  export type ProjectUncheckedCreateNestedManyWithoutTeamInput = {
-    create?: XOR<ProjectCreateWithoutTeamInput, ProjectUncheckedCreateWithoutTeamInput> | ProjectCreateWithoutTeamInput[] | ProjectUncheckedCreateWithoutTeamInput[]
-    connectOrCreate?: ProjectCreateOrConnectWithoutTeamInput | ProjectCreateOrConnectWithoutTeamInput[]
-    createMany?: ProjectCreateManyTeamInputEnvelope
+  export type ProjectUncheckedCreateNestedManyWithoutTeamsInput = {
+    create?: XOR<ProjectCreateWithoutTeamsInput, ProjectUncheckedCreateWithoutTeamsInput> | ProjectCreateWithoutTeamsInput[] | ProjectUncheckedCreateWithoutTeamsInput[]
+    connectOrCreate?: ProjectCreateOrConnectWithoutTeamsInput | ProjectCreateOrConnectWithoutTeamsInput[]
     connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
   }
 
@@ -17761,17 +17745,16 @@ export namespace Prisma {
     deleteMany?: TeamScalarWhereInput | TeamScalarWhereInput[]
   }
 
-  export type ProjectUpdateManyWithoutTeamNestedInput = {
-    create?: XOR<ProjectCreateWithoutTeamInput, ProjectUncheckedCreateWithoutTeamInput> | ProjectCreateWithoutTeamInput[] | ProjectUncheckedCreateWithoutTeamInput[]
-    connectOrCreate?: ProjectCreateOrConnectWithoutTeamInput | ProjectCreateOrConnectWithoutTeamInput[]
-    upsert?: ProjectUpsertWithWhereUniqueWithoutTeamInput | ProjectUpsertWithWhereUniqueWithoutTeamInput[]
-    createMany?: ProjectCreateManyTeamInputEnvelope
+  export type ProjectUpdateManyWithoutTeamsNestedInput = {
+    create?: XOR<ProjectCreateWithoutTeamsInput, ProjectUncheckedCreateWithoutTeamsInput> | ProjectCreateWithoutTeamsInput[] | ProjectUncheckedCreateWithoutTeamsInput[]
+    connectOrCreate?: ProjectCreateOrConnectWithoutTeamsInput | ProjectCreateOrConnectWithoutTeamsInput[]
+    upsert?: ProjectUpsertWithWhereUniqueWithoutTeamsInput | ProjectUpsertWithWhereUniqueWithoutTeamsInput[]
     set?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
     disconnect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
     delete?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
     connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
-    update?: ProjectUpdateWithWhereUniqueWithoutTeamInput | ProjectUpdateWithWhereUniqueWithoutTeamInput[]
-    updateMany?: ProjectUpdateManyWithWhereWithoutTeamInput | ProjectUpdateManyWithWhereWithoutTeamInput[]
+    update?: ProjectUpdateWithWhereUniqueWithoutTeamsInput | ProjectUpdateWithWhereUniqueWithoutTeamsInput[]
+    updateMany?: ProjectUpdateManyWithWhereWithoutTeamsInput | ProjectUpdateManyWithWhereWithoutTeamsInput[]
     deleteMany?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
   }
 
@@ -17821,17 +17804,16 @@ export namespace Prisma {
     deleteMany?: TeamScalarWhereInput | TeamScalarWhereInput[]
   }
 
-  export type ProjectUncheckedUpdateManyWithoutTeamNestedInput = {
-    create?: XOR<ProjectCreateWithoutTeamInput, ProjectUncheckedCreateWithoutTeamInput> | ProjectCreateWithoutTeamInput[] | ProjectUncheckedCreateWithoutTeamInput[]
-    connectOrCreate?: ProjectCreateOrConnectWithoutTeamInput | ProjectCreateOrConnectWithoutTeamInput[]
-    upsert?: ProjectUpsertWithWhereUniqueWithoutTeamInput | ProjectUpsertWithWhereUniqueWithoutTeamInput[]
-    createMany?: ProjectCreateManyTeamInputEnvelope
+  export type ProjectUncheckedUpdateManyWithoutTeamsNestedInput = {
+    create?: XOR<ProjectCreateWithoutTeamsInput, ProjectUncheckedCreateWithoutTeamsInput> | ProjectCreateWithoutTeamsInput[] | ProjectUncheckedCreateWithoutTeamsInput[]
+    connectOrCreate?: ProjectCreateOrConnectWithoutTeamsInput | ProjectCreateOrConnectWithoutTeamsInput[]
+    upsert?: ProjectUpsertWithWhereUniqueWithoutTeamsInput | ProjectUpsertWithWhereUniqueWithoutTeamsInput[]
     set?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
     disconnect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
     delete?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
     connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
-    update?: ProjectUpdateWithWhereUniqueWithoutTeamInput | ProjectUpdateWithWhereUniqueWithoutTeamInput[]
-    updateMany?: ProjectUpdateManyWithWhereWithoutTeamInput | ProjectUpdateManyWithWhereWithoutTeamInput[]
+    update?: ProjectUpdateWithWhereUniqueWithoutTeamsInput | ProjectUpdateWithWhereUniqueWithoutTeamsInput[]
+    updateMany?: ProjectUpdateManyWithWhereWithoutTeamsInput | ProjectUpdateManyWithWhereWithoutTeamsInput[]
     deleteMany?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
   }
 
@@ -17863,16 +17845,16 @@ export namespace Prisma {
     deleteMany?: ActualAllocationScalarWhereInput | ActualAllocationScalarWhereInput[]
   }
 
+  export type TeamCreateNestedManyWithoutProjectsInput = {
+    create?: XOR<TeamCreateWithoutProjectsInput, TeamUncheckedCreateWithoutProjectsInput> | TeamCreateWithoutProjectsInput[] | TeamUncheckedCreateWithoutProjectsInput[]
+    connectOrCreate?: TeamCreateOrConnectWithoutProjectsInput | TeamCreateOrConnectWithoutProjectsInput[]
+    connect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+  }
+
   export type OrganizationCreateNestedOneWithoutProjectsInput = {
     create?: XOR<OrganizationCreateWithoutProjectsInput, OrganizationUncheckedCreateWithoutProjectsInput>
     connectOrCreate?: OrganizationCreateOrConnectWithoutProjectsInput
     connect?: OrganizationWhereUniqueInput
-  }
-
-  export type TeamCreateNestedOneWithoutProjectsInput = {
-    create?: XOR<TeamCreateWithoutProjectsInput, TeamUncheckedCreateWithoutProjectsInput>
-    connectOrCreate?: TeamCreateOrConnectWithoutProjectsInput
-    connect?: TeamWhereUniqueInput
   }
 
   export type AuditLogCreateNestedManyWithoutProjectInput = {
@@ -17894,6 +17876,12 @@ export namespace Prisma {
     connectOrCreate?: ActualAllocationCreateOrConnectWithoutProjectInput | ActualAllocationCreateOrConnectWithoutProjectInput[]
     createMany?: ActualAllocationCreateManyProjectInputEnvelope
     connect?: ActualAllocationWhereUniqueInput | ActualAllocationWhereUniqueInput[]
+  }
+
+  export type TeamUncheckedCreateNestedManyWithoutProjectsInput = {
+    create?: XOR<TeamCreateWithoutProjectsInput, TeamUncheckedCreateWithoutProjectsInput> | TeamCreateWithoutProjectsInput[] | TeamUncheckedCreateWithoutProjectsInput[]
+    connectOrCreate?: TeamCreateOrConnectWithoutProjectsInput | TeamCreateOrConnectWithoutProjectsInput[]
+    connect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
   }
 
   export type AuditLogUncheckedCreateNestedManyWithoutProjectInput = {
@@ -17925,6 +17913,19 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type TeamUpdateManyWithoutProjectsNestedInput = {
+    create?: XOR<TeamCreateWithoutProjectsInput, TeamUncheckedCreateWithoutProjectsInput> | TeamCreateWithoutProjectsInput[] | TeamUncheckedCreateWithoutProjectsInput[]
+    connectOrCreate?: TeamCreateOrConnectWithoutProjectsInput | TeamCreateOrConnectWithoutProjectsInput[]
+    upsert?: TeamUpsertWithWhereUniqueWithoutProjectsInput | TeamUpsertWithWhereUniqueWithoutProjectsInput[]
+    set?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    disconnect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    delete?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    connect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    update?: TeamUpdateWithWhereUniqueWithoutProjectsInput | TeamUpdateWithWhereUniqueWithoutProjectsInput[]
+    updateMany?: TeamUpdateManyWithWhereWithoutProjectsInput | TeamUpdateManyWithWhereWithoutProjectsInput[]
+    deleteMany?: TeamScalarWhereInput | TeamScalarWhereInput[]
+  }
+
   export type OrganizationUpdateOneWithoutProjectsNestedInput = {
     create?: XOR<OrganizationCreateWithoutProjectsInput, OrganizationUncheckedCreateWithoutProjectsInput>
     connectOrCreate?: OrganizationCreateOrConnectWithoutProjectsInput
@@ -17933,16 +17934,6 @@ export namespace Prisma {
     delete?: OrganizationWhereInput | boolean
     connect?: OrganizationWhereUniqueInput
     update?: XOR<XOR<OrganizationUpdateToOneWithWhereWithoutProjectsInput, OrganizationUpdateWithoutProjectsInput>, OrganizationUncheckedUpdateWithoutProjectsInput>
-  }
-
-  export type TeamUpdateOneWithoutProjectsNestedInput = {
-    create?: XOR<TeamCreateWithoutProjectsInput, TeamUncheckedCreateWithoutProjectsInput>
-    connectOrCreate?: TeamCreateOrConnectWithoutProjectsInput
-    upsert?: TeamUpsertWithoutProjectsInput
-    disconnect?: TeamWhereInput | boolean
-    delete?: TeamWhereInput | boolean
-    connect?: TeamWhereUniqueInput
-    update?: XOR<XOR<TeamUpdateToOneWithWhereWithoutProjectsInput, TeamUpdateWithoutProjectsInput>, TeamUncheckedUpdateWithoutProjectsInput>
   }
 
   export type AuditLogUpdateManyWithoutProjectNestedInput = {
@@ -17985,6 +17976,19 @@ export namespace Prisma {
     update?: ActualAllocationUpdateWithWhereUniqueWithoutProjectInput | ActualAllocationUpdateWithWhereUniqueWithoutProjectInput[]
     updateMany?: ActualAllocationUpdateManyWithWhereWithoutProjectInput | ActualAllocationUpdateManyWithWhereWithoutProjectInput[]
     deleteMany?: ActualAllocationScalarWhereInput | ActualAllocationScalarWhereInput[]
+  }
+
+  export type TeamUncheckedUpdateManyWithoutProjectsNestedInput = {
+    create?: XOR<TeamCreateWithoutProjectsInput, TeamUncheckedCreateWithoutProjectsInput> | TeamCreateWithoutProjectsInput[] | TeamUncheckedCreateWithoutProjectsInput[]
+    connectOrCreate?: TeamCreateOrConnectWithoutProjectsInput | TeamCreateOrConnectWithoutProjectsInput[]
+    upsert?: TeamUpsertWithWhereUniqueWithoutProjectsInput | TeamUpsertWithWhereUniqueWithoutProjectsInput[]
+    set?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    disconnect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    delete?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    connect?: TeamWhereUniqueInput | TeamWhereUniqueInput[]
+    update?: TeamUpdateWithWhereUniqueWithoutProjectsInput | TeamUpdateWithWhereUniqueWithoutProjectsInput[]
+    updateMany?: TeamUpdateManyWithWhereWithoutProjectsInput | TeamUpdateManyWithWhereWithoutProjectsInput[]
+    deleteMany?: TeamScalarWhereInput | TeamScalarWhereInput[]
   }
 
   export type AuditLogUncheckedUpdateManyWithoutProjectNestedInput = {
@@ -18655,7 +18659,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: string
-    team?: TeamCreateNestedOneWithoutProjectsInput
+    teams?: TeamCreateNestedManyWithoutProjectsInput
     logs?: AuditLogCreateNestedManyWithoutProjectInput
     allocations?: BudgetAllocationCreateNestedManyWithoutProjectInput
     actualAllocations?: ActualAllocationCreateNestedManyWithoutProjectInput
@@ -18663,7 +18667,6 @@ export namespace Prisma {
 
   export type ProjectUncheckedCreateWithoutOrganizationInput = {
     id?: string
-    teamId?: string | null
     name: string
     code?: string
     description?: string | null
@@ -18673,6 +18676,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: string
+    teams?: TeamUncheckedCreateNestedManyWithoutProjectsInput
     logs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutProjectInput
     actualAllocations?: ActualAllocationUncheckedCreateNestedManyWithoutProjectInput
@@ -18697,7 +18701,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     parentTeam?: TeamCreateNestedOneWithoutChildTeamsInput
     childTeams?: TeamCreateNestedManyWithoutParentTeamInput
-    projects?: ProjectCreateNestedManyWithoutTeamInput
+    projects?: ProjectCreateNestedManyWithoutTeamsInput
     allocations?: BudgetAllocationCreateNestedManyWithoutTeamInput
     actualAllocations?: ActualAllocationCreateNestedManyWithoutTeamInput
   }
@@ -18711,7 +18715,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     childTeams?: TeamUncheckedCreateNestedManyWithoutParentTeamInput
-    projects?: ProjectUncheckedCreateNestedManyWithoutTeamInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutTeamsInput
     allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutTeamInput
     actualAllocations?: ActualAllocationUncheckedCreateNestedManyWithoutTeamInput
   }
@@ -18847,7 +18851,6 @@ export namespace Prisma {
     NOT?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
     id?: StringFilter<"Project"> | string
     organizationId?: StringNullableFilter<"Project"> | string | null
-    teamId?: StringNullableFilter<"Project"> | string | null
     name?: StringFilter<"Project"> | string
     code?: StringFilter<"Project"> | string
     description?: StringNullableFilter<"Project"> | string | null
@@ -18987,7 +18990,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutTeamsInput
     parentTeam?: TeamCreateNestedOneWithoutChildTeamsInput
-    projects?: ProjectCreateNestedManyWithoutTeamInput
+    projects?: ProjectCreateNestedManyWithoutTeamsInput
     allocations?: BudgetAllocationCreateNestedManyWithoutTeamInput
     actualAllocations?: ActualAllocationCreateNestedManyWithoutTeamInput
   }
@@ -19001,7 +19004,7 @@ export namespace Prisma {
     isActive?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
-    projects?: ProjectUncheckedCreateNestedManyWithoutTeamInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutTeamsInput
     allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutTeamInput
     actualAllocations?: ActualAllocationUncheckedCreateNestedManyWithoutTeamInput
   }
@@ -19020,7 +19023,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     organization: OrganizationCreateNestedOneWithoutTeamsInput
     childTeams?: TeamCreateNestedManyWithoutParentTeamInput
-    projects?: ProjectCreateNestedManyWithoutTeamInput
+    projects?: ProjectCreateNestedManyWithoutTeamsInput
     allocations?: BudgetAllocationCreateNestedManyWithoutTeamInput
     actualAllocations?: ActualAllocationCreateNestedManyWithoutTeamInput
   }
@@ -19034,7 +19037,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     childTeams?: TeamUncheckedCreateNestedManyWithoutParentTeamInput
-    projects?: ProjectUncheckedCreateNestedManyWithoutTeamInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutTeamsInput
     allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutTeamInput
     actualAllocations?: ActualAllocationUncheckedCreateNestedManyWithoutTeamInput
   }
@@ -19049,7 +19052,7 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ProjectCreateWithoutTeamInput = {
+  export type ProjectCreateWithoutTeamsInput = {
     id?: string
     name: string
     code?: string
@@ -19066,7 +19069,7 @@ export namespace Prisma {
     actualAllocations?: ActualAllocationCreateNestedManyWithoutProjectInput
   }
 
-  export type ProjectUncheckedCreateWithoutTeamInput = {
+  export type ProjectUncheckedCreateWithoutTeamsInput = {
     id?: string
     organizationId?: string | null
     name: string
@@ -19083,14 +19086,9 @@ export namespace Prisma {
     actualAllocations?: ActualAllocationUncheckedCreateNestedManyWithoutProjectInput
   }
 
-  export type ProjectCreateOrConnectWithoutTeamInput = {
+  export type ProjectCreateOrConnectWithoutTeamsInput = {
     where: ProjectWhereUniqueInput
-    create: XOR<ProjectCreateWithoutTeamInput, ProjectUncheckedCreateWithoutTeamInput>
-  }
-
-  export type ProjectCreateManyTeamInputEnvelope = {
-    data: ProjectCreateManyTeamInput | ProjectCreateManyTeamInput[]
-    skipDuplicates?: boolean
+    create: XOR<ProjectCreateWithoutTeamsInput, ProjectUncheckedCreateWithoutTeamsInput>
   }
 
   export type BudgetAllocationCreateWithoutTeamInput = {
@@ -19198,7 +19196,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutTeamsNestedInput
     parentTeam?: TeamUpdateOneWithoutChildTeamsNestedInput
-    projects?: ProjectUpdateManyWithoutTeamNestedInput
+    projects?: ProjectUpdateManyWithoutTeamsNestedInput
     allocations?: BudgetAllocationUpdateManyWithoutTeamNestedInput
     actualAllocations?: ActualAllocationUpdateManyWithoutTeamNestedInput
   }
@@ -19212,7 +19210,7 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projects?: ProjectUncheckedUpdateManyWithoutTeamNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutTeamsNestedInput
     allocations?: BudgetAllocationUncheckedUpdateManyWithoutTeamNestedInput
     actualAllocations?: ActualAllocationUncheckedUpdateManyWithoutTeamNestedInput
   }
@@ -19233,20 +19231,20 @@ export namespace Prisma {
     data: XOR<TeamUpdateManyMutationInput, TeamUncheckedUpdateManyWithoutParentTeamInput>
   }
 
-  export type ProjectUpsertWithWhereUniqueWithoutTeamInput = {
+  export type ProjectUpsertWithWhereUniqueWithoutTeamsInput = {
     where: ProjectWhereUniqueInput
-    update: XOR<ProjectUpdateWithoutTeamInput, ProjectUncheckedUpdateWithoutTeamInput>
-    create: XOR<ProjectCreateWithoutTeamInput, ProjectUncheckedCreateWithoutTeamInput>
+    update: XOR<ProjectUpdateWithoutTeamsInput, ProjectUncheckedUpdateWithoutTeamsInput>
+    create: XOR<ProjectCreateWithoutTeamsInput, ProjectUncheckedCreateWithoutTeamsInput>
   }
 
-  export type ProjectUpdateWithWhereUniqueWithoutTeamInput = {
+  export type ProjectUpdateWithWhereUniqueWithoutTeamsInput = {
     where: ProjectWhereUniqueInput
-    data: XOR<ProjectUpdateWithoutTeamInput, ProjectUncheckedUpdateWithoutTeamInput>
+    data: XOR<ProjectUpdateWithoutTeamsInput, ProjectUncheckedUpdateWithoutTeamsInput>
   }
 
-  export type ProjectUpdateManyWithWhereWithoutTeamInput = {
+  export type ProjectUpdateManyWithWhereWithoutTeamsInput = {
     where: ProjectScalarWhereInput
-    data: XOR<ProjectUpdateManyMutationInput, ProjectUncheckedUpdateManyWithoutTeamInput>
+    data: XOR<ProjectUpdateManyMutationInput, ProjectUncheckedUpdateManyWithoutTeamsInput>
   }
 
   export type BudgetAllocationUpsertWithWhereUniqueWithoutTeamInput = {
@@ -19305,33 +19303,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"ActualAllocation"> | Date | string
   }
 
-  export type OrganizationCreateWithoutProjectsInput = {
-    id?: string
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    users?: UserCreateNestedManyWithoutOrganizationInput
-    teams?: TeamCreateNestedManyWithoutOrganizationInput
-    periods?: PeriodCreateNestedManyWithoutOrganizationInput
-    auditLogs?: AuditLogCreateNestedManyWithoutOrganizationInput
-  }
-
-  export type OrganizationUncheckedCreateWithoutProjectsInput = {
-    id?: string
-    name: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
-    teams?: TeamUncheckedCreateNestedManyWithoutOrganizationInput
-    periods?: PeriodUncheckedCreateNestedManyWithoutOrganizationInput
-    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
-  }
-
-  export type OrganizationCreateOrConnectWithoutProjectsInput = {
-    where: OrganizationWhereUniqueInput
-    create: XOR<OrganizationCreateWithoutProjectsInput, OrganizationUncheckedCreateWithoutProjectsInput>
-  }
-
   export type TeamCreateWithoutProjectsInput = {
     id?: string
     name: string
@@ -19363,6 +19334,33 @@ export namespace Prisma {
   export type TeamCreateOrConnectWithoutProjectsInput = {
     where: TeamWhereUniqueInput
     create: XOR<TeamCreateWithoutProjectsInput, TeamUncheckedCreateWithoutProjectsInput>
+  }
+
+  export type OrganizationCreateWithoutProjectsInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserCreateNestedManyWithoutOrganizationInput
+    teams?: TeamCreateNestedManyWithoutOrganizationInput
+    periods?: PeriodCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationUncheckedCreateWithoutProjectsInput = {
+    id?: string
+    name: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: UserUncheckedCreateNestedManyWithoutOrganizationInput
+    teams?: TeamUncheckedCreateNestedManyWithoutOrganizationInput
+    periods?: PeriodUncheckedCreateNestedManyWithoutOrganizationInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutOrganizationInput
+  }
+
+  export type OrganizationCreateOrConnectWithoutProjectsInput = {
+    where: OrganizationWhereUniqueInput
+    create: XOR<OrganizationCreateWithoutProjectsInput, OrganizationUncheckedCreateWithoutProjectsInput>
   }
 
   export type AuditLogCreateWithoutProjectInput = {
@@ -19453,6 +19451,22 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type TeamUpsertWithWhereUniqueWithoutProjectsInput = {
+    where: TeamWhereUniqueInput
+    update: XOR<TeamUpdateWithoutProjectsInput, TeamUncheckedUpdateWithoutProjectsInput>
+    create: XOR<TeamCreateWithoutProjectsInput, TeamUncheckedCreateWithoutProjectsInput>
+  }
+
+  export type TeamUpdateWithWhereUniqueWithoutProjectsInput = {
+    where: TeamWhereUniqueInput
+    data: XOR<TeamUpdateWithoutProjectsInput, TeamUncheckedUpdateWithoutProjectsInput>
+  }
+
+  export type TeamUpdateManyWithWhereWithoutProjectsInput = {
+    where: TeamScalarWhereInput
+    data: XOR<TeamUpdateManyMutationInput, TeamUncheckedUpdateManyWithoutProjectsInput>
+  }
+
   export type OrganizationUpsertWithoutProjectsInput = {
     update: XOR<OrganizationUpdateWithoutProjectsInput, OrganizationUncheckedUpdateWithoutProjectsInput>
     create: XOR<OrganizationCreateWithoutProjectsInput, OrganizationUncheckedCreateWithoutProjectsInput>
@@ -19484,45 +19498,6 @@ export namespace Prisma {
     teams?: TeamUncheckedUpdateManyWithoutOrganizationNestedInput
     periods?: PeriodUncheckedUpdateManyWithoutOrganizationNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutOrganizationNestedInput
-  }
-
-  export type TeamUpsertWithoutProjectsInput = {
-    update: XOR<TeamUpdateWithoutProjectsInput, TeamUncheckedUpdateWithoutProjectsInput>
-    create: XOR<TeamCreateWithoutProjectsInput, TeamUncheckedCreateWithoutProjectsInput>
-    where?: TeamWhereInput
-  }
-
-  export type TeamUpdateToOneWithWhereWithoutProjectsInput = {
-    where?: TeamWhereInput
-    data: XOR<TeamUpdateWithoutProjectsInput, TeamUncheckedUpdateWithoutProjectsInput>
-  }
-
-  export type TeamUpdateWithoutProjectsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    organization?: OrganizationUpdateOneRequiredWithoutTeamsNestedInput
-    parentTeam?: TeamUpdateOneWithoutChildTeamsNestedInput
-    childTeams?: TeamUpdateManyWithoutParentTeamNestedInput
-    allocations?: BudgetAllocationUpdateManyWithoutTeamNestedInput
-    actualAllocations?: ActualAllocationUpdateManyWithoutTeamNestedInput
-  }
-
-  export type TeamUncheckedUpdateWithoutProjectsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    organizationId?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    parentTeamId?: NullableStringFieldUpdateOperationsInput | string | null
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    childTeams?: TeamUncheckedUpdateManyWithoutParentTeamNestedInput
-    allocations?: BudgetAllocationUncheckedUpdateManyWithoutTeamNestedInput
-    actualAllocations?: ActualAllocationUncheckedUpdateManyWithoutTeamNestedInput
   }
 
   export type AuditLogUpsertWithWhereUniqueWithoutProjectInput = {
@@ -19727,7 +19702,7 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutTeamsInput
     parentTeam?: TeamCreateNestedOneWithoutChildTeamsInput
     childTeams?: TeamCreateNestedManyWithoutParentTeamInput
-    projects?: ProjectCreateNestedManyWithoutTeamInput
+    projects?: ProjectCreateNestedManyWithoutTeamsInput
     actualAllocations?: ActualAllocationCreateNestedManyWithoutTeamInput
   }
 
@@ -19741,7 +19716,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     childTeams?: TeamUncheckedCreateNestedManyWithoutParentTeamInput
-    projects?: ProjectUncheckedCreateNestedManyWithoutTeamInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutTeamsInput
     actualAllocations?: ActualAllocationUncheckedCreateNestedManyWithoutTeamInput
   }
 
@@ -19761,8 +19736,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: string
+    teams?: TeamCreateNestedManyWithoutProjectsInput
     organization?: OrganizationCreateNestedOneWithoutProjectsInput
-    team?: TeamCreateNestedOneWithoutProjectsInput
     logs?: AuditLogCreateNestedManyWithoutProjectInput
     actualAllocations?: ActualAllocationCreateNestedManyWithoutProjectInput
   }
@@ -19770,7 +19745,6 @@ export namespace Prisma {
   export type ProjectUncheckedCreateWithoutAllocationsInput = {
     id?: string
     organizationId?: string | null
-    teamId?: string | null
     name: string
     code?: string
     description?: string | null
@@ -19780,6 +19754,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: string
+    teams?: TeamUncheckedCreateNestedManyWithoutProjectsInput
     logs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     actualAllocations?: ActualAllocationUncheckedCreateNestedManyWithoutProjectInput
   }
@@ -19837,7 +19812,7 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutTeamsNestedInput
     parentTeam?: TeamUpdateOneWithoutChildTeamsNestedInput
     childTeams?: TeamUpdateManyWithoutParentTeamNestedInput
-    projects?: ProjectUpdateManyWithoutTeamNestedInput
+    projects?: ProjectUpdateManyWithoutTeamsNestedInput
     actualAllocations?: ActualAllocationUpdateManyWithoutTeamNestedInput
   }
 
@@ -19851,7 +19826,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     childTeams?: TeamUncheckedUpdateManyWithoutParentTeamNestedInput
-    projects?: ProjectUncheckedUpdateManyWithoutTeamNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutTeamsNestedInput
     actualAllocations?: ActualAllocationUncheckedUpdateManyWithoutTeamNestedInput
   }
 
@@ -19877,8 +19852,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
+    teams?: TeamUpdateManyWithoutProjectsNestedInput
     organization?: OrganizationUpdateOneWithoutProjectsNestedInput
-    team?: TeamUpdateOneWithoutProjectsNestedInput
     logs?: AuditLogUpdateManyWithoutProjectNestedInput
     actualAllocations?: ActualAllocationUpdateManyWithoutProjectNestedInput
   }
@@ -19886,7 +19861,6 @@ export namespace Prisma {
   export type ProjectUncheckedUpdateWithoutAllocationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
-    teamId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -19896,6 +19870,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
+    teams?: TeamUncheckedUpdateManyWithoutProjectsNestedInput
     logs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     actualAllocations?: ActualAllocationUncheckedUpdateManyWithoutProjectNestedInput
   }
@@ -19943,7 +19918,7 @@ export namespace Prisma {
     organization: OrganizationCreateNestedOneWithoutTeamsInput
     parentTeam?: TeamCreateNestedOneWithoutChildTeamsInput
     childTeams?: TeamCreateNestedManyWithoutParentTeamInput
-    projects?: ProjectCreateNestedManyWithoutTeamInput
+    projects?: ProjectCreateNestedManyWithoutTeamsInput
     allocations?: BudgetAllocationCreateNestedManyWithoutTeamInput
   }
 
@@ -19957,7 +19932,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     childTeams?: TeamUncheckedCreateNestedManyWithoutParentTeamInput
-    projects?: ProjectUncheckedCreateNestedManyWithoutTeamInput
+    projects?: ProjectUncheckedCreateNestedManyWithoutTeamsInput
     allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutTeamInput
   }
 
@@ -19977,8 +19952,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: string
+    teams?: TeamCreateNestedManyWithoutProjectsInput
     organization?: OrganizationCreateNestedOneWithoutProjectsInput
-    team?: TeamCreateNestedOneWithoutProjectsInput
     logs?: AuditLogCreateNestedManyWithoutProjectInput
     allocations?: BudgetAllocationCreateNestedManyWithoutProjectInput
   }
@@ -19986,7 +19961,6 @@ export namespace Prisma {
   export type ProjectUncheckedCreateWithoutActualAllocationsInput = {
     id?: string
     organizationId?: string | null
-    teamId?: string | null
     name: string
     code?: string
     description?: string | null
@@ -19996,6 +19970,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: string
+    teams?: TeamUncheckedCreateNestedManyWithoutProjectsInput
     logs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutProjectInput
   }
@@ -20053,7 +20028,7 @@ export namespace Prisma {
     organization?: OrganizationUpdateOneRequiredWithoutTeamsNestedInput
     parentTeam?: TeamUpdateOneWithoutChildTeamsNestedInput
     childTeams?: TeamUpdateManyWithoutParentTeamNestedInput
-    projects?: ProjectUpdateManyWithoutTeamNestedInput
+    projects?: ProjectUpdateManyWithoutTeamsNestedInput
     allocations?: BudgetAllocationUpdateManyWithoutTeamNestedInput
   }
 
@@ -20067,7 +20042,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     childTeams?: TeamUncheckedUpdateManyWithoutParentTeamNestedInput
-    projects?: ProjectUncheckedUpdateManyWithoutTeamNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutTeamsNestedInput
     allocations?: BudgetAllocationUncheckedUpdateManyWithoutTeamNestedInput
   }
 
@@ -20093,8 +20068,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
+    teams?: TeamUpdateManyWithoutProjectsNestedInput
     organization?: OrganizationUpdateOneWithoutProjectsNestedInput
-    team?: TeamUpdateOneWithoutProjectsNestedInput
     logs?: AuditLogUpdateManyWithoutProjectNestedInput
     allocations?: BudgetAllocationUpdateManyWithoutProjectNestedInput
   }
@@ -20102,7 +20077,6 @@ export namespace Prisma {
   export type ProjectUncheckedUpdateWithoutActualAllocationsInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
-    teamId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20112,6 +20086,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
+    teams?: TeamUncheckedUpdateManyWithoutProjectsNestedInput
     logs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     allocations?: BudgetAllocationUncheckedUpdateManyWithoutProjectNestedInput
   }
@@ -20187,8 +20162,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: string
+    teams?: TeamCreateNestedManyWithoutProjectsInput
     organization?: OrganizationCreateNestedOneWithoutProjectsInput
-    team?: TeamCreateNestedOneWithoutProjectsInput
     allocations?: BudgetAllocationCreateNestedManyWithoutProjectInput
     actualAllocations?: ActualAllocationCreateNestedManyWithoutProjectInput
   }
@@ -20196,7 +20171,6 @@ export namespace Prisma {
   export type ProjectUncheckedCreateWithoutLogsInput = {
     id?: string
     organizationId?: string | null
-    teamId?: string | null
     name: string
     code?: string
     description?: string | null
@@ -20206,6 +20180,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     createdBy: string
+    teams?: TeamUncheckedCreateNestedManyWithoutProjectsInput
     allocations?: BudgetAllocationUncheckedCreateNestedManyWithoutProjectInput
     actualAllocations?: ActualAllocationUncheckedCreateNestedManyWithoutProjectInput
   }
@@ -20270,8 +20245,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
+    teams?: TeamUpdateManyWithoutProjectsNestedInput
     organization?: OrganizationUpdateOneWithoutProjectsNestedInput
-    team?: TeamUpdateOneWithoutProjectsNestedInput
     allocations?: BudgetAllocationUpdateManyWithoutProjectNestedInput
     actualAllocations?: ActualAllocationUpdateManyWithoutProjectNestedInput
   }
@@ -20279,7 +20254,6 @@ export namespace Prisma {
   export type ProjectUncheckedUpdateWithoutLogsInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
-    teamId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20289,6 +20263,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
+    teams?: TeamUncheckedUpdateManyWithoutProjectsNestedInput
     allocations?: BudgetAllocationUncheckedUpdateManyWithoutProjectNestedInput
     actualAllocations?: ActualAllocationUncheckedUpdateManyWithoutProjectNestedInput
   }
@@ -20622,7 +20597,6 @@ export namespace Prisma {
 
   export type ProjectCreateManyOrganizationInput = {
     id?: string
-    teamId?: string | null
     name: string
     code?: string
     description?: string | null
@@ -20714,7 +20688,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
-    team?: TeamUpdateOneWithoutProjectsNestedInput
+    teams?: TeamUpdateManyWithoutProjectsNestedInput
     logs?: AuditLogUpdateManyWithoutProjectNestedInput
     allocations?: BudgetAllocationUpdateManyWithoutProjectNestedInput
     actualAllocations?: ActualAllocationUpdateManyWithoutProjectNestedInput
@@ -20722,7 +20696,6 @@ export namespace Prisma {
 
   export type ProjectUncheckedUpdateWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    teamId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20732,6 +20705,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdBy?: StringFieldUpdateOperationsInput | string
+    teams?: TeamUncheckedUpdateManyWithoutProjectsNestedInput
     logs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     allocations?: BudgetAllocationUncheckedUpdateManyWithoutProjectNestedInput
     actualAllocations?: ActualAllocationUncheckedUpdateManyWithoutProjectNestedInput
@@ -20739,7 +20713,6 @@ export namespace Prisma {
 
   export type ProjectUncheckedUpdateManyWithoutOrganizationInput = {
     id?: StringFieldUpdateOperationsInput | string
-    teamId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -20760,7 +20733,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     parentTeam?: TeamUpdateOneWithoutChildTeamsNestedInput
     childTeams?: TeamUpdateManyWithoutParentTeamNestedInput
-    projects?: ProjectUpdateManyWithoutTeamNestedInput
+    projects?: ProjectUpdateManyWithoutTeamsNestedInput
     allocations?: BudgetAllocationUpdateManyWithoutTeamNestedInput
     actualAllocations?: ActualAllocationUpdateManyWithoutTeamNestedInput
   }
@@ -20774,7 +20747,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     childTeams?: TeamUncheckedUpdateManyWithoutParentTeamNestedInput
-    projects?: ProjectUncheckedUpdateManyWithoutTeamNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutTeamsNestedInput
     allocations?: BudgetAllocationUncheckedUpdateManyWithoutTeamNestedInput
     actualAllocations?: ActualAllocationUncheckedUpdateManyWithoutTeamNestedInput
   }
@@ -20869,20 +20842,6 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
-  export type ProjectCreateManyTeamInput = {
-    id?: string
-    organizationId?: string | null
-    name: string
-    code?: string
-    description?: string | null
-    status?: string
-    priority?: number
-    progress?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    createdBy: string
-  }
-
   export type BudgetAllocationCreateManyTeamInput = {
     id?: string
     projectId: string
@@ -20908,7 +20867,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     organization?: OrganizationUpdateOneRequiredWithoutTeamsNestedInput
     childTeams?: TeamUpdateManyWithoutParentTeamNestedInput
-    projects?: ProjectUpdateManyWithoutTeamNestedInput
+    projects?: ProjectUpdateManyWithoutTeamsNestedInput
     allocations?: BudgetAllocationUpdateManyWithoutTeamNestedInput
     actualAllocations?: ActualAllocationUpdateManyWithoutTeamNestedInput
   }
@@ -20922,7 +20881,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     childTeams?: TeamUncheckedUpdateManyWithoutParentTeamNestedInput
-    projects?: ProjectUncheckedUpdateManyWithoutTeamNestedInput
+    projects?: ProjectUncheckedUpdateManyWithoutTeamsNestedInput
     allocations?: BudgetAllocationUncheckedUpdateManyWithoutTeamNestedInput
     actualAllocations?: ActualAllocationUncheckedUpdateManyWithoutTeamNestedInput
   }
@@ -20937,7 +20896,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ProjectUpdateWithoutTeamInput = {
+  export type ProjectUpdateWithoutTeamsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     code?: StringFieldUpdateOperationsInput | string
@@ -20954,7 +20913,7 @@ export namespace Prisma {
     actualAllocations?: ActualAllocationUpdateManyWithoutProjectNestedInput
   }
 
-  export type ProjectUncheckedUpdateWithoutTeamInput = {
+  export type ProjectUncheckedUpdateWithoutTeamsInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -20971,7 +20930,7 @@ export namespace Prisma {
     actualAllocations?: ActualAllocationUncheckedUpdateManyWithoutProjectNestedInput
   }
 
-  export type ProjectUncheckedUpdateManyWithoutTeamInput = {
+  export type ProjectUncheckedUpdateManyWithoutTeamsInput = {
     id?: StringFieldUpdateOperationsInput | string
     organizationId?: NullableStringFieldUpdateOperationsInput | string | null
     name?: StringFieldUpdateOperationsInput | string
@@ -21060,6 +21019,45 @@ export namespace Prisma {
     periodId: string
     actualHours?: number
     updatedAt?: Date | string
+  }
+
+  export type TeamUpdateWithoutProjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    organization?: OrganizationUpdateOneRequiredWithoutTeamsNestedInput
+    parentTeam?: TeamUpdateOneWithoutChildTeamsNestedInput
+    childTeams?: TeamUpdateManyWithoutParentTeamNestedInput
+    allocations?: BudgetAllocationUpdateManyWithoutTeamNestedInput
+    actualAllocations?: ActualAllocationUpdateManyWithoutTeamNestedInput
+  }
+
+  export type TeamUncheckedUpdateWithoutProjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    parentTeamId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    childTeams?: TeamUncheckedUpdateManyWithoutParentTeamNestedInput
+    allocations?: BudgetAllocationUncheckedUpdateManyWithoutTeamNestedInput
+    actualAllocations?: ActualAllocationUncheckedUpdateManyWithoutTeamNestedInput
+  }
+
+  export type TeamUncheckedUpdateManyWithoutProjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    organizationId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    parentTeamId?: NullableStringFieldUpdateOperationsInput | string | null
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type AuditLogUpdateWithoutProjectInput = {

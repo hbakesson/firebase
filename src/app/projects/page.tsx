@@ -22,10 +22,10 @@ export default async function ProjectsPage({
     where: {
       organizationId: session.user.organizationId,
       ...(q ? { name: { contains: q, mode: 'insensitive' } } : {}),
-      ...(team ? { teamId: team } : {}),
+      ...(team ? { teams: { some: { id: team } } } : {}),
       ...(status ? { status: status } : {}),
     },
-    include: { team: true },
+    include: { teams: true },
     orderBy: { updatedAt: 'desc' }
   });
 
@@ -48,9 +48,10 @@ export default async function ProjectsPage({
           "use server";
           const name = formData.get("name") as string;
           const code = formData.get("code") as string;
-          const teamId = formData.get("teamId") as string || undefined;
+          const teamId = formData.get("teamId") as string;
+          const teamIds = teamId ? [teamId] : undefined;
           const description = formData.get("description") as string;
-          await createProject({ name, code, teamId, description });
+          await createProject({ name, code, teamIds, description });
         }}>
           <div className="card" style={{ padding: '1rem', marginTop: '1rem', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', gap: '1rem', flex: 1 }}>

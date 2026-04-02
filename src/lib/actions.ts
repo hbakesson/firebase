@@ -65,13 +65,18 @@ export async function updateTeam(id: string, data: Partial<{ name: string; code:
 
 // ─── Project Actions ────────────────────────────────────────────────────────
 
-export async function createProject(data: { name: string; code: string; description?: string; teamId?: string }) {
+export async function createProject(data: { name: string; code: string; description?: string; teamIds?: string[] }) {
   const session = await auth();
   if (!session?.user?.organizationId) throw new Error("Unauthorized");
 
   const project = await prisma.project.create({
     data: {
-      ...data,
+      name: data.name,
+      code: data.code,
+      description: data.description,
+      teams: data.teamIds && data.teamIds.length > 0 ? {
+        connect: data.teamIds.map(id => ({ id }))
+      } : undefined,
       organizationId: session.user.organizationId,
       createdBy: session.user.id!,
     },
@@ -98,10 +103,21 @@ export async function updateProject(id: string, data: Record<string, unknown>) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
 
+  const { teamIds, ...restData } = data;
+  const updateData: any = { ...restData };
+  
+  if (teamIds && Array.isArray(teamIds)) {
+    updateData.teams = {
+      set: teamIds.map((id: string) => ({ id }))
+    };
+  } else if (data.hasOwnProperty('teamIds') && (teamIds === null || (Array.isArray(teamIds) && teamIds.length === 0))) {
+    updateData.teams = { set: [] };
+  }
+
   const previous = await prisma.project.findUnique({ where: { id } });
   const project = await prisma.project.update({
     where: { id },
-    data,
+    data: updateData,
   });
 
   await prisma.auditLog.create({

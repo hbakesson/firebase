@@ -14,8 +14,7 @@ interface Project {
   status: string;
   progress: number;
   updatedAt: Date;
-  teamId: string | null;
-  team: { id: string; name: string } | null;
+  teams?: { id: string; name: string }[];
 }
 
 interface Team {
@@ -38,7 +37,7 @@ export default function ProjectList({ initialProjects, teams }: { initialProject
           <tr style={{ textAlign: 'left', borderBottom: '1px solid var(--card-border)' }}>
             <th style={{ padding: '1.25rem' }}>Project Details</th>
             <th>Status</th>
-            <th>Assigned Team</th>
+            <th>Assigned Teams</th>
             <th>Progress</th>
             <th style={{ textAlign: 'right', paddingRight: '1.25rem' }}>Actions</th>
           </tr>
@@ -65,9 +64,13 @@ export default function ProjectList({ initialProjects, teams }: { initialProject
                   </span>
                 </td>
                 <td>
-                  {project.team ? (
-                    <div className="user-badge" style={{ gap: '0.5rem' }}>
-                      <Users size={14} /> {project.team.name}
+                  {project.teams && project.teams.length > 0 ? (
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                      {project.teams.map(t => (
+                        <div key={t.id} className="user-badge" style={{ gap: '0.5rem' }}>
+                          <Users size={14} /> {t.name}
+                        </div>
+                      ))}
                     </div>
                   ) : (
                     <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem' }}>Unassigned</span>

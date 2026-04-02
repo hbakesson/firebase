@@ -50,7 +50,7 @@ model Team {
 model Project {
   id             String   @id @default(cuid())
   organizationId String?
-  teamId         String?
+  teams          Team[]
   name           String   @unique
   code           String   @unique @default(cuid())
   description    String?
@@ -62,7 +62,6 @@ model Project {
   createdBy      String
 
   organization      Organization?      @relation(fields: [organizationId], references: [id])
-  team              Team?              @relation(fields: [teamId], references: [id])
   logs              AuditLog[]
   allocations       BudgetAllocation[]
   actualAllocations ActualAllocation[]

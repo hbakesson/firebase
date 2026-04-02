@@ -23,7 +23,7 @@ interface BulkProject {
   id: string;
   name: string;
   code: string;
-  teamId?: string;
+  teams?: { id: string; name: string }[];
 }
 
 // --- Specialized Compact Editable Cell (MEMOIZED) ---
@@ -95,7 +95,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
     let result = initialProjects;
     
     if (selectedTeamId !== 'all') {
-      result = result.filter(p => p.teamId === selectedTeamId);
+      result = result.filter(p => p.teams?.some(t => t.id === selectedTeamId));
     }
     
     if (search) {
@@ -176,7 +176,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
         startTransition(async () => {
           try {
             await upsertAllocation({
-              teamId: prj.teamId || "bulk-global",
+              teamId: selectedTeamId !== "all" ? selectedTeamId : (prj.teams?.[0]?.id || "bulk-global"),
               projectId: prj.id,
               periodId: columnId,
               plannedHours: val,
@@ -193,8 +193,24 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
 
   return (
     <div className="bg-[#14141e] border border-white/5 rounded-xl overflow-hidden shadow-2xl">
-      <div className="p-3 border-b border-white/5 flex items-center justify-between gap-4">
+      <div className="py-3 px-2 border-b border-white/5 flex items-center justify-between gap-4">
         <div className="relative flex-1 max-w-md flex items-center gap-3">
+          <div className="flex items-center gap-8">
+            <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em', fontWeight: 600 }}>Team</span>
+            <select
+              value={selectedTeamId}
+              onChange={e => setSelectedTeamId(e.target.value)}
+              className="flex-1 bg-[#e2e8f0] text-[#0f172a] font-medium border-0 rounded-lg px-3 py-1.5 text-xs focus:ring-2 focus:ring-indigo-500 outline-none transition-all appearance-none cursor-pointer"
+              style={{ minWidth: '150px', backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23334155%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 0.7rem top 50%', backgroundSize: '0.65rem auto' }}
+            >
+              <option value="all" className="bg-white text-slate-900">All Teams</option>
+              {initialTeams?.map(t => (
+                <option key={t.id} value={t.id} className="bg-white text-slate-900">
+                  {t.name}
+                </option>
+              ))}
+            </select>
+          </div>
           <input
             type="text"
             placeholder="Search projects..."
@@ -203,17 +219,6 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
             className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs focus:ring-1 focus:ring-primary outline-none transition-all"
             style={{ width: '100%' }}
           />
-          <select
-            value={selectedTeamId}
-            onChange={e => setSelectedTeamId(e.target.value)}
-            className="bg-white/5 border border-white/10 rounded-lg px-3 py-1.5 text-xs focus:ring-1 focus:ring-primary outline-none transition-all"
-            style={{ color: 'var(--text-main)', minWidth: '150px' }}
-          >
-            <option value="all">All Teams</option>
-            {initialTeams?.map(t => (
-              <option key={t.id} value={t.id} style={{ color: 'black' }}>{t.name}</option>
-            ))}
-          </select>
         </div>
         
         <div style={{ 
