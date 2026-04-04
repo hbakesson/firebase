@@ -84,7 +84,7 @@ export default async function TeamsPage() {
                 </td>
               </tr>
             ) : (
-              teams.map((team: any) => (
+              teams.map((team) => (
                 <TeamRow key={team.id} team={team} parentOptions={parentOptions} allProjects={allProjects} />
               ))
             )}

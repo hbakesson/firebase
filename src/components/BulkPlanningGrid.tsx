@@ -168,7 +168,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
       },
       size: 60,
     }
-  ], [allocations, initialPeriods]); // Only recompute columns if allocations change
+  ], [allocations, initialPeriods, selectedTeamId]); // Only recompute columns if allocations change
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({

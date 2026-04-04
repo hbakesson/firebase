@@ -15,7 +15,7 @@ interface Team {
   projects?: { id: string; name: string; code: string }[];
 }
 
-const TeamRow = React.memo(({ team, parentOptions, allProjects }: { team: Team; parentOptions: { id: string; name: string }[]; allProjects: any[] }) => {
+const TeamRow = React.memo(({ team, parentOptions, allProjects }: { team: Team; parentOptions: { id: string; name: string }[]; allProjects: Array<{ id: string; name: string; code: string }> }) => {
   const [isPending, startTransition] = useTransition();
   const [isEditing, setIsEditing] = useState(false);
   const [isManagingProjects, setIsManagingProjects] = useState(false);
