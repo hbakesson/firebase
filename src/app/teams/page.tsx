@@ -8,6 +8,13 @@ import {
 } from "lucide-react";
 import { sanitize } from "@/lib/utils";
 import TeamRow from "@/components/TeamRow";
+import { Team as PrismaTeam, Project as PrismaProject } from "@/generated/client";
+
+interface Team extends PrismaTeam {
+  parentTeam?: PrismaTeam | null;
+  projects?: PrismaProject[];
+}
+
 
 export default async function TeamsPage() {
   const session = await auth();
@@ -84,7 +91,7 @@ export default async function TeamsPage() {
                 </td>
               </tr>
             ) : (
-              teams.map((team) => (
+              teams.map((team: Team) => (
                 <TeamRow key={team.id} team={team} parentOptions={parentOptions} allProjects={allProjects} />
               ))
             )}
