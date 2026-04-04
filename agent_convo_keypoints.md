@@ -11,7 +11,7 @@ Transition the `Project` model from a singular `teamId` association to a **many-
     *   Replaced `teamId` with `teamIds` array in project mutations.
     *   Updated `updateProject` and `createProject` to handle `connect` and `set` operations for the `teams` relational field.
 3.  **Data Persistence Layer**: Fully optimized the `prisma.project` and `prisma.team` calls across the application to handle multiple associations.
-4.  **Mock Hardening (`src/lib/mockData.ts`)**:
+4.  **Mock Hardening (`src/lib/mockData.s`)**:
     *   Hardened the mock `findMany` and `findUnique` implementations to ensure `allocations`, `actualAllocations`, and `teams` are **always** initialized as arrays (prevents `.reduce()` and `.map()` crashes).
 
 ### 🐞 Critical Bug Fixes
