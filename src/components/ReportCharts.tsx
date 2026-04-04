@@ -19,6 +19,7 @@ interface ReportChartsProps {
     name: string;
     planned: number;
     actual: number;
+    teams: string[];
   }[];
   teamBreakdown: {
     name: string;
@@ -77,7 +78,14 @@ export default function ReportCharts({ comparisonData, teamBreakdown }: ReportCh
               return (
                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', borderBottom: '1px solid var(--card-border)' }}>
                   <div>
-                    <div style={{ fontWeight: 600 }}>{item.name}</div>
+                    <div style={{ fontWeight: 600, fontSize: '1rem', marginBottom: '0.25rem' }}>{item.name}</div>
+                    <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                      {item.teams.map((t, idx) => (
+                        <span key={idx} style={{ fontSize: '0.65rem', background: 'rgba(255,255,255,0.05)', padding: '2px 6px', borderRadius: '4px', color: 'var(--text-muted)' }}>
+                          {t}
+                        </span>
+                      ))}
+                    </div>
                     <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Difference: {Math.abs(variance)}h</div>
                   </div>
                   <div className={`role-tag ${isOver ? 'role-admin' : 'role-staff'}`}>

@@ -284,21 +284,23 @@ export async function importActuals(rows: { projectCode: string; periodId: strin
 
   for (const row of rows) {
     const project = await prisma.project.findFirst({
-      where: { code: row.projectCode, organizationId: orgId }
+      where: { code: row.projectCode, organizationId: orgId },
+      include: { teams: true }
     });
-    if (!project || !project.teamId) continue;
+    if (!project || project.teams.length === 0) continue;
+    const teamId = project.teams[0].id;
 
     const allocation = await prisma.actualAllocation.upsert({
       where: {
         teamId_projectId_periodId: {
-          teamId: project.teamId,
+          teamId,
           projectId: project.id,
           periodId: row.periodId,
         },
       },
       update: { actualHours: row.hours },
       create: {
-        teamId: project.teamId,
+        teamId,
         projectId: project.id,
         periodId: row.periodId,
         actualHours: row.hours,

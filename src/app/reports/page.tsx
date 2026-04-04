@@ -20,25 +20,48 @@ export default async function ReportsPage() {
   const orgId = session.user.organizationId;
 
   // Fetch Comparison Data, Teams, etc... (keep existing logic)
-  const projects = await prisma.project.findMany({
-    where: { organizationId: orgId },
-    include: { allocations: true, actualAllocations: true, team: true }
-  });
+  interface ProjectWithRelations {
+    id: string;
+    name: string;
+    allocations: { plannedHours: number | null }[];
+    actualAllocations: { actualHours: number | null }[];
+    teams: { id: string; name: string }[];
+  }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const comparisonData = projects.map((p: any) => {
+  interface TeamWithAllocations {
+    name: string;
+    allocations: { plannedHours: number | null }[];
+  }
+
+  const projects = (await prisma.project.findMany({
+    where: { organizationId: orgId },
+    include: { allocations: true, actualAllocations: true, teams: true }
+  })) as unknown as ProjectWithRelations[];
+
+  interface ComparisonItem {
+    name: string;
+    planned: number;
+    actual: number;
+    teams: string[];
+  }
+
+  const comparisonData: ComparisonItem[] = projects.map((p: ProjectWithRelations) => {
     const planned = p.allocations.reduce((acc: number, curr: { plannedHours: number | null }) => acc + (curr.plannedHours || 0), 0);
     const actual = p.actualAllocations.reduce((acc: number, curr: { actualHours: number | null }) => acc + (curr.actualHours || 0), 0);
-    return { name: p.name, planned, actual };
-  }).filter((d: { planned: number; actual: number }) => d.planned > 0 || d.actual > 0);
+    return { 
+      name: p.name, 
+      planned, 
+      actual,
+      teams: p.teams.map((t: { name: string }) => t.name)
+    };
+  }).filter((d: ComparisonItem) => d.planned > 0 || d.actual > 0);
 
-  const teams = await prisma.team.findMany({
+  const teams = (await prisma.team.findMany({
     where: { organizationId: orgId },
     include: { allocations: true }
-  });
+  })) as unknown as TeamWithAllocations[];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const teamBreakdown = teams.map((t: any) => ({
+  const teamBreakdown = teams.map((t: TeamWithAllocations) => ({
     name: t.name,
     value: t.allocations.reduce((acc: number, curr: { plannedHours: number | null }) => acc + (curr.plannedHours || 0), 0)
   })).filter((t: { value: number }) => t.value > 0);

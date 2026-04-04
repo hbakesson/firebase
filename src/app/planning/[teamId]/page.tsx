@@ -33,8 +33,8 @@ export default async function PlanningPage({
       where: { 
         organizationId: session.user.organizationId,
         OR: [
-          { teamId: teamId },
-          { teamId: null }
+          { teams: { some: { id: teamId } } },
+          { teams: { none: {} } }
         ],
         status: { in: ["PLANNED", "ACTIVE"] }
       },

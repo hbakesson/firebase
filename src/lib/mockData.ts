@@ -73,7 +73,12 @@ export const createMockPrisma = () => {
           if (include?.parentTeam && (t as any).parentTeamId) {
             parentTeam = mockTeams.find(p => p.id === (t as any).parentTeamId) || null;
           }
-          const team = { ...t, isActive: true, parentTeam };
+          const team = { 
+            ...t, 
+            isActive: true, 
+            parentTeam,
+            allocations: (t as any).allocations || []
+          };
           if (include?.projects) {
             (team as any).projects = mockProjects.filter(p => p.teamIds?.includes(t.id));
           }
@@ -125,7 +130,10 @@ export const createMockPrisma = () => {
       findUnique: async ({ where, include }: any) => {
         const t = mockTeams.find(team => team.id === where.id);
         if (t) {
-          const team = { ...t };
+          const team = { 
+            ...t,
+            allocations: (t as any).allocations || []
+          };
           if (include?.projects) {
             (team as any).projects = mockProjects.filter(p => p.teamIds?.includes(t.id));
           }
@@ -138,11 +146,19 @@ export const createMockPrisma = () => {
       findMany: async ({ where, include }: any = {}) => {
         let results = mockProjects.filter(p => !where?.status || p.status === where.status);
         
-        if (include?.teams) {
-          results = results.map(p => ({
-            ...p,
-            teams: (p.teamIds || []).map((id: string) => mockTeams.find(t => t.id === id)).filter(Boolean)
-          }));
+        if (include) {
+          results = results.map(p => {
+            const extended: any = { 
+              ...p,
+              allocations: p.allocations || [],
+              actualAllocations: p.actualAllocations || [],
+              teams: p.teams || []
+            };
+            if (include.teams) {
+              extended.teams = (p.teamIds || []).map((id: string) => mockTeams.find(t => t.id === id)).filter(Boolean);
+            }
+            return extended;
+          });
         }
         return results;
       },
