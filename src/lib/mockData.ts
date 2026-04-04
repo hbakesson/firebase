@@ -216,9 +216,10 @@ export const createMockPrisma = () => {
         
         // Handle composite unique key logic from prisma call: 
         // where: { teamId_projectId_periodId: { teamId, projectId, periodId } }
-        const { projectId, periodId } = where.teamId_projectId_periodId || where;
+        const { teamId, projectId, periodId } = where.teamId_projectId_periodId || where;
 
         const existingIdx = mockAllocations.findIndex(a => 
+          a.teamId === teamId &&
           a.projectId === projectId && 
           a.periodId === periodId
         );
@@ -227,7 +228,13 @@ export const createMockPrisma = () => {
           mockAllocations[existingIdx] = { ...mockAllocations[existingIdx], ...update };
           return mockAllocations[existingIdx];
         } else {
-          const newAlloc = { id: `alloc-${Date.now()}`, ...create };
+          const newAlloc = { 
+            id: `alloc-${Date.now()}`, 
+            teamId, 
+            projectId, 
+            periodId, 
+            ...create 
+          };
           mockAllocations.push(newAlloc);
           return newAlloc;
         }

@@ -23,6 +23,9 @@ export default async function BulkPlanningPage() {
       organizationId: orgId,
       status: "ACTIVE" 
     },
+    include: {
+      teams: true
+    },
     orderBy: { name: 'asc' }
   });
 

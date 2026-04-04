@@ -84,7 +84,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
   const [allocations, setAllocations] = useState<Record<string, number>>(() => 
     initialAllocations.reduce((acc, curr) => ({
       ...acc,
-      [`${curr.projectId}-${curr.periodId}`]: curr.plannedHours
+      [`${curr.projectId}-${curr.periodId}-${curr.teamId}`]: curr.plannedHours
     }), {})
   );
 
@@ -137,7 +137,13 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
           <div style={{ fontSize: '0.55rem', color: 'var(--text-muted)', fontWeight: 400 }}>{per.label.split(' (')[1]?.replace(')', '')}</div>
         </div>
       ),
-      accessorFn: (row: BulkProject) => allocations[`${row.id}-${per.id}`] ?? 0,
+      accessorFn: (row: BulkProject) => {
+        if (selectedTeamId !== 'all') {
+          return allocations[`${row.id}-${per.id}-${selectedTeamId}`] ?? 0;
+        }
+        // Sum across all teams for this project/period
+        return (row.teams || []).reduce((sum, t) => sum + (allocations[`${row.id}-${per.id}-${t.id}`] || 0), 0);
+      },
       cell: CompactEditableCell,
       size: 70,
     })),
@@ -146,8 +152,14 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
       header: "Σ",
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       cell: ({ row }: CellContext<BulkProject, any>) => {
-        // total is already memoized implicitly within allocations dependency of columns
-        const total = initialPeriods.reduce((acc, per) => acc + (allocations[`${row.id}-${per.id}`] || 0), 0);
+        const total = initialPeriods.reduce((acc, per) => {
+          if (selectedTeamId !== 'all') {
+            return acc + (allocations[`${row.original.id}-${per.id}-${selectedTeamId}`] || 0);
+          }
+          const prjTeams = row.original.teams || [];
+          const projectPeriodSum = prjTeams.reduce((sum, t) => sum + (allocations[`${row.original.id}-${per.id}-${t.id}`] || 0), 0);
+          return acc + projectPeriodSum;
+        }, 0);
         return (
           <div style={{ textAlign: 'center', fontSize: '0.75rem', fontWeight: 700, color: 'var(--primary-light)' }}>
             {total}
@@ -168,7 +180,8 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
       updateData: (rowIndex: number, columnId: string, value: unknown) => {
         const prj = filteredData[rowIndex];
         const val = parseFloat(value as string) || 0;
-        const key = `${prj.id}-${columnId}`;
+        const targetTeamId = selectedTeamId !== "all" ? selectedTeamId : (prj.teams?.[0]?.id || "bulk-global");
+        const key = `${prj.id}-${columnId}-${targetTeamId}`;
         
         setAllocations(prev => ({ ...prev, [key]: val }));
         setSavingStatus('saving');
