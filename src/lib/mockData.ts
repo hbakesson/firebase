@@ -269,7 +269,23 @@ export const createMockPrisma = () => {
       count: async () => 0,
     },
     organization: {
-      findFirst: async () => ({ id: "mock-org", name: "Mock Organization" }),
+      findFirst: async () => ({ 
+        id: "mock-org", 
+        name: "Mock Organization",
+        fiscalYearStartMonth: 1,
+        defaultCurrency: "USD"
+      }),
+      findUnique: async ({ where }: any) => ({ 
+        id: where.id || "mock-org", 
+        name: "Mock Organization",
+        fiscalYearStartMonth: 1,
+        defaultCurrency: "USD"
+      }),
+      update: async ({ where, data }: any) => ({ 
+        id: where.id || "mock-org", 
+        name: "Mock Organization", 
+        ...data 
+      }),
     },
     $transaction: async (promises: Promise<any>[]) => Promise.all(promises),
   };

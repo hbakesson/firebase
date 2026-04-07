@@ -46,15 +46,15 @@ const UserRow = React.memo(({ user, currentUserId }: { user: User; currentUserId
             fontWeight: 700,
             color: 'white'
           }}>
-            {user.name?.[0] || user.email?.[0].toUpperCase()}
+            {user.name?.[0] || user.email?.[0]?.toUpperCase() || "?"}
           </div>
-          <span style={{ fontWeight: 600 }}>{user.name || "Unnamed User"} {isSelf && "(You)"}</span>
+          <span style={{ fontWeight: 600 }}>{user.name || (user.email ? user.email.split('@')[0] : "Invited User")} {isSelf && "(You)"}</span>
         </div>
       </td>
       <td>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)' }}>
           <Mail size={14} />
-          {user.email}
+          {user.email || "No email provided"}
         </div>
       </td>
       <td>

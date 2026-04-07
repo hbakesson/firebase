@@ -1,4 +1,4 @@
-import { Users, Shield, Clock, Mail } from "lucide-react";
+import { Users, Shield, Clock, Mail, Link as LinkIcon } from "lucide-react";
 import { Metadata } from "next";
 import InviteUserModal from "@/components/InviteUserModal";
 import UserRow from "@/components/UserRow";
@@ -23,8 +23,12 @@ export default async function UsersPage() {
     include: { accounts: true }
   });
 
-  const activeUsers = usersWithAccounts.filter((u: { accounts: unknown[]; id: string }) => u.accounts.length > 0 || u.id === session.user.id);
-  const pendingUsers = usersWithAccounts.filter((u: { accounts: unknown[]; id: string }) => u.accounts.length === 0 && u.id !== session.user.id);
+  const activeUsers = usersWithAccounts.filter((u: { accounts: any[]; id: string; password?: string | null; name?: string | null }) => 
+    u.accounts.length > 0 || !!u.password || !!u.name || u.id === session.user.id
+  );
+  const pendingUsers = usersWithAccounts.filter((u: { accounts: any[]; id: string; password?: string | null; name?: string | null }) => 
+    u.accounts.length === 0 && !u.password && !u.name && u.id !== session.user.id
+  );
 
   return (
     <div className="users-page space-y-8">
@@ -91,18 +95,29 @@ export default async function UsersPage() {
             </div>
           ) : (
             <div className="space-y-3">
-              {pendingUsers.map((user: { id: string; email: string | null; role: string }) => (
-                <div key={user.id} className="user-badge" style={{ justifyContent: 'space-between', padding: '0.75rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+              {pendingUsers.map((user: { id: string; email: string | null; role: string; createdAt: Date }) => (
+                <div key={user.id} className="user-badge" style={{ justifyContent: 'space-between', padding: '0.75rem', gap: '1rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1 }}>
                     <Mail size={16} className="text-indigo-400" />
                     <div>
                       <div style={{ fontWeight: 600, fontSize: '0.875rem' }}>{user.email}</div>
-                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>Invited as {user.role}</div>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
+                        Invited as {user.role} on {new Date(user.createdAt).toLocaleDateString()}
+                      </div>
                     </div>
                   </div>
-                  <span className="role-tag" style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-muted)', border: 'none' }}>
-                    Awaiting
-                  </span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <button 
+                      className="secondary btn-xs" 
+                      title="Copy join link"
+                      style={{ padding: '0.3rem 0.6rem', fontSize: '0.7rem' }}
+                    >
+                      <LinkIcon size={12} /> Link
+                    </button>
+                    <span className="role-tag" style={{ background: 'rgba(255,255,255,0.05)', color: 'var(--text-muted)', border: 'none', margin: 0 }}>
+                      Awaiting
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>

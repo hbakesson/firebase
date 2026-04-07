@@ -17,10 +17,12 @@ datasource db {
 // ─── Project Tracker Models ──────────────────────────────────────────────────
 
 model Organization {
-  id        String   @id @default(cuid())
-  name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                   String   @id @default(cuid())
+  name                 String
+  fiscalYearStartMonth Int      @default(1)
+  defaultCurrency      String   @default("USD")
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
   users     User[]
   projects  Project[]

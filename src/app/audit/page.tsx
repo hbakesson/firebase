@@ -12,11 +12,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-export default async function AuditPage({ searchParams }: { searchParams: Promise<{ entityType?: string; action?: string }> }) {
+export default async function AuditPage({ searchParams }: { searchParams: Promise<{ entityType?: string; action?: string; q?: string }> }) {
   const session = await auth();
   if (!session?.user?.organizationId) redirect("/login");
 
-  const { entityType, action } = await searchParams;
+  const { entityType, action, q } = await searchParams;
   const orgId = session.user.organizationId;
 
   const logs = await prisma.auditLog.findMany({
@@ -24,6 +24,14 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
       organizationId: orgId,
       ...(entityType ? { entityType } : {}),
       ...(action ? { action } : {}),
+      ...(q ? {
+        OR: [
+          { projectName: { contains: q, mode: 'insensitive' } },
+          { userEmail: { contains: q, mode: 'insensitive' } },
+          { newValue: { contains: q, mode: 'insensitive' } },
+          { entityId: { contains: q } },
+        ]
+      } : {})
     },
     orderBy: { timestamp: "desc" },
     take: 100,
@@ -51,7 +59,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
           <div style={{ display: 'flex', gap: '0.5rem' }}>
             <Link 
               href="/audit" 
-              className={`role-tag ${!entityType && !action ? 'role-admin' : 'secondary'}`}
+              className={`role-tag ${!entityType && !action && !q ? 'role-admin' : 'secondary'}`}
               style={{ padding: '0.4rem 1rem' }}
             >
               All Activity
@@ -73,12 +81,29 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
           </div>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div className="user-badge" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid var(--card-border)' }}>
-            <Search size={14} />
-            <span style={{ fontSize: '0.875rem' }}>Search by Project Code...</span>
+        <form action="/audit" method="GET" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          {entityType && <input type="hidden" name="entityType" value={entityType} />}
+          {action && <input type="hidden" name="action" value={action} />}
+          <div className="input-group" style={{ margin: 0 }}>
+            <div className="relative">
+              <input 
+                type="text" 
+                name="q"
+                placeholder="Search logs..." 
+                defaultValue={q || ""}
+                style={{ 
+                  paddingLeft: '2.5rem',
+                  borderRadius: '2rem',
+                  fontSize: '0.875rem',
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid var(--card-border)',
+                  width: '250px'
+                }}
+              />
+              <Search size={14} style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', opacity: 0.5 }} />
+            </div>
           </div>
-        </div>
+        </form>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 350px', gap: '2rem' }}>

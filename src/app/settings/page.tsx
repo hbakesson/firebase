@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { Settings as SettingsIcon, User, Shield, Building } from "lucide-react";
 import { Metadata } from "next";
 import ProfileForm from "./ProfileForm";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Settings | Project Tracker",
@@ -64,6 +65,13 @@ export default async function SettingsPage() {
               </code>
             </div>
           </div>
+          {role === 'admin' && (
+            <div style={{ marginTop: '2rem', borderTop: '1px solid var(--card-border)', paddingTop: '1.5rem' }}>
+              <Link href="/settings/organization" className="secondary flex items-center justify-center gap-2 w-full" style={{ fontSize: '0.875rem' }}>
+                <Building size={16} /> Manage Organization
+              </Link>
+            </div>
+          )}
         </div>
 
       </div>

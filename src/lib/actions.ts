@@ -567,3 +567,34 @@ export async function updateMyProfile(formData: FormData) {
   revalidatePath("/");
   return { success: true };
 }
+
+export async function updateOrganization(data: { name?: string; fiscalYearStartMonth?: number; defaultCurrency?: string }) {
+  const session = await auth();
+  if (!session?.user?.id || session.user.role !== "admin") throw new Error("Unauthorized");
+  if (!session.user.organizationId) throw new Error("No organization associated");
+
+  const orgId = session.user.organizationId;
+  const previous = await prisma.organization.findUnique({ where: { id: orgId } });
+
+  const updated = await prisma.organization.update({
+    where: { id: orgId },
+    data
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      organizationId: orgId,
+      action: "UPDATE",
+      entityType: "Organization",
+      projectName: updated.name,
+      userId: session.user.id,
+      userEmail: session.user.email!,
+      previousValue: JSON.stringify(previous),
+      newValue: JSON.stringify(updated),
+    },
+  });
+
+  revalidatePath("/settings");
+  revalidatePath("/settings/organization");
+  return { success: true };
+}
