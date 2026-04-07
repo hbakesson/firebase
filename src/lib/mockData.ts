@@ -56,6 +56,7 @@ const mockProjects: any[] = [
 ];
 
 const mockAllocations: Allocation[] = [];
+const mockActualAllocations: any[] = [];
 
 export const createMockPrisma = () => {
   console.log("🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...");
@@ -258,7 +259,42 @@ export const createMockPrisma = () => {
       }
     },
     actualAllocation: {
-      upsert: async ({ create }: any) => ({ id: `actual-${Date.now()}`, ...create }),
+      findMany: async ({ where }: any) => {
+        let results = mockActualAllocations;
+        if (where?.projectId?.in) {
+          results = results.filter(a => where.projectId.in.includes(a.projectId));
+        }
+        if (where?.periodId?.in) {
+          results = results.filter(a => where.periodId.in.includes(a.periodId));
+        }
+        return results;
+      },
+      upsert: async ({ create, update, where }: any) => {
+        console.log("🛠️ [MOCK] actualAllocation.upsert", where);
+        
+        const { teamId, projectId, periodId } = where.teamId_projectId_periodId || where;
+
+        const existingIdx = mockActualAllocations.findIndex(a => 
+          a.teamId === teamId &&
+          a.projectId === projectId && 
+          a.periodId === periodId
+        );
+
+        if (existingIdx >= 0) {
+          mockActualAllocations[existingIdx] = { ...mockActualAllocations[existingIdx], ...update };
+          return mockActualAllocations[existingIdx];
+        } else {
+          const newAlloc = { 
+            id: `actual-${Date.now()}`, 
+            teamId, 
+            projectId, 
+            periodId, 
+            ...create 
+          };
+          mockActualAllocations.push(newAlloc);
+          return newAlloc;
+        }
+      },
     },
     auditLog: {
       create: async ({ data }: any) => {
