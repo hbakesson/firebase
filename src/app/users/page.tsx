@@ -14,24 +14,34 @@ export default async function UsersPage() {
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
   
-  const orgId = session.user.organizationId!;
+  const orgId = session.user.organizationId;
+  if (!orgId) {
+    console.error("[USERS] No organizationId for user", session.user.id);
+    return <div>Error: No organization found for your account.</div>;
+  }
 
-  // "Active" = Has at least one account linked or has logged in (NextAuth logic)
-  // "Pending" = Invited but no account linked yet
-  const usersWithAccounts = await prisma.user.findMany({
-    where: { organizationId: orgId },
-    include: { accounts: true }
-  });
+  let usersWithAccounts: any[] = [];
+  try {
+    usersWithAccounts = await prisma.user.findMany({
+      where: { organizationId: orgId },
+      include: { accounts: true }
+    });
+    console.log(`[USERS] Found ${usersWithAccounts.length} users for org ${orgId}`);
+  } catch (err: any) {
+    console.error("[USERS] Database fetch failed:", err.message);
+    return <div>Internal Server Error: Database access failed.</div>;
+  }
 
-  const activeUsers = usersWithAccounts.filter((u: { accounts: unknown[]; id: string; password?: string | null; name?: string | null }) => 
-    u.accounts.length > 0 || !!u.password || !!u.name || u.id === session.user.id
+  const activeUsers = usersWithAccounts.filter((u) => 
+    (u.accounts && u.accounts.length > 0) || !!u.password || !!u.name || u.id === session.user.id
   );
-  const pendingUsers = usersWithAccounts.filter((u: { accounts: unknown[]; id: string; password?: string | null; name?: string | null }) => 
-    u.accounts.length === 0 && !u.password && !u.name && u.id !== session.user.id
+  const pendingUsers = usersWithAccounts.filter((u) => 
+    (!u.accounts || u.accounts.length === 0) && !u.password && !u.name && u.id !== session.user.id
   );
 
   return (
     <div className="users-page space-y-8">
+      {/* ... previous header ... */}
       <header className="header-row">
         <div>
           <h1 className="text-3xl font-extrabold">User Management</h1>
@@ -58,7 +68,7 @@ export default async function UsersPage() {
               </tr>
             </thead>
             <tbody>
-              {activeUsers.map((user: { id: string; name: string | null; email: string | null; role: string }) => (
+              {activeUsers.map((user: any) => (
                 <UserRow key={user.id} user={user} currentUserId={session.user.id!} />
               ))}
             </tbody>
@@ -95,14 +105,14 @@ export default async function UsersPage() {
             </div>
           ) : (
             <div className="space-y-3">
-              {pendingUsers.map((user: { id: string; email: string | null; role: string; createdAt: Date }) => (
+              {pendingUsers.map((user: any) => (
                 <div key={user.id} className="user-badge" style={{ justifyContent: 'space-between', padding: '0.75rem', gap: '1rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1 }}>
                     <Mail size={16} className="text-indigo-400" />
                     <div>
                       <div style={{ fontWeight: 600, fontSize: '0.875rem' }}>{user.email}</div>
                       <div style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>
-                        Invited as {user.role} on {new Date(user.createdAt).toLocaleDateString()}
+                        Invited as {user.role || 'user'} on {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'recently'}
                       </div>
                     </div>
                   </div>
