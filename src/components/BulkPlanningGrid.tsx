@@ -20,7 +20,6 @@ declare module '@tanstack/react-table' {
     allocations?: Record<string, number>;
     actualsMap?: Record<string, number>;
     selectedTeamId?: string;
-    isSaving?: boolean;
   }
 }
 
@@ -38,8 +37,6 @@ const PlannedCell = React.memo(({ getValue, row, column, table }: CellContext<Bu
   const plannedValue = getValue();
   const [localValue, setLocalValue] = useState<string | number>(plannedValue);
   
-  const meta = table.options.meta;
-  const isSaving = meta?.isSaving;
   // The column ID for sub-columns usually looks like "periodId-planned"
   const periodId = column.id.split('-')[0];
   const isLocked = (column.columnDef as ColumnDef<BulkProject, number> & { meta: { isLocked?: boolean } }).meta?.isLocked;
@@ -60,7 +57,7 @@ const PlannedCell = React.memo(({ getValue, row, column, table }: CellContext<Bu
         value={localValue}
         onChange={e => setLocalValue(e.target.value)}
         onBlur={onBlur}
-        disabled={isLocked || isSaving}
+        disabled={isLocked}
         type="number"
         step="1"
         min="0"
@@ -88,7 +85,6 @@ const ActualCell = React.memo(({ getValue, row, column, table }: CellContext<Bul
   const actualValue = getValue();
   const [localValue, setLocalValue] = useState<string | number>(actualValue);
   const meta = table.options.meta;
-  const isSaving = meta?.isSaving;
   const allocations = meta?.allocations;
   const periodId = column.id.split('-')[0];
   const selectedTeamId = meta?.selectedTeamId;
@@ -120,7 +116,6 @@ const ActualCell = React.memo(({ getValue, row, column, table }: CellContext<Bul
         value={localValue}
         onChange={e => setLocalValue(e.target.value)}
         onBlur={onBlur}
-        disabled={isSaving}
         type="number"
         step="1"
         min="0"
@@ -297,7 +292,6 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
       allocations, // Pass allocations for totals and health checks
       actualsMap,
       selectedTeamId,
-      isSaving: savingStatus === 'saving',
       updateData: (rowIndex: number, columnId: string, value: unknown) => {
         const prj = filteredData[rowIndex];
         const val = parseFloat(value as string) || 0;
