@@ -58,9 +58,9 @@ const PlannedCell = React.memo(({ getValue, row, column, table }: CellContext<Bu
         onChange={e => setLocalValue(e.target.value)}
         onBlur={onBlur}
         disabled={isLocked}
-        type="number"
-        step="1"
-        min="0"
+        type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
         style={{
           width: '100%',
           background: 'transparent',
@@ -116,9 +116,9 @@ const ActualCell = React.memo(({ getValue, row, column, table }: CellContext<Bul
         value={localValue}
         onChange={e => setLocalValue(e.target.value)}
         onBlur={onBlur}
-        type="number"
-        step="1"
-        min="0"
+        type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
         style={{
           width: '100%',
           background: isOverPlan ? 'rgba(245, 158, 11, 0.05)' : 'transparent',
