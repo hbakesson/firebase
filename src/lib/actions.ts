@@ -317,7 +317,7 @@ export async function importActuals(rows: ImportRow[]) {
     let attributionWarning = false;
 
     if (row.teamCode) {
-      const foundTeam = project.teams.find((t: any) => t.code === row.teamCode);
+      const foundTeam = project.teams.find((t: { id: string; name: string; code: string; organizationId: string }) => t.code === row.teamCode);
       if (foundTeam) {
         targetTeam = foundTeam;
       } else {

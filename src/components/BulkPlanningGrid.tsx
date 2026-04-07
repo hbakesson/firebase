@@ -31,6 +31,7 @@ interface BulkProject {
 const CompactEditableCell = React.memo(({ getValue, row, column, table }: CellContext<BulkProject, number>) => {
   const initialValue = getValue() as number;
   const [value, setValue] = useState<string | number>(initialValue);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const isDisabled = (column.columnDef as any).meta?.isLocked;
 
   // Sync internal value if global state changes externally (e.g. from total recalculation or Undo)
