@@ -17,6 +17,7 @@ export interface Period {
   label: string;
   startDate: Date;
   endDate: Date;
+  isLocked?: boolean;
 }
 
 export interface Allocation {

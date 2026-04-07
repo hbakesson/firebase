@@ -43,4 +43,5 @@ next-env.d.ts
 .firebase/
 
 /src/generated/prisma
+/src/generated/client
 cloud-sql-proxy

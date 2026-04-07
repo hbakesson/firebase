@@ -25,7 +25,7 @@ export default async function TeamsPage() {
   // 1. Fetch main teams list with parent and projects inclusion
   const rawTeams = await prisma.team.findMany({
     where: { organizationId: orgId },
-    include: { parentTeam: true, projects: true },
+    include: { parentTeam: true, projects: true, _count: { select: { allocations: true, actualAllocations: true } } },
     orderBy: { name: 'asc' }
   });
 

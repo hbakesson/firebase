@@ -40,7 +40,7 @@ model Team {
   updatedAt      DateTime @updatedAt
 
   organization      Organization       @relation(fields: [organizationId], references: [id])
-  parentTeam        Team?              @relation("TeamHierarchy", fields: [parentTeamId], references: [id])
+  parentTeam        Team?              @relation("TeamHierarchy", fields: [parentTeamId], references: [id], onDelete: SetNull)
   childTeams        Team[]             @relation("TeamHierarchy")
   projects          Project[]
   allocations       BudgetAllocation[]
@@ -90,8 +90,8 @@ model BudgetAllocation {
   plannedHours Float    @default(0)
   updatedAt    DateTime @updatedAt
 
-  team    Team    @relation(fields: [teamId], references: [id])
-  project Project @relation(fields: [projectId], references: [id])
+  team    Team    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   period  Period  @relation(fields: [periodId], references: [id])
 
   @@unique([teamId, projectId, periodId])
@@ -105,8 +105,8 @@ model ActualAllocation {
   actualHours Float    @default(0)
   updatedAt   DateTime @updatedAt
 
-  team    Team    @relation(fields: [teamId], references: [id])
-  project Project @relation(fields: [projectId], references: [id])
+  team    Team    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
   period  Period  @relation(fields: [periodId], references: [id])
 
   @@unique([teamId, projectId, periodId])
@@ -126,7 +126,7 @@ model AuditLog {
   timestamp      DateTime @default(now())
 
   organization Organization? @relation(fields: [organizationId], references: [id])
-  project      Project?      @relation(fields: [entityId], references: [id], map: "AuditLog_projectId_fkey")
+  project      Project?      @relation(fields: [entityId], references: [id], onDelete: SetNull, map: "AuditLog_projectId_fkey")
 }
 
 // ─── NextAuth Models ─────────────────────────────────────────────────────────

@@ -47,11 +47,11 @@ export default function ImportPage() {
     setStatus('importing');
     try {
       // Map data to the format expected by the server action
-      // Expected columns: projectCode, periodId, hours
       const rows = data.map((row: CSVRow) => ({
         projectCode: row.projectCode || row.Code || row.ProjectCode || "",
         periodId: row.periodId || row.Period || row.PeriodId || "",
-        hours: parseFloat(row.hours || row.Hours || row.ActualHours || "0") || 0
+        hours: parseFloat(row.hours || row.Hours || row.ActualHours || "0") || 0,
+        teamCode: row.teamCode || row.Team || row.TeamCode || undefined
       })).filter(r => r.projectCode && r.periodId);
 
       if (rows.length === 0) throw new Error("No valid data rows found. Check column headers (projectCode, periodId, hours).");

@@ -31,6 +31,7 @@ interface BulkProject {
 const CompactEditableCell = React.memo(({ getValue, row, column, table }: CellContext<BulkProject, any>) => {
   const initialValue = getValue() as number;
   const [value, setValue] = useState<string | number>(initialValue);
+  const isDisabled = (column.columnDef as any).meta?.isLocked;
 
   // Sync internal value if global state changes externally (e.g. from total recalculation or Undo)
   React.useEffect(() => {
@@ -48,22 +49,24 @@ const CompactEditableCell = React.memo(({ getValue, row, column, table }: CellCo
       value={value}
       onChange={e => setValue(e.target.value)}
       onBlur={onBlur}
+      disabled={isDisabled}
       type="number"
       step="0.5"
       min="0"
       style={{
         width: '100%',
-        background: 'transparent',
+        background: isDisabled ? 'rgba(255,255,255,0.02)' : 'transparent',
         border: 'none',
-        color: 'var(--text-main)',
+        color: isDisabled ? 'var(--text-muted)' : 'var(--text-main)',
         fontSize: '0.7rem',
         textAlign: 'center',
         padding: '0.2rem',
         outline: 'none',
         borderRadius: '2px',
         transition: 'background 0.2s',
+        cursor: isDisabled ? 'not-allowed' : 'text',
       }}
-      className="hover:bg-white/5 focus:bg-white/10"
+      className={isDisabled ? "" : "hover:bg-white/5 focus:bg-white/10"}
     />
   );
 });
@@ -132,7 +135,10 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
     ...initialPeriods.map(per => ({
       id: per.id,
       header: () => (
-        <div style={{ textAlign: 'center', lineHeight: 1.1 }}>
+        <div style={{ textAlign: 'center', lineHeight: 1.1, position: 'relative' }}>
+          {per.isLocked && (
+            <div style={{ position: 'absolute', top: '-8px', right: '-4px', fontSize: '0.6rem', color: '#f59e0b' }}>🔒</div>
+          )}
           <div style={{ fontSize: '0.65rem', fontWeight: 700 }}>{per.label.split(' (')[0]}</div>
           <div style={{ fontSize: '0.55rem', color: 'var(--text-muted)', fontWeight: 400 }}>{per.label.split(' (')[1]?.replace(')', '')}</div>
         </div>
@@ -146,6 +152,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
       },
       cell: CompactEditableCell,
       size: 70,
+      meta: { isLocked: per.isLocked }
     })),
     {
       id: "total",
@@ -180,9 +187,16 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
       updateData: (rowIndex: number, columnId: string, value: unknown) => {
         const prj = filteredData[rowIndex];
         const val = parseFloat(value as string) || 0;
-        const targetTeamId = selectedTeamId !== "all" ? selectedTeamId : (prj.teams?.[0]?.id || "bulk-global");
-        const key = `${prj.id}-${columnId}-${targetTeamId}`;
+        const isMultiTeam = prj.teams && prj.teams.length > 1;
+        const targetTeamId = selectedTeamId !== "all" 
+          ? selectedTeamId 
+          : (prj.teams?.[0]?.id || "bulk-global");
+
+        if (selectedTeamId === "all" && isMultiTeam) {
+          alert(`Note: This project (${prj.code}) is assigned to multiple teams. Your change will be attributed to ${prj.teams?.[0]?.name}. Select a specific team for precise control.`);
+        }
         
+        const key = `${prj.id}-${columnId}-${targetTeamId}`;
         setAllocations(prev => ({ ...prev, [key]: val }));
         setSavingStatus('saving');
 

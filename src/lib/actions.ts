@@ -156,6 +156,16 @@ export async function deleteProject(id: string) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
 
+  const lockedData = await prisma.budgetAllocation.findFirst({
+    where: { projectId: id, period: { isLocked: true } }
+  }) || await prisma.actualAllocation.findFirst({
+    where: { projectId: id, period: { isLocked: true } }
+  });
+
+  if (lockedData) {
+    throw new Error("Cannot delete project containing data in locked fiscal periods. Please unlock the periods first.");
+  }
+
   const project = await prisma.project.delete({
     where: { id },
   });
@@ -205,6 +215,9 @@ export async function createYearPeriods(year: number) {
 export async function upsertAllocation(data: { teamId: string; projectId: string; periodId: string; plannedHours: number }) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
+
+  const period = await prisma.period.findUnique({ where: { id: data.periodId } });
+  if (period?.isLocked) throw new Error("This period is locked for fiscal governance. Modifications are disabled.");
 
   const allocation = await prisma.budgetAllocation.upsert({
     where: {
@@ -275,7 +288,7 @@ export async function getOrCreateWeeklyPeriods() {
   return sanitize(results) as typeof results;
 }
 
-export async function importActuals(rows: { projectCode: string; periodId: string; hours: number }[]) {
+export async function importActuals(rows: { projectCode: string; periodId: string; hours: number; teamCode?: string }[]) {
   const session = await auth();
   if (!session?.user?.organizationId) throw new Error("Unauthorized");
 
@@ -283,12 +296,31 @@ export async function importActuals(rows: { projectCode: string; periodId: strin
   const results = [];
 
   for (const row of rows) {
+    const period = await prisma.period.findUnique({ where: { id: row.periodId } });
+    if (period?.isLocked) continue;
+
     const project = await prisma.project.findFirst({
       where: { code: row.projectCode, organizationId: orgId },
       include: { teams: true }
     });
+    
     if (!project || project.teams.length === 0) continue;
-    const teamId = project.teams[0].id;
+
+    let targetTeam = project.teams[0];
+    let attributionWarning = false;
+
+    if (row.teamCode) {
+      const foundTeam = project.teams.find((t: any) => t.code === row.teamCode);
+      if (foundTeam) {
+        targetTeam = foundTeam;
+      } else {
+        attributionWarning = true;
+      }
+    } else if (project.teams.length > 1) {
+      attributionWarning = true;
+    }
+
+    const teamId = targetTeam.id;
 
     const allocation = await prisma.actualAllocation.upsert({
       where: {
@@ -306,6 +338,22 @@ export async function importActuals(rows: { projectCode: string; periodId: strin
         actualHours: row.hours,
       },
     });
+
+    if (attributionWarning) {
+      await prisma.auditLog.create({
+        data: {
+          organizationId: orgId,
+          action: "IMPORT_WARNING",
+          entityType: "ActualAllocation",
+          entityId: allocation.id,
+          projectName: project.name,
+          userId: session.user.id!,
+          userEmail: session.user.email!,
+          newValue: `Ambiguous attribution for project ${project.code}. Defaulted to team ${targetTeam.code}.`,
+        },
+      });
+    }
+
     results.push(allocation);
   }
 
@@ -412,7 +460,22 @@ export async function deleteTeam(teamId: string) {
   const session = await auth();
   if (session?.user?.role !== "admin") throw new Error("Unauthorized");
 
-  const team = await prisma.team.findUnique({ where: { id: teamId } });
+  const team = await prisma.team.findUnique({ 
+    where: { id: teamId },
+    include: { allocations: true, actualAllocations: true }
+  });
+
+  if (!team) throw new Error("Team not found");
+
+  const lockedData = await prisma.budgetAllocation.findFirst({
+    where: { teamId: teamId, period: { isLocked: true } }
+  }) || await prisma.actualAllocation.findFirst({
+    where: { teamId: teamId, period: { isLocked: true } }
+  });
+
+  if (lockedData) {
+    throw new Error("Cannot delete team with records in locked fiscal periods. Please unlock the periods first.");
+  }
 
   await prisma.team.delete({
     where: { id: teamId },
@@ -423,9 +486,10 @@ export async function deleteTeam(teamId: string) {
       organizationId: session.user.organizationId!,
       action: "DELETE",
       entityType: "Team",
-      projectName: team?.name || "Deleted Team",
+      projectName: team.name,
       userId: session.user.id!,
       userEmail: session.user.email!,
+      previousValue: JSON.stringify(team),
     },
   });
 
