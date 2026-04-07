@@ -16,7 +16,7 @@ declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface TableMeta<TData extends RowData> {
     updateData: (rowIndex: number, columnId: string, value: unknown) => void;
-    updateActualData: (rowIndex: number, columnId: string, value: unknown) => void;
+    updateActuals: (rowIndex: number, columnId: string, value: unknown) => void;
     allocations?: Record<string, number>;
     actualsMap?: Record<string, number>;
     selectedTeamId?: string;
@@ -87,13 +87,11 @@ const PlannedCell = React.memo(({ getValue, row, column, table }: CellContext<Bu
 const ActualCell = React.memo(({ getValue, row, column, table }: CellContext<BulkProject, number>) => {
   const actualValue = getValue();
   const [localValue, setLocalValue] = useState<string | number>(actualValue);
-  
   const meta = table.options.meta;
   const isSaving = meta?.isSaving;
   const allocations = meta?.allocations;
   const periodId = column.id.split('-')[0];
   const selectedTeamId = meta?.selectedTeamId;
-  const isLocked = (column.columnDef as ColumnDef<BulkProject, number> & { meta: { isLocked?: boolean } }).meta?.isLocked;
 
   React.useEffect(() => {
     setLocalValue(actualValue);
@@ -107,37 +105,37 @@ const ActualCell = React.memo(({ getValue, row, column, table }: CellContext<Bul
     return (row.original.teams || []).reduce((sum: number, t: { id: string }) => sum + (allocations?.[`${row.original.id}-${periodId}-${t.id}`] || 0), 0);
   }, [allocations, row.original.id, row.original.teams, periodId, selectedTeamId]);
 
-  const isOverPlan = (parseFloat(localValue.toString()) || 0) > plannedValue && plannedValue > 0;
+  const numericLocal = parseFloat(localValue.toString()) || 0;
+  const isOverPlan = numericLocal > plannedValue && plannedValue > 0;
 
   const onBlur = () => {
-    if (parseFloat(localValue.toString()) !== actualValue) {
-      table.options.meta?.updateActualData(row.index, periodId, localValue);
+    if (numericLocal !== actualValue) {
+      table.options.meta?.updateActuals(row.index, periodId, localValue);
     }
   };
 
   return (
     <div style={{ padding: '0.1rem' }}>
       <input
-        value={localValue === 0 ? '' : localValue}
+        value={localValue}
         onChange={e => setLocalValue(e.target.value)}
         onBlur={onBlur}
-        placeholder="-"
-        disabled={isLocked || isSaving}
+        disabled={isSaving}
         type="number"
         step="1"
         min="0"
         style={{
           width: '100%',
-          background: 'transparent',
+          background: isOverPlan ? 'rgba(245, 158, 11, 0.05)' : 'transparent',
           border: 'none',
           color: isOverPlan ? '#fbbf24' : 'var(--text-muted)',
           fontSize: '0.65rem',
           textAlign: 'center',
           outline: 'none',
-          cursor: isLocked ? 'not-allowed' : 'text',
-          fontWeight: isOverPlan ? 800 : 500,
+          cursor: 'text',
+          fontWeight: isOverPlan ? 700 : 500,
         }}
-        className={isLocked ? "" : "hover:bg-white/5 focus:bg-white/10 rounded px-1 transition-all"}
+        className="hover:bg-white/5 focus:bg-white/10 rounded px-1 transition-all"
       />
     </div>
   );
@@ -168,11 +166,11 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
     }), {})
   );
 
-  const [actualsMap, setActualsMap] = useState<Record<string, number>>(() => 
-    initialActuals.reduce((acc, curr) => ({
+  const [actualsMap, setActualsMap] = useState<Record<string, number>>(() =>
+    initialActuals.reduce((acc, curr: Allocation) => ({
       ...acc,
-      [`${curr.projectId}-${curr.periodId}-${curr.teamId}`]: (curr as any).actualHours || 0
-    }), {})
+      [`${curr.projectId}-${curr.periodId}-${curr.teamId}`]: curr.plannedHours || (curr as unknown as { actualHours: number }).actualHours || 0
+    }), {} as Record<string, number>)
   );
 
   const [savingStatus, setSavingStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
@@ -331,12 +329,17 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
           }
         });
       },
-      updateActualData: (rowIndex: number, columnId: string, value: unknown) => {
+      updateActuals: (rowIndex: number, columnId: string, value: unknown) => {
         const prj = filteredData[rowIndex];
         const val = parseFloat(value as string) || 0;
-        const targetTeamId = selectedTeamId !== "all" 
-          ? selectedTeamId 
+        const isMultiTeam = prj.teams && prj.teams.length > 1;
+        const targetTeamId = selectedTeamId !== "all"
+          ? selectedTeamId
           : (prj.teams?.[0]?.id || "bulk-global");
+
+        if (selectedTeamId === "all" && isMultiTeam) {
+          alert(`Note: This project (${prj.code}) is assigned to multiple teams. Actual hours will be attributed to ${prj.teams?.[0]?.name}. Select a specific team for precise control.`);
+        }
 
         const key = `${prj.id}-${columnId}-${targetTeamId}`;
         setActualsMap(prev => ({ ...prev, [key]: val }));
