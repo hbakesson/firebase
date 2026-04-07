@@ -16,7 +16,7 @@ declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface TableMeta<TData extends RowData> {
     updateData: (rowIndex: number, columnId: string, value: unknown) => void;
-    updateActuals: (rowIndex: number, columnId: string, value: unknown) => void;
+    updateActuals?: (rowIndex: number, columnId: string, value: unknown) => void;
     allocations?: Record<string, number>;
     actualsMap?: Record<string, number>;
     selectedTeamId?: string;
@@ -110,7 +110,7 @@ const ActualCell = React.memo(({ getValue, row, column, table }: CellContext<Bul
 
   const onBlur = () => {
     if (numericLocal !== actualValue) {
-      table.options.meta?.updateActuals(row.index, periodId, localValue);
+      table.options.meta?.updateActuals?.(row.index, periodId, localValue);
     }
   };
 
