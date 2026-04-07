@@ -299,7 +299,14 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
         const isMultiTeam = prj.teams && prj.teams.length > 1;
         const targetTeamId = selectedTeamId !== "all" 
           ? selectedTeamId 
-          : (prj.teams?.[0]?.id || "bulk-global");
+          : prj.teams?.[0]?.id;
+
+        if (!targetTeamId) {
+          alert(`This project (${prj.code}) has no assigned team. Please assign a team to it or select one from the filter dropdown before planning hours.`);
+          // We need to trigger a re-render to revert the local value since we abort saving
+          setAllocations(prev => ({ ...prev }));
+          return;
+        }
 
         if (selectedTeamId === "all" && isMultiTeam) {
           alert(`Note: This project (${prj.code}) is assigned to multiple teams. Your change will be attributed to ${prj.teams?.[0]?.name}. Select a specific team for precise control.`);
@@ -312,7 +319,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
         startTransition(async () => {
           try {
             await upsertAllocation({
-              teamId: selectedTeamId !== "all" ? selectedTeamId : (prj.teams?.[0]?.id || "bulk-global"),
+              teamId: targetTeamId,
               projectId: prj.id,
               periodId: columnId,
               plannedHours: val,
@@ -330,7 +337,13 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
         const isMultiTeam = prj.teams && prj.teams.length > 1;
         const targetTeamId = selectedTeamId !== "all"
           ? selectedTeamId
-          : (prj.teams?.[0]?.id || "bulk-global");
+          : prj.teams?.[0]?.id;
+
+        if (!targetTeamId) {
+          alert(`This project (${prj.code}) has no assigned team. Please assign a team to it or select one from the filter dropdown before saving actuals.`);
+          setActualsMap(prev => ({ ...prev }));
+          return;
+        }
 
         if (selectedTeamId === "all" && isMultiTeam) {
           alert(`Note: This project (${prj.code}) is assigned to multiple teams. Actual hours will be attributed to ${prj.teams?.[0]?.name}. Select a specific team for precise control.`);
