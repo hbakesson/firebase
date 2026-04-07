@@ -10,6 +10,16 @@ export const metadata: Metadata = {
   title: "User Management | Project Tracker",
 };
 
+interface UserWithAccounts {
+  id: string;
+  name: string | null;
+  email: string | null;
+  role: string;
+  password?: string | null;
+  createdAt: Date;
+  accounts: unknown[];
+}
+
 export default async function UsersPage() {
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
@@ -20,15 +30,17 @@ export default async function UsersPage() {
     return <div>Error: No organization found for your account.</div>;
   }
 
-  let usersWithAccounts: any[] = [];
+  let usersWithAccounts: UserWithAccounts[] = [];
   try {
-    usersWithAccounts = await prisma.user.findMany({
+    const rawUsers = await prisma.user.findMany({
       where: { organizationId: orgId },
       include: { accounts: true }
     });
+    usersWithAccounts = rawUsers as unknown as UserWithAccounts[];
     console.log(`[USERS] Found ${usersWithAccounts.length} users for org ${orgId}`);
-  } catch (err: any) {
-    console.error("[USERS] Database fetch failed:", err.message);
+  } catch (err: unknown) {
+    const error = err as Error;
+    console.error("[USERS] Database fetch failed:", error.message);
     return <div>Internal Server Error: Database access failed.</div>;
   }
 
@@ -68,7 +80,7 @@ export default async function UsersPage() {
               </tr>
             </thead>
             <tbody>
-              {activeUsers.map((user: any) => (
+              {activeUsers.map((user: UserWithAccounts) => (
                 <UserRow key={user.id} user={user} currentUserId={session.user.id!} />
               ))}
             </tbody>
@@ -105,7 +117,7 @@ export default async function UsersPage() {
             </div>
           ) : (
             <div className="space-y-3">
-              {pendingUsers.map((user: any) => (
+              {pendingUsers.map((user: UserWithAccounts) => (
                 <div key={user.id} className="user-badge" style={{ justifyContent: 'space-between', padding: '0.75rem', gap: '1rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1 }}>
                     <Mail size={16} className="text-indigo-400" />
