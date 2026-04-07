@@ -28,7 +28,7 @@ interface BulkProject {
 
 // --- Specialized Compact Editable Cell (MEMOIZED) ---
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const CompactEditableCell = React.memo(({ getValue, row, column, table }: CellContext<BulkProject, any>) => {
+const CompactEditableCell = React.memo(({ getValue, row, column, table }: CellContext<BulkProject, number>) => {
   const initialValue = getValue() as number;
   const [value, setValue] = useState<string | number>(initialValue);
   const isDisabled = (column.columnDef as any).meta?.isLocked;

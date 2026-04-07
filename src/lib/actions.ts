@@ -288,7 +288,14 @@ export async function getOrCreateWeeklyPeriods() {
   return sanitize(results) as typeof results;
 }
 
-export async function importActuals(rows: { projectCode: string; periodId: string; hours: number; teamCode?: string }[]) {
+interface ImportRow {
+  projectCode: string;
+  periodId: string;
+  hours: number;
+  teamCode?: string;
+}
+
+export async function importActuals(rows: ImportRow[]) {
   const session = await auth();
   if (!session?.user?.organizationId) throw new Error("Unauthorized");
 
