@@ -46,8 +46,9 @@ const PlannedCell = React.memo(({ getValue, row, column, table }: CellContext<Bu
   }, [plannedValue]);
 
   const onBlur = () => {
-    if (parseFloat(localValue.toString()) !== plannedValue) {
-      table.options.meta?.updateData(row.index, periodId, localValue);
+    const intVal = parseInt(localValue.toString(), 10) || 0;
+    if (intVal !== plannedValue) {
+      table.options.meta?.updateData(row.index, periodId, intVal);
     }
   };
 
@@ -55,7 +56,7 @@ const PlannedCell = React.memo(({ getValue, row, column, table }: CellContext<Bu
     <div style={{ padding: '0.1rem' }}>
       <input
         value={localValue}
-        onChange={e => setLocalValue(e.target.value)}
+        onChange={e => setLocalValue(e.target.value.replace(/[^0-9]/g, ''))}
         onBlur={onBlur}
         disabled={isLocked}
         type="text"
@@ -101,12 +102,12 @@ const ActualCell = React.memo(({ getValue, row, column, table }: CellContext<Bul
     return (row.original.teams || []).reduce((sum: number, t: { id: string }) => sum + (allocations?.[`${row.original.id}-${periodId}-${t.id}`] || 0), 0);
   }, [allocations, row.original.id, row.original.teams, periodId, selectedTeamId]);
 
-  const numericLocal = parseFloat(localValue.toString()) || 0;
+  const numericLocal = parseInt(localValue.toString(), 10) || 0;
   const isOverPlan = numericLocal > plannedValue && plannedValue > 0;
 
   const onBlur = () => {
     if (numericLocal !== actualValue) {
-      table.options.meta?.updateActuals?.(row.index, periodId, localValue);
+      table.options.meta?.updateActuals?.(row.index, periodId, numericLocal);
     }
   };
 
@@ -114,7 +115,7 @@ const ActualCell = React.memo(({ getValue, row, column, table }: CellContext<Bul
     <div style={{ padding: '0.1rem' }}>
       <input
         value={localValue}
-        onChange={e => setLocalValue(e.target.value)}
+        onChange={e => setLocalValue(e.target.value.replace(/[^0-9]/g, ''))}
         onBlur={onBlur}
         type="text"
         inputMode="numeric"
@@ -294,7 +295,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
       selectedTeamId,
       updateData: (rowIndex: number, columnId: string, value: unknown) => {
         const prj = filteredData[rowIndex];
-        const val = parseFloat(value as string) || 0;
+        const val = parseInt(value as string, 10) || 0;
         const isMultiTeam = prj.teams && prj.teams.length > 1;
         const targetTeamId = selectedTeamId !== "all" 
           ? selectedTeamId 
@@ -325,7 +326,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
       },
       updateActuals: (rowIndex: number, columnId: string, value: unknown) => {
         const prj = filteredData[rowIndex];
-        const val = parseFloat(value as string) || 0;
+        const val = parseInt(value as string, 10) || 0;
         const isMultiTeam = prj.teams && prj.teams.length > 1;
         const targetTeamId = selectedTeamId !== "all"
           ? selectedTeamId
