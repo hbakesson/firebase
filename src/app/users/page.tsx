@@ -23,10 +23,10 @@ export default async function UsersPage() {
     include: { accounts: true }
   });
 
-  const activeUsers = usersWithAccounts.filter((u: { accounts: any[]; id: string; password?: string | null; name?: string | null }) => 
+  const activeUsers = usersWithAccounts.filter((u: { accounts: unknown[]; id: string; password?: string | null; name?: string | null }) => 
     u.accounts.length > 0 || !!u.password || !!u.name || u.id === session.user.id
   );
-  const pendingUsers = usersWithAccounts.filter((u: { accounts: any[]; id: string; password?: string | null; name?: string | null }) => 
+  const pendingUsers = usersWithAccounts.filter((u: { accounts: unknown[]; id: string; password?: string | null; name?: string | null }) => 
     u.accounts.length === 0 && !u.password && !u.name && u.id !== session.user.id
   );
 

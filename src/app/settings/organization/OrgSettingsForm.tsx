@@ -22,8 +22,9 @@ export default function OrgSettingsForm({ initialData }: { initialData: OrgSetti
     try {
       await updateOrganization(formData);
       setMessage({ type: 'success', text: 'Organization settings updated successfully.' });
-    } catch (err: any) {
-      setMessage({ type: 'error', text: err.message || 'Failed to update settings.' });
+    } catch (err) {
+      const error = err as Error;
+      setMessage({ type: 'error', text: error.message || 'Failed to update settings.' });
     } finally {
       setLoading(false);
     }

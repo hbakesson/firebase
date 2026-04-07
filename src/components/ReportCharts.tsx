@@ -12,8 +12,6 @@ import {
   Cell,
   PieChart,
   Pie,
-  LineChart,
-  Line,
   AreaChart,
   Area
 } from "recharts";

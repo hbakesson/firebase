@@ -188,7 +188,7 @@ export default async function ReportsPage({
           </p>
           
           <div className="space-y-2">
-            {allPeriods.map((p) => (
+            {allPeriods.map((p: { id: string; label: string; isLocked: boolean }) => (
               <a 
                 key={p.id} 
                 href={`/reports?periodId=${p.id}`}
@@ -208,7 +208,7 @@ export default async function ReportsPage({
             Cycle Management
           </h3>
           <div className="space-y-2">
-            {allPeriods.slice(0, 3).map((p) => (
+            {allPeriods.slice(0, 3).map((p: { id: string; label: string; isLocked: boolean }) => (
               <PeriodLockToggle key={p.id} period={p} />
             ))}
           </div>
