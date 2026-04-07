@@ -368,6 +368,47 @@ export async function importActuals(rows: ImportRow[]) {
   return null;
 }
 
+export async function upsertActual(data: { teamId: string; projectId: string; periodId: string; actualHours: number }) {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Unauthorized");
+
+  const period = await prisma.period.findUnique({ where: { id: data.periodId } });
+  if (period?.isLocked) throw new Error("This period is locked for fiscal governance. Modifications are disabled.");
+
+  const actual = await prisma.actualAllocation.upsert({
+    where: {
+      teamId_projectId_periodId: {
+        teamId: data.teamId,
+        projectId: data.projectId,
+        periodId: data.periodId,
+      },
+    },
+    update: { actualHours: data.actualHours },
+    create: {
+      teamId: data.teamId,
+      projectId: data.projectId,
+      periodId: data.periodId,
+      actualHours: data.actualHours,
+    },
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      organizationId: session.user.organizationId,
+      action: "UPDATE",
+      entityType: "ActualAllocation",
+      entityId: actual.id,
+      projectName: "Grid Actual Update",
+      userId: session.user.id!,
+      userEmail: session.user.email!,
+      newValue: `Actual: ${data.actualHours}`,
+    },
+  });
+
+  revalidatePath("/reports");
+  return null;
+}
+
 // ─── User Actions ────────────────────────────────────────────────────────────
 
 export async function getUsers() {

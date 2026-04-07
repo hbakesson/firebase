@@ -9,14 +9,15 @@ import {
   CellContext,
   RowData,
 } from '@tanstack/react-table';
-import { upsertAllocation } from '@/lib/actions';
+import { upsertAllocation, upsertActual } from '@/lib/actions';
 import { Project, Period, Allocation } from '@/lib/mockData';
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface TableMeta<TData extends RowData> {
     updateData: (rowIndex: number, columnId: string, value: unknown) => void;
-    viewMode?: BulkViewMode;
+    updateActualData: (rowIndex: number, columnId: string, value: unknown) => void;
+    allocations?: Record<string, number>;
     actualsMap?: Record<string, number>;
     selectedTeamId?: string;
     isSaving?: boolean;
@@ -31,107 +32,119 @@ interface BulkProject {
 }
 
 /**
- * A highly condensed, performant cell that displays both Planned and Actual values.
- * - In PLANNED mode: Input takes full width.
- * - In ACTUAL mode: Static text display with light styling.
- * - In COMPARE mode: Side-by-side view with health indicator.
+ * Sub-column Cell: Planned (Editable)
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const CompactEditableCell = React.memo(({ getValue, row, column, table }: CellContext<BulkProject, number>) => {
+const PlannedCell = React.memo(({ getValue, row, column, table }: CellContext<BulkProject, number>) => {
   const plannedValue = getValue();
-  const [localPlanned, setLocalPlanned] = useState<string | number>(plannedValue);
+  const [localValue, setLocalValue] = useState<string | number>(plannedValue);
   
   const meta = table.options.meta;
-  const { viewMode, actualsMap, selectedTeamId, isSaving } = meta || {};
+  const isSaving = meta?.isSaving;
+  // The column ID for sub-columns usually looks like "periodId-planned"
+  const periodId = column.id.split('-')[0];
   const isLocked = (column.columnDef as ColumnDef<BulkProject, number> & { meta: { isLocked?: boolean } }).meta?.isLocked;
 
-  // Sync internal value if global state changes externally
   React.useEffect(() => {
-    setLocalPlanned(plannedValue);
+    setLocalValue(plannedValue);
   }, [plannedValue]);
 
-  // Derived Actuals for this specific cell (Project x Period x Team)
-  const actualValue = useMemo(() => {
-    if (selectedTeamId !== 'all') {
-      return actualsMap?.[`${row.original.id}-${column.id}-${selectedTeamId}`] || 0;
-    }
-    return (row.original.teams || []).reduce((sum: number, t: { id: string }) => sum + (actualsMap?.[`${row.original.id}-${column.id}-${t.id}`] || 0), 0);
-  }, [actualsMap, row.original.id, row.original.teams, column.id, selectedTeamId]);
-
   const onBlur = () => {
-    if (parseFloat(localPlanned.toString()) !== plannedValue) {
-      table.options.meta?.updateData(row.index, column.id, localPlanned);
+    if (parseFloat(localValue.toString()) !== plannedValue) {
+      table.options.meta?.updateData(row.index, periodId, localValue);
     }
   };
 
-  const isOverPlan = actualValue > plannedValue && plannedValue > 0;
-// ... (rest of component remains same, but I'll skip to line 160)
-// For line 160: cell: ({ row }: CellContext<BulkProject, number>) => {
-
-  if (viewMode === 'ACTUAL') {
-    return (
-      <div style={{ textAlign: 'center', fontSize: '0.7rem', color: actualValue > 0 ? 'var(--text-main)' : 'var(--text-muted)' }}>
-        {actualValue || '-'}
-      </div>
-    );
-  }
-
   return (
-    <div style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <div style={{ display: 'flex', alignItems: 'center', minHeight: '1.5rem', background: isOverPlan ? 'rgba(245, 158, 11, 0.05)' : 'transparent' }}>
-        <input
-          value={localPlanned}
-          onChange={e => setLocalPlanned(e.target.value)}
-          onBlur={onBlur}
-          disabled={isLocked || isSaving}
-          type="number"
-          step="1"
-          min="0"
-          style={{
-            flex: 1,
-            background: 'transparent',
-            border: 'none',
-            color: isLocked ? 'var(--text-muted)' : (isOverPlan ? '#fbbf24' : 'var(--text-main)'),
-            fontSize: '0.7rem',
-            textAlign: viewMode === 'COMPARE' ? 'left' : 'center',
-            paddingLeft: viewMode === 'COMPARE' ? '0.4rem' : '0',
-            outline: 'none',
-            cursor: isLocked ? 'not-allowed' : 'text',
-            fontWeight: viewMode === 'COMPARE' ? 600 : 400,
-          }}
-          className={isLocked ? "" : "hover:bg-white/5 focus:bg-white/10"}
-        />
-        
-        {viewMode === 'COMPARE' && (
-          <div style={{ 
-            fontSize: '0.55rem', 
-            padding: '0 0.4rem', 
-            color: isOverPlan ? '#fbbf24' : 'var(--text-muted)',
-            fontWeight: 700,
-            opacity: 0.8
-          }}>
-            / {actualValue}
-          </div>
-        )}
-      </div>
-
-      {viewMode === 'COMPARE' && actualValue > 0 && (
-        <div style={{ height: '2px', background: 'rgba(255,255,255,0.05)', position: 'relative' }}>
-          <div style={{ 
-            position: 'absolute', 
-            left: 0, 
-            top: 0, 
-            bottom: 0, 
-            width: `${Math.min((actualValue / (plannedValue || 1)) * 100, 100)}%`,
-            background: isOverPlan ? '#ef4444' : 'var(--primary-light)'
-          }} />
-        </div>
-      )}
+    <div style={{ padding: '0.1rem' }}>
+      <input
+        value={localValue}
+        onChange={e => setLocalValue(e.target.value)}
+        onBlur={onBlur}
+        disabled={isLocked || isSaving}
+        type="number"
+        step="1"
+        min="0"
+        style={{
+          width: '100%',
+          background: 'transparent',
+          border: 'none',
+          color: isLocked ? 'var(--text-muted)' : 'var(--primary-light)',
+          fontSize: '0.65rem',
+          textAlign: 'center',
+          outline: 'none',
+          cursor: isLocked ? 'not-allowed' : 'text',
+          fontWeight: 600,
+        }}
+        className={isLocked ? "" : "hover:bg-white/5 focus:bg-white/10 rounded px-1 transition-all"}
+      />
     </div>
   );
 });
 
-CompactEditableCell.displayName = "CompactEditableCell";
+/**
+ * Sub-column Cell: Actual (Editable)
+ */
+const ActualCell = React.memo(({ getValue, row, column, table }: CellContext<BulkProject, number>) => {
+  const actualValue = getValue();
+  const [localValue, setLocalValue] = useState<string | number>(actualValue);
+  
+  const meta = table.options.meta;
+  const isSaving = meta?.isSaving;
+  const allocations = meta?.allocations;
+  const periodId = column.id.split('-')[0];
+  const selectedTeamId = meta?.selectedTeamId;
+  const isLocked = (column.columnDef as ColumnDef<BulkProject, number> & { meta: { isLocked?: boolean } }).meta?.isLocked;
+
+  React.useEffect(() => {
+    setLocalValue(actualValue);
+  }, [actualValue]);
+
+  // Find corresponding planned value for health indicator
+  const plannedValue = useMemo(() => {
+    if (selectedTeamId !== 'all') {
+      return allocations?.[`${row.original.id}-${periodId}-${selectedTeamId}`] || 0;
+    }
+    return (row.original.teams || []).reduce((sum: number, t: { id: string }) => sum + (allocations?.[`${row.original.id}-${periodId}-${t.id}`] || 0), 0);
+  }, [allocations, row.original.id, row.original.teams, periodId, selectedTeamId]);
+
+  const isOverPlan = (parseFloat(localValue.toString()) || 0) > plannedValue && plannedValue > 0;
+
+  const onBlur = () => {
+    if (parseFloat(localValue.toString()) !== actualValue) {
+      table.options.meta?.updateActualData(row.index, periodId, localValue);
+    }
+  };
+
+  return (
+    <div style={{ padding: '0.1rem' }}>
+      <input
+        value={localValue === 0 ? '' : localValue}
+        onChange={e => setLocalValue(e.target.value)}
+        onBlur={onBlur}
+        placeholder="-"
+        disabled={isLocked || isSaving}
+        type="number"
+        step="1"
+        min="0"
+        style={{
+          width: '100%',
+          background: 'transparent',
+          border: 'none',
+          color: isOverPlan ? '#fbbf24' : 'var(--text-muted)',
+          fontSize: '0.65rem',
+          textAlign: 'center',
+          outline: 'none',
+          cursor: isLocked ? 'not-allowed' : 'text',
+          fontWeight: isOverPlan ? 800 : 500,
+        }}
+        className={isLocked ? "" : "hover:bg-white/5 focus:bg-white/10 rounded px-1 transition-all"}
+      />
+    </div>
+  );
+});
+
+PlannedCell.displayName = "PlannedCell";
+ActualCell.displayName = "ActualCell";
 
 interface BulkPlanningGridProps {
   initialProjects: Project[];
@@ -146,7 +159,6 @@ export type BulkViewMode = 'PLANNED' | 'ACTUAL' | 'COMPARE';
 export function BulkPlanningGrid({ initialProjects, initialAllocations, initialActuals, initialPeriods, initialTeams }: BulkPlanningGridProps) {
   const [search, setSearch] = useState('');
   const [selectedTeamId, setSelectedTeamId] = useState<string>('all');
-  const [viewMode, setViewMode] = useState<BulkViewMode>('COMPARE');
   const [, startTransition] = useTransition();
   
   const [allocations, setAllocations] = useState<Record<string, number>>(() => 
@@ -156,14 +168,11 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
     }), {})
   );
 
-  const actualsMap = useMemo(() => 
-    // Using simple Record approach for actuals as they are read-only
-    // Note: ActualAllocation has actualHours, so we map accordingly
-    initialActuals.reduce((acc, curr: Allocation) => ({
+  const [actualsMap, setActualsMap] = useState<Record<string, number>>(() => 
+    initialActuals.reduce((acc, curr) => ({
       ...acc,
-      [`${curr.projectId}-${curr.periodId}-${curr.teamId}`]: curr.plannedHours || (curr as unknown as { actualHours: number }).actualHours || 0
-    }), {} as Record<string, number>),
-    [initialActuals]
+      [`${curr.projectId}-${curr.periodId}-${curr.teamId}`]: (curr as any).actualHours || 0
+    }), {})
   );
 
   const [savingStatus, setSavingStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
@@ -218,16 +227,33 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
           <div style={{ fontSize: '0.55rem', color: 'var(--text-muted)', fontWeight: 400 }}>{per.label.split(' (')[1]?.replace(')', '')}</div>
         </div>
       ),
-      accessorFn: (row: BulkProject) => {
-        if (selectedTeamId !== 'all') {
-          return allocations[`${row.id}-${per.id}-${selectedTeamId}`] ?? 0;
+      columns: [
+        {
+          id: `${per.id}-planned`,
+          header: () => <div style={{ fontSize: '0.55rem', textAlign: 'center', color: 'var(--primary-light)', fontWeight: 800 }}>P</div>,
+          accessorFn: (row: BulkProject) => {
+            if (selectedTeamId !== 'all') {
+              return allocations[`${row.id}-${per.id}-${selectedTeamId}`] ?? 0;
+            }
+            return (row.teams || []).reduce((sum, t) => sum + (allocations[`${row.id}-${per.id}-${t.id}`] || 0), 0);
+          },
+          cell: PlannedCell,
+          size: 40,
+          meta: { isLocked: per.isLocked }
+        },
+        {
+          id: `${per.id}-actual`,
+          header: () => <div style={{ fontSize: '0.55rem', textAlign: 'center', color: 'var(--text-muted)', fontWeight: 800 }}>A</div>,
+          accessorFn: (row: BulkProject) => {
+            if (selectedTeamId !== 'all') {
+              return actualsMap[`${row.id}-${per.id}-${selectedTeamId}`] || 0;
+            }
+            return (row.teams || []).reduce((sum, t) => sum + (actualsMap[`${row.id}-${per.id}-${t.id}`] || 0), 0);
+          },
+          cell: ActualCell,
+          size: 40,
         }
-        // Sum across all teams for this project/period
-        return (row.teams || []).reduce((sum, t) => sum + (allocations[`${row.id}-${per.id}-${t.id}`] || 0), 0);
-      },
-      cell: CompactEditableCell,
-      size: 80,
-      meta: { isLocked: per.isLocked }
+      ]
     })),
     {
       id: "total",
@@ -253,17 +279,15 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
             <div style={{ fontSize: '0.75rem', fontWeight: 700, color: totalActual > totalPlanned && totalPlanned > 0 ? '#fbbf24' : 'var(--primary-light)' }}>
               {totalPlanned}
             </div>
-            {viewMode !== 'PLANNED' && (
-              <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)', fontWeight: 500 }}>
-                {totalActual}
-              </div>
-            )}
+            <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+              {totalActual}
+            </div>
           </div>
         );
       },
       size: 60,
     }
-  ], [allocations, actualsMap, initialPeriods, selectedTeamId, viewMode]);
+  ], [allocations, actualsMap, initialPeriods, selectedTeamId]);
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
@@ -272,7 +296,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
     getCoreRowModel: getCoreRowModel(),
     getRowId: (row) => row.id,
     meta: {
-      viewMode,
+      allocations, // Pass allocations for totals and health checks
       actualsMap,
       selectedTeamId,
       isSaving: savingStatus === 'saving',
@@ -306,6 +330,32 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
             setSavingStatus('error');
           }
         });
+      },
+      updateActualData: (rowIndex: number, columnId: string, value: unknown) => {
+        const prj = filteredData[rowIndex];
+        const val = parseFloat(value as string) || 0;
+        const targetTeamId = selectedTeamId !== "all" 
+          ? selectedTeamId 
+          : (prj.teams?.[0]?.id || "bulk-global");
+
+        const key = `${prj.id}-${columnId}-${targetTeamId}`;
+        setActualsMap(prev => ({ ...prev, [key]: val }));
+        setSavingStatus('saving');
+
+        startTransition(async () => {
+          try {
+            await upsertActual({
+              teamId: targetTeamId,
+              projectId: prj.id,
+              periodId: columnId,
+              actualHours: val,
+            });
+            setSavingStatus('saved');
+            setTimeout(() => setSavingStatus('idle'), 2000);
+          } catch {
+            setSavingStatus('error');
+          }
+        });
       }
     }
   });
@@ -329,22 +379,6 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
                 </option>
               ))}
             </select>
-          </div>
-
-          <div className="flex items-center bg-white/5 border border-white/10 p-1 rounded-lg">
-            {(['PLANNED', 'ACTUAL', 'COMPARE'] as BulkViewMode[]).map(mode => (
-              <button
-                key={mode}
-                onClick={() => setViewMode(mode)}
-                className={`px-3 py-1 rounded-md text-[0.6rem] font-bold transition-all ${
-                  viewMode === mode 
-                    ? 'bg-primary text-white shadow-lg' 
-                    : 'text-white/40 hover:text-white/70 hover:bg-white/5'
-                }`}
-              >
-                {mode}
-              </button>
-            ))}
           </div>
 
           <div className="flex-1 max-w-xs">
@@ -379,22 +413,23 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
                 {headerGroup.headers.map(header => (
                   <th 
                     key={header.id}
+                    colSpan={header.colSpan}
                     style={{ 
-                      padding: '0.5rem', 
+                      padding: header.depth === 0 ? '0.5rem' : '0.1rem 0.5rem', 
                       background: 'rgba(255,255,255,0.02)', 
-                      textAlign: 'left', 
-                      fontSize: '0.6rem', 
+                      textAlign: header.subHeaders.length > 0 ? 'center' : 'left', 
+                      fontSize: header.depth === 0 ? '0.65rem' : '0.55rem', 
                       textTransform: 'uppercase', 
                       letterSpacing: '0.05em', 
                       color: 'var(--text-muted)',
                       borderBottom: '1px solid var(--card-border)',
                       borderRight: '1px solid var(--card-border)',
-                      position: header.id === 'project' ? 'sticky' : 'static',
+                      position: header.column.id === 'project' ? 'sticky' : 'static',
                       left: 0,
-                      zIndex: header.id === 'project' ? 20 : 1,
+                      zIndex: header.column.id === 'project' ? 20 : 1,
                     }}
                   >
-                    {flexRender(header.column.columnDef.header, header.getContext())}
+                    {!header.isPlaceholder && flexRender(header.column.columnDef.header, header.getContext())}
                   </th>
                 ))}
               </tr>

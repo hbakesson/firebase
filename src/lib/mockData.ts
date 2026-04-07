@@ -213,10 +213,14 @@ export const createMockPrisma = () => {
     },
     period: {
       findMany: async () => [],
+      findUnique: async ({ where }: any) => ({ id: where.id, label: `Mock Period ${where.id}`, isLocked: false }),
+      findFirst: async ({ where }: any) => ({ id: where?.id || "p1", label: "Mock Period Alpha", isLocked: false }),
       upsert: async ({ create, where, update }: any) => {
         console.log("🛠️ [MOCK] period.upsert", where);
         return { 
-          id: `per-${create?.startDate?.toISOString() || Date.now()}`, 
+          id: where?.id || `per-${create?.startDate?.toISOString() || Date.now()}`, 
+          label: create?.label || "Mock Period",
+          isLocked: false,
           ...create,
           ...update
         };
