@@ -32,12 +32,20 @@ export default async function BulkPlanningPage() {
   const projectIds = projects.map((p: { id: string }) => p.id);
 
   // 3. Fetch Existing Allocations for these Projects/Periods
-  const allocations = await prisma.budgetAllocation.findMany({
-    where: {
-      projectId: { in: projectIds },
-      periodId: { in: periodIds }
-    }
-  });
+  const [allocations, actuals] = await Promise.all([
+    prisma.budgetAllocation.findMany({
+      where: {
+        projectId: { in: projectIds },
+        periodId: { in: periodIds }
+      }
+    }),
+    prisma.actualAllocation.findMany({
+      where: {
+        projectId: { in: projectIds },
+        periodId: { in: periodIds }
+      }
+    })
+  ]);
 
   // 4. Fetch Teams to populate the filter dropdown
   const teams = await prisma.team.findMany({
@@ -66,6 +74,7 @@ export default async function BulkPlanningPage() {
           initialProjects={projects}
           initialPeriods={periods}
           initialAllocations={allocations}
+          initialActuals={actuals}
           initialTeams={teams}
         />
       </div>
