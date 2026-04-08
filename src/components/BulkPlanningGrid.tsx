@@ -508,27 +508,33 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
         </table>
       </div>
       <div className="flex flex-col items-center justify-center p-6 border-t border-white/5 bg-gradient-to-b from-transparent to-black/20">
-        <div className="flex items-center gap-2 bg-[#1A1D27] rounded-full p-1.5 shadow-[0_8px_30px_rgb(0,0,0,0.3)] border border-white/10 mb-6">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#2C3140', borderRadius: '50px', padding: '6px', boxShadow: '0 8px 30px rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', marginBottom: '1.5rem' }}>
           <button
             onClick={() => router.push(`?offset=${offset - 8}`)}
-            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/10 text-white/40 hover:text-white transition-all transform hover:scale-105 active:scale-95"
+            style={{ all: 'unset', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', transition: 'all 0.2s', background: 'transparent', boxSizing: 'border-box' }}
             title="Previous 8 weeks"
+            onMouseEnter={e => { e.currentTarget.style.color = 'white'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; e.currentTarget.style.background = 'transparent'; }}
           >
-            <ChevronLeft size={18} />
+            <ChevronLeft size={16} />
           </button>
           <button
             onClick={() => router.push(`?offset=0`)}
-            className="px-5 text-[0.65rem] font-bold tracking-[0.15em] text-white/50 hover:text-white transition-colors uppercase"
+            style={{ all: 'unset', padding: '0 16px', fontSize: '0.65rem', fontWeight: 'bold', letterSpacing: '0.15em', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', textTransform: 'uppercase', transition: 'all 0.2s', background: 'transparent' }}
             title="Jump to current week"
+            onMouseEnter={e => { e.currentTarget.style.color = 'white'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; }}
           >
             Timeline
           </button>
           <button
             onClick={() => router.push(`?offset=${offset + 8}`)}
-            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/10 text-white/40 hover:text-white transition-all transform hover:scale-105 active:scale-95"
+            style={{ all: 'unset', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', transition: 'all 0.2s', background: 'transparent', boxSizing: 'border-box' }}
             title="Next 8 weeks"
+            onMouseEnter={e => { e.currentTarget.style.color = 'white'; e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.5)'; e.currentTarget.style.background = 'transparent'; }}
           >
-            <ChevronRight size={18} />
+            <ChevronRight size={16} />
           </button>
         </div>
 
