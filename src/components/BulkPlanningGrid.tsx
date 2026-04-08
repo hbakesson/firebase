@@ -191,64 +191,97 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
 
   // --- Column Definitions ---
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const columns = useMemo<ColumnDef<BulkProject, any>[]>(() => [
-    {
-      id: "project",
-      header: "Project",
-      accessorFn: (row) => row,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      cell: ({ getValue }: CellContext<BulkProject, any>) => {
-        const prj = getValue() as BulkProject;
-        return (
-          <div style={{ padding: '0.25rem 0.5rem', minWidth: '180px' }}>
-            <div style={{ fontWeight: 600, fontSize: '0.75rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {prj.name}
-            </div>
-            <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)' }}>{prj.code}</div>
-          </div>
-        );
-      },
-      size: 200,
-    },
-    ...initialPeriods.map(per => ({
-      id: per.id,
+  const columns = useMemo<ColumnDef<BulkProject, any>[]>(() => {
+    // Group periods by Month and Year
+    const groupedPeriods: Record<string, typeof initialPeriods> = {};
+    initialPeriods.forEach(per => {
+      const d = new Date(per.startDate);
+      const monthYear = d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      if (!groupedPeriods[monthYear]) {
+        groupedPeriods[monthYear] = [];
+      }
+      groupedPeriods[monthYear].push(per);
+    });
+
+    const periodColumns = Object.entries(groupedPeriods).map(([monthYear, periods]) => ({
+      id: monthYear,
       header: () => (
-        <div style={{ textAlign: 'center', lineHeight: 1.1, position: 'relative' }}>
-          {per.isLocked && (
-            <div style={{ position: 'absolute', top: '-8px', right: '-4px', fontSize: '0.6rem', color: '#f59e0b' }}>🔒</div>
-          )}
-          <div style={{ fontSize: '0.65rem', fontWeight: 700 }}>{per.label.split(' (')[0]}</div>
-          <div style={{ fontSize: '0.55rem', color: 'var(--text-muted)', fontWeight: 400 }}>{per.label.split(' (')[1]?.replace(')', '')}</div>
+        <div style={{ 
+          textAlign: 'center', 
+          fontSize: '0.65rem', 
+          fontWeight: 600, 
+          color: 'var(--text-muted)', 
+          paddingBottom: '4px',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+        }}>
+          {monthYear}
         </div>
       ),
-      columns: [
-        {
-          id: `${per.id}-planned`,
-          header: () => <div style={{ fontSize: '0.55rem', textAlign: 'center', color: 'var(--primary-light)', fontWeight: 800 }}>P</div>,
-          accessorFn: (row: BulkProject) => {
-            if (selectedTeamId !== 'all') {
-              return allocations[`${row.id}-${per.id}-${selectedTeamId}`] ?? 0;
+      columns: periods.map(per => {
+        const d = new Date(per.startDate);
+        const dayDate = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+        return {
+          id: per.id,
+          header: () => (
+            <div style={{ textAlign: 'center', lineHeight: 1.1, position: 'relative' }}>
+              {per.isLocked && (
+                <div style={{ position: 'absolute', top: '-8px', right: '-4px', fontSize: '0.6rem', color: '#f59e0b' }}>🔒</div>
+              )}
+              <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)', fontWeight: 600 }}>{dayDate}</div>
+            </div>
+          ),
+          columns: [
+            {
+              id: `${per.id}-planned`,
+              header: () => <div style={{ fontSize: '0.55rem', textAlign: 'center', color: 'var(--primary-light)', fontWeight: 800 }}>P</div>,
+              accessorFn: (row: BulkProject) => {
+                if (selectedTeamId !== 'all') {
+                  return allocations[`${row.id}-${per.id}-${selectedTeamId}`] ?? 0;
+                }
+                return (row.teams || []).reduce((sum, t) => sum + (allocations[`${row.id}-${per.id}-${t.id}`] || 0), 0);
+              },
+              cell: PlannedCell,
+              size: 40,
+              meta: { isLocked: per.isLocked }
+            },
+            {
+              id: `${per.id}-actual`,
+              header: () => <div style={{ fontSize: '0.55rem', textAlign: 'center', color: 'var(--text-muted)', fontWeight: 800 }}>A</div>,
+              accessorFn: (row: BulkProject) => {
+                if (selectedTeamId !== 'all') {
+                  return actualsMap[`${row.id}-${per.id}-${selectedTeamId}`] || 0;
+                }
+                return (row.teams || []).reduce((sum, t) => sum + (actualsMap[`${row.id}-${per.id}-${t.id}`] || 0), 0);
+              },
+              cell: ActualCell,
+              size: 40,
             }
-            return (row.teams || []).reduce((sum, t) => sum + (allocations[`${row.id}-${per.id}-${t.id}`] || 0), 0);
-          },
-          cell: PlannedCell,
-          size: 40,
-          meta: { isLocked: per.isLocked }
+          ]
+        };
+      })
+    }));
+
+    return [
+      {
+        id: "project",
+        header: "Project",
+        accessorFn: (row) => row,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        cell: ({ getValue }: CellContext<BulkProject, any>) => {
+          const prj = getValue() as BulkProject;
+          return (
+            <div style={{ padding: '0.25rem 0.5rem', minWidth: '180px' }}>
+              <div style={{ fontWeight: 600, fontSize: '0.75rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                {prj.name}
+              </div>
+              <div style={{ fontSize: '0.6rem', color: 'var(--text-muted)' }}>{prj.code}</div>
+            </div>
+          );
         },
-        {
-          id: `${per.id}-actual`,
-          header: () => <div style={{ fontSize: '0.55rem', textAlign: 'center', color: 'var(--text-muted)', fontWeight: 800 }}>A</div>,
-          accessorFn: (row: BulkProject) => {
-            if (selectedTeamId !== 'all') {
-              return actualsMap[`${row.id}-${per.id}-${selectedTeamId}`] || 0;
-            }
-            return (row.teams || []).reduce((sum, t) => sum + (actualsMap[`${row.id}-${per.id}-${t.id}`] || 0), 0);
-          },
-          cell: ActualCell,
-          size: 40,
-        }
-      ]
-    })),
+        size: 200,
+      },
+      ...periodColumns,
     {
       id: "total",
       header: "Σ",
@@ -281,7 +314,8 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
       },
       size: 60,
     }
-  ], [allocations, actualsMap, initialPeriods, selectedTeamId]);
+  ];
+  }, [allocations, actualsMap, initialPeriods, selectedTeamId]);
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
