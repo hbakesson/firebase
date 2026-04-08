@@ -111,10 +111,10 @@ export async function createProject(data: { name: string; code: string; descript
     revalidatePath("/projects");
     return { success: true, project: sanitize(project) };
   } catch (error: unknown) {
-    const err = error as Error;
+    const err = error as Error & { code?: string; meta?: { target?: string } };
     console.error("[PROJECT_CREATE_ERROR]", err);
-    if ((error as any).code === 'P2002') {
-      return { error: `Validation failure: A project with this ${(error as any).meta?.target || 'name/code'} already exists.` };
+    if (err.code === 'P2002') {
+      return { error: `Validation failure: A project with this ${err.meta?.target || 'name/code'} already exists.` };
     }
     return { error: err.message || "An unexpected error occurred during project genesis." };
   }

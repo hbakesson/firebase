@@ -50,7 +50,7 @@ export default function ProjectList({ initialProjects, teams }: { initialProject
                   <Briefcase size={40} style={{ opacity: 0.1 }} />
                   <div>
                     <div style={{ fontWeight: 600, color: 'var(--text-main)', fontSize: '1.1rem' }}>No projects found</div>
-                    <p style={{ fontSize: '0.9rem', marginTop: '0.25rem' }}>Try adjusting your search or filters to find what you're looking for.</p>
+                    <p style={{ fontSize: '0.9rem', marginTop: '0.25rem' }}>Try adjusting your search or filters to find what you&apos;re looking for.</p>
                   </div>
                 </div>
               </td>

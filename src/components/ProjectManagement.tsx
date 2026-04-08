@@ -5,9 +5,6 @@ import Image from "next/image";
 import { 
   Users, 
   Edit2, 
-  CheckCircle2, 
-  PlayCircle, 
-  Briefcase, 
   Save, 
   Trash2, 
   AlertTriangle,
@@ -293,15 +290,14 @@ export default function ProjectManagement({
   initialProjects: Project[]; 
   teams: Team[];
 }) {
-  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(initialProjects[0]?.id || null);
-  const selectedProject = initialProjects.find(p => p.id === selectedProjectId);
+  const [selectedProjectIdState, setSelectedProjectId] = useState<string | null>(initialProjects[0]?.id || null);
 
-  // Auto-select if first project is deleted/changed
-  useEffect(() => {
-    if (selectedProjectId && !initialProjects.some(p => p.id === selectedProjectId)) {
-      setSelectedProjectId(initialProjects[0]?.id || null);
-    }
-  }, [initialProjects, selectedProjectId]);
+  // Derived selection: Fallback to first project if the current selection is missing from props
+  const selectedProjectId = initialProjects.some(p => p.id === selectedProjectIdState)
+    ? selectedProjectIdState
+    : (initialProjects[0]?.id || null);
+
+  const selectedProject = initialProjects.find(p => p.id === selectedProjectId);
 
   const handleSelect = (p: Project) => {
     setSelectedProjectId(p.id);
