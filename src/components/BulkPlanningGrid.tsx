@@ -22,6 +22,7 @@ declare module '@tanstack/react-table' {
     allocations?: Record<string, number>;
     actualsMap?: Record<string, number>;
     selectedTeamId?: string;
+    allRelatedTeamIds?: string[];
   }
 }
 
@@ -29,7 +30,21 @@ interface BulkProject {
   id: string;
   name: string;
   code: string;
-  teams?: { id: string; name: string }[];
+  teams?: { id: string; name: string; parentTeamId?: string | null }[];
+}
+
+interface BulkTeam {
+  id: string;
+  name: string;
+  parentTeamId?: string | null;
+}
+
+interface BulkPeriod {
+  id: string;
+  label: string;
+  startDate: string | Date;
+  endDate: string | Date;
+  isLocked?: boolean;
 }
 
 /**
@@ -99,10 +114,14 @@ const ActualCell = React.memo(({ getValue, row, column, table }: CellContext<Bul
   // Find corresponding planned value for health indicator
   const plannedValue = useMemo(() => {
     if (selectedTeamId !== 'all') {
-      return allocations?.[`${row.original.id}-${periodId}-${selectedTeamId}`] || 0;
+      // Use allRelatedTeamIds from meta or external context if needed, 
+      // but for ActualCell we can assume if selectedTeamId is set, 
+      // we want the sum of that team and its subteams provided in meta
+      const relatedIds = (table.options.meta as any)?.allRelatedTeamIds || [selectedTeamId];
+      return relatedIds.reduce((sum: number, tid: string) => sum + (allocations?.[`${row.original.id}-${periodId}-${tid}`] || 0), 0);
     }
     return (row.original.teams || []).reduce((sum: number, t: { id: string }) => sum + (allocations?.[`${row.original.id}-${periodId}-${t.id}`] || 0), 0);
-  }, [allocations, row.original.id, row.original.teams, periodId, selectedTeamId]);
+  }, [allocations, row.original.id, row.original.teams, periodId, selectedTeamId, table.options.meta]);
 
   const numericLocal = parseInt(localValue.toString(), 10) || 0;
   const isOverPlan = numericLocal > plannedValue && plannedValue > 0;
@@ -143,11 +162,11 @@ PlannedCell.displayName = "PlannedCell";
 ActualCell.displayName = "ActualCell";
 
 interface BulkPlanningGridProps {
-  initialProjects: Project[];
-  initialAllocations: Allocation[];
-  initialActuals: Allocation[]; // Repurposing Allocation interface as actuals follow same ID structure
-  initialPeriods: Period[];
-  initialTeams: { id: string; name: string }[];
+  initialProjects: BulkProject[];
+  initialAllocations: any[];
+  initialActuals: any[]; 
+  initialPeriods: BulkPeriod[];
+  initialTeams: BulkTeam[];
   offset?: number;
 }
 
@@ -160,27 +179,49 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
   const [, startTransition] = useTransition();
   
   const [allocations, setAllocations] = useState<Record<string, number>>(() => 
-    initialAllocations.reduce((acc, curr) => ({
+    initialAllocations.reduce((acc: Record<string, number>, curr: any) => ({
       ...acc,
       [`${curr.projectId}-${curr.periodId}-${curr.teamId}`]: curr.plannedHours
     }), {})
   );
 
   const [actualsMap, setActualsMap] = useState<Record<string, number>>(() =>
-    initialActuals.reduce((acc, curr: Allocation) => ({
+    initialActuals.reduce((acc: Record<string, number>, curr: any) => ({
       ...acc,
-      [`${curr.projectId}-${curr.periodId}-${curr.teamId}`]: curr.plannedHours || (curr as unknown as { actualHours: number }).actualHours || 0
+      [`${curr.projectId}-${curr.periodId}-${curr.teamId}`]: curr.plannedHours || curr.actualHours || 0
     }), {} as Record<string, number>)
   );
 
   const [savingStatus, setSavingStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+
+  // --- Recursive Team Resolution ---
+  const allRelatedTeamIds = useMemo(() => {
+    if (selectedTeamId === 'all') return [];
+    
+    const ids = new Set<string>();
+    const stack = [selectedTeamId];
+    
+    while (stack.length > 0) {
+      const currentId = stack.pop()!;
+      if (!ids.has(currentId)) {
+        ids.add(currentId);
+        // Find children of this team
+        initialTeams
+          .filter(t => t.parentTeamId === currentId)
+          .forEach(t => stack.push(t.id));
+      }
+    }
+    
+    return Array.from(ids);
+  }, [selectedTeamId, initialTeams]);
 
   // --- Filtered Data ---
   const filteredData = useMemo(() => {
     let result = initialProjects;
     
     if (selectedTeamId !== 'all') {
-      result = result.filter(p => p.teams?.some(t => t.id === selectedTeamId));
+      // Include projects connected to the selected team OR any of its sub-teams
+      result = result.filter(p => p.teams?.some(t => allRelatedTeamIds.includes(t.id)));
     }
     
     if (search) {
@@ -191,7 +232,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
     }
     
     return result;
-  }, [initialProjects, search, selectedTeamId]);
+  }, [initialProjects, search, selectedTeamId, allRelatedTeamIds]);
 
   // --- Column Definitions ---
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -241,7 +282,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
               header: () => <div style={{ fontSize: '0.55rem', textAlign: 'center', color: 'var(--primary-light)', fontWeight: 800 }}>P</div>,
               accessorFn: (row: BulkProject) => {
                 if (selectedTeamId !== 'all') {
-                  return allocations[`${row.id}-${per.id}-${selectedTeamId}`] ?? 0;
+                  return allRelatedTeamIds.reduce((sum, tid) => sum + (allocations[`${row.id}-${per.id}-${tid}`] || 0), 0);
                 }
                 return (row.teams || []).reduce((sum, t) => sum + (allocations[`${row.id}-${per.id}-${t.id}`] || 0), 0);
               },
@@ -254,7 +295,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
               header: () => <div style={{ fontSize: '0.55rem', textAlign: 'center', color: 'var(--text-muted)', fontWeight: 800 }}>A</div>,
               accessorFn: (row: BulkProject) => {
                 if (selectedTeamId !== 'all') {
-                  return actualsMap[`${row.id}-${per.id}-${selectedTeamId}`] || 0;
+                  return allRelatedTeamIds.reduce((sum, tid) => sum + (actualsMap[`${row.id}-${per.id}-${tid}`] || 0), 0);
                 }
                 return (row.teams || []).reduce((sum, t) => sum + (actualsMap[`${row.id}-${per.id}-${t.id}`] || 0), 0);
               },
@@ -291,18 +332,18 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
       header: "Σ",
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       cell: ({ row }: CellContext<BulkProject, any>) => {
-        const totalPlanned = initialPeriods.reduce((acc, per) => {
+        const totalPlanned = initialPeriods.reduce((acc: number, per: BulkPeriod) => {
           if (selectedTeamId !== 'all') {
-            return acc + (allocations[`${row.original.id}-${per.id}-${selectedTeamId}`] || 0);
+            return acc + allRelatedTeamIds.reduce((sum: number, tid: string) => sum + (allocations[`${row.original.id}-${per.id}-${tid}`] || 0), 0);
           }
-          return acc + (row.original.teams || []).reduce((sum, t) => sum + (allocations[`${row.original.id}-${per.id}-${t.id}`] || 0), 0);
+          return acc + (row.original.teams || []).reduce((sum: number, t: any) => sum + (allocations[`${row.original.id}-${per.id}-${t.id}`] || 0), 0);
         }, 0);
 
-        const totalActual = initialPeriods.reduce((acc, per) => {
+        const totalActual = initialPeriods.reduce((acc: number, per: BulkPeriod) => {
           if (selectedTeamId !== 'all') {
-            return acc + (actualsMap[`${row.original.id}-${per.id}-${selectedTeamId}`] || 0);
+            return acc + allRelatedTeamIds.reduce((sum: number, tid: string) => sum + (actualsMap[`${row.original.id}-${per.id}-${tid}`] || 0), 0);
           }
-          return acc + (row.original.teams || []).reduce((sum, t) => sum + (actualsMap[`${row.original.id}-${per.id}-${t.id}`] || 0), 0);
+          return acc + (row.original.teams || []).reduce((sum: number, t: any) => sum + (actualsMap[`${row.original.id}-${per.id}-${t.id}`] || 0), 0);
         }, 0);
 
         return (
@@ -331,6 +372,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
       allocations, // Pass allocations for totals and health checks
       actualsMap,
       selectedTeamId,
+      allRelatedTeamIds,
       updateData: (rowIndex: number, columnId: string, value: unknown) => {
         const prj = filteredData[rowIndex];
         const val = parseInt(value as string, 10) || 0;
