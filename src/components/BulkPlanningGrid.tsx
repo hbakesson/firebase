@@ -508,7 +508,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
         </table>
       </div>
       <div className="flex flex-col items-center justify-center p-6 border-t border-white/5 bg-gradient-to-b from-transparent to-black/20">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#2C3140', borderRadius: '50px', padding: '6px', boxShadow: '0 8px 30px rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)', marginBottom: '1.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#2C3140', borderRadius: '50px', padding: '6px', boxShadow: '0 8px 30px rgba(0,0,0,0.3)', border: '1px solid rgba(255,255,255,0.1)' }}>
           <button
             onClick={() => router.push(`?offset=${offset - 8}`)}
             style={{ all: 'unset', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', transition: 'all 0.2s', background: 'transparent', boxSizing: 'border-box' }}
@@ -536,24 +536,6 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
           >
             <ChevronRight size={16} />
           </button>
-        </div>
-
-        <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-3 text-[0.6rem] text-white/40">
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-            <span>Planned Effort</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
-            <span>Reported Actuals</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-[#fbbf24] font-bold text-[10px]">!</span>
-            <span>Actuals Exceed Plan</span>
-          </div>
-          <div className="italic opacity-60 ml-4">
-            * Editing updates {selectedTeamId === 'all' ? 'primary team allocation' : `allocation for ${initialTeams?.find(t => t.id === selectedTeamId)?.name}`}
-          </div>
         </div>
       </div>
     </div>
