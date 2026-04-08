@@ -110,12 +110,13 @@ export async function createProject(data: { name: string; code: string; descript
 
     revalidatePath("/projects");
     return { success: true, project: sanitize(project) };
-  } catch (error: any) {
-    console.error("[PROJECT_CREATE_ERROR]", error);
-    if (error.code === 'P2002') {
-      return { error: `Validation failure: A project with this ${error.meta?.target || 'name/code'} already exists.` };
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("[PROJECT_CREATE_ERROR]", err);
+    if ((error as any).code === 'P2002') {
+      return { error: `Validation failure: A project with this ${(error as any).meta?.target || 'name/code'} already exists.` };
     }
-    return { error: error.message || "An unexpected error occurred during project genesis." };
+    return { error: err.message || "An unexpected error occurred during project genesis." };
   }
 }
 
@@ -159,9 +160,10 @@ export async function updateProject(id: string, data: Record<string, unknown>) {
     revalidatePath("/projects");
     revalidatePath("/dashboard");
     return { success: true, project: sanitize(project) };
-  } catch (error: any) {
-    console.error("[PROJECT_UPDATE_ERROR]", error);
-    return { error: error.message || "Transformation failed. The system rejected the evolution." };
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("[PROJECT_UPDATE_ERROR]", err);
+    return { error: err.message || "Transformation failed. The system rejected the evolution." };
   }
 }
 
@@ -202,9 +204,10 @@ export async function deleteProject(id: string) {
     revalidatePath("/projects");
     revalidatePath("/dashboard");
     return { success: true };
-  } catch (error: any) {
-    console.error("[PROJECT_DELETE_ERROR]", error);
-    return { error: error.message || "Decommissioning failed. Ensure no dependent items exist." };
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("[PROJECT_DELETE_ERROR]", err);
+    return { error: err.message || "Decommissioning failed. Ensure no dependent items exist." };
   }
 }
 
@@ -561,9 +564,10 @@ export async function deleteTeam(teamId: string) {
 
     revalidatePath("/teams");
     return { success: true };
-  } catch (error: any) {
-    console.error("[TEAM_DELETE_ERROR]", error);
-    return { error: error.message || "Decommissioning failed. Ensure no dependent internal projects remain." };
+  } catch (error: unknown) {
+    const err = error as Error;
+    console.error("[TEAM_DELETE_ERROR]", err);
+    return { error: err.message || "Decommissioning failed. Ensure no dependent internal projects remain." };
   }
 }
 

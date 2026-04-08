@@ -33,6 +33,259 @@ interface Team {
   name: string;
 }
 
+/**
+ * ─── Sub-Component: Project Detail Workspace ─────────────────────────────────
+ * Using the 'key' pattern to reset internal state when selection changes.
+ */
+function ProjectDetail({ project, teams, onUpdate }: { project: Project, teams: Team[], onUpdate: () => void }) {
+  const [formData, setFormData] = useState({
+    name: project.name,
+    code: project.code,
+    description: project.description || "",
+    status: project.status,
+    progress: project.progress,
+    teamIds: project.teams?.map(t => t.id) || []
+  });
+
+  const [isPending, setIsPending] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+
+  const handleSave = async () => {
+    setIsPending(true);
+    const result = await updateProject(project.id, formData);
+    setIsPending(false);
+    
+    if (result?.error) {
+      alert(`System Conflict: ${result.error}`);
+    } else {
+      alert("Project architecture synchronized.");
+      onUpdate();
+    }
+  };
+
+  const handleDelete = async () => {
+    setIsPending(true);
+    const result = await deleteProject(project.id);
+    setIsPending(false);
+    
+    if (result?.error) {
+      alert(`Purge Interrupted: ${result.error}`);
+    } else {
+      alert("Project decommissioned successfully.");
+      onUpdate();
+    }
+  };
+
+  const toggleTeam = (teamId: string) => {
+    setFormData(prev => ({
+      ...prev,
+      teamIds: prev.teamIds.includes(teamId)
+        ? prev.teamIds.filter(id => id !== teamId)
+        : [...prev.teamIds, teamId]
+    }));
+  };
+
+  return (
+    <div className="flex-1 min-w-0 bg-white/[0.03] border border-white/5 rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl backdrop-blur-3xl animate-in fade-in slide-in-from-right-4 duration-500">
+      {/* Header with Generated Graphic */}
+      <div className="relative h-64 w-full overflow-hidden">
+        <Image 
+          src="/Users/hbakesson/.gemini/antigravity/brain/eb76f46a-8eb0-4f3b-907d-43ad92740783/modern_project_dashboard_graphics_1775678772185.png"
+          alt="Project Analytics Visualization"
+          fill
+          className="object-cover opacity-80"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent" />
+        
+        <div className="absolute bottom-8 left-10 right-10 flex justify-between items-end">
+          <div className="space-y-2">
+            <div className="flex items-center gap-3">
+              <span className="px-3 py-1 bg-indigo-500 text-white text-[10px] font-black rounded-lg uppercase tracking-tighter shadow-lg shadow-indigo-500/40">
+                Live Initiative
+              </span>
+              <span className="text-white/40 text-[10px] font-mono tracking-widest">{project.id}</span>
+            </div>
+            <h2 className="text-4xl font-black text-white tracking-tight leading-none">{project.name}</h2>
+            <div className="flex items-center gap-4 text-white/40 text-[10px] font-bold uppercase tracking-widest">
+              <span className="flex items-center gap-1.5"><Briefcase size={12} className="text-indigo-400" /> {project.code}</span>
+              <span className="w-1 h-1 bg-white/20 rounded-full" />
+              <span>Refactored: {formatDate(project.updatedAt)}</span>
+            </div>
+          </div>
+          
+          <div className="flex flex-col items-end gap-2">
+             <div className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Completion Node</div>
+             <div className="text-5xl font-black text-indigo-400 font-mono tracking-tighter">{project.progress}%</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Workspace Area */}
+      <div className="flex-1 overflow-y-auto p-10 space-y-12 scrollbar-hide">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-12">
+          
+          {/* Left Block: Core Meta */}
+          <div className="space-y-8">
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.1em] ml-1">Identity Specifications</label>
+              <div className="grid grid-cols-1 gap-4">
+                <div className="form-group flex-1">
+                  <label className="text-xs opacity-60">Project Name</label>
+                  <input 
+                    className="w-full bg-white/[0.03] border-white/10 focus:border-indigo-500/50"
+                    value={formData.name} 
+                    onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  />
+                </div>
+                <div className="form-group flex-1">
+                  <label className="text-xs opacity-60">System Code</label>
+                  <input 
+                    className="w-full font-mono bg-white/[0.03] border-white/10 focus:border-indigo-500/50"
+                    value={formData.code} 
+                    onChange={e => setFormData(prev => ({ ...prev, code: e.target.value }))}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.1em] ml-1">Status & Velocity</label>
+              <div className="grid grid-cols-1 gap-4">
+                <div className="form-group">
+                  <label className="text-xs opacity-60">Current Status</label>
+                  <select 
+                    value={formData.status}
+                    onChange={e => setFormData(prev => ({ ...prev, status: e.target.value }))}
+                    className="w-full p-3.5 bg-black/40 rounded-xl border border-white/10 text-white outline-none focus:border-indigo-500 transition-all cursor-pointer"
+                  >
+                    <option value="PLANNED">Planned</option>
+                    <option value="ACTIVE">Active</option>
+                    <option value="COMPLETED">Completed</option>
+                    <option value="ARCHIVED">Archived</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label className="text-xs opacity-60">Execution Progress ({formData.progress}%)</label>
+                  <div className="flex items-center gap-6 bg-white/[0.03] p-4 rounded-xl border border-white/5">
+                    <input 
+                      type="range"
+                      className="flex-1 accent-indigo-500 h-1.5"
+                      value={formData.progress}
+                      onChange={e => setFormData(prev => ({ ...prev, progress: parseInt(e.target.value) }))}
+                    />
+                    <span className="text-lg font-black text-indigo-400 font-mono">{formData.progress}%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Block: Architecture & Description */}
+          <div className="space-y-8">
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.1em] ml-1">Team Architecture</label>
+              <div className="form-group">
+                <label className="text-xs opacity-60">Assigned Collaborative Units</label>
+                <div className="flex flex-wrap gap-2.5 p-5 bg-black/40 rounded-2xl border border-white/10 min-h-[140px]">
+                  {teams.map(t => {
+                    const isSelected = formData.teamIds.includes(t.id);
+                    return (
+                      <button
+                        key={t.id}
+                        type="button"
+                        onClick={() => toggleTeam(t.id)}
+                        className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all border ${
+                          isSelected 
+                            ? 'bg-indigo-500/20 border-indigo-500 text-indigo-300 shadow-lg shadow-indigo-500/10' 
+                            : 'bg-white/5 border-white/5 text-white/40 hover:bg-white/10'
+                        }`}
+                      >
+                        <Users size={14} />
+                        {t.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.1em] ml-1">Strategic Description</label>
+              <textarea 
+                className="w-full h-[140px] bg-black/40 border-white/10 rounded-2xl p-5 text-sm focus:border-indigo-500/50 resize-none transition-all"
+                placeholder="Detail high-level objectives and technical roadmap..."
+                value={formData.description}
+                onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Action Command Bar */}
+      <div className="p-8 bg-black/40 border-t border-white/5 flex items-center justify-between backdrop-blur-xl">
+        {!showDeleteConfirm ? (
+          <button 
+            onClick={() => setShowDeleteConfirm(true)} 
+            className="flex items-center gap-2.5 px-6 py-3.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-500 rounded-2xl font-black text-xs uppercase tracking-widest transition-all active:scale-95"
+          >
+            <Trash2 size={16} /> Delete Initiative
+          </button>
+        ) : (
+          <div className="flex items-center gap-3 p-2 bg-red-500/10 border border-red-500/20 rounded-2xl animate-in zoom-in-95">
+            <div className="flex items-center gap-2 px-3 text-red-400">
+              <AlertTriangle size={16} />
+              <span className="text-[10px] font-black uppercase tracking-tight">System Purge?</span>
+            </div>
+            <button 
+              onClick={handleDelete}
+              disabled={isPending}
+              className="px-6 py-2 bg-red-600 text-white text-xs font-black rounded-xl hover:bg-red-500 transition-all shadow-lg shadow-red-600/20"
+            >
+              CONFIRM
+            </button>
+            <button 
+              onClick={() => setShowDeleteConfirm(false)}
+              className="px-6 py-2 bg-white/10 text-xs font-bold rounded-xl hover:bg-white/20 transition-all"
+            >
+              BACK
+            </button>
+          </div>
+        )}
+
+        <div className="flex items-center gap-4">
+          <button 
+            onClick={() => {
+              setFormData({
+                name: project.name,
+                code: project.code,
+                description: project.description || "",
+                status: project.status,
+                progress: project.progress,
+                teamIds: project.teams?.map(t => t.id) || []
+              });
+            }}
+            className="px-8 py-3.5 bg-white/5 border border-white/10 rounded-2xl font-black text-xs uppercase tracking-widest text-white/60 hover:bg-white/10 transition-all"
+          >
+            Discard
+          </button>
+          <button 
+            onClick={handleSave} 
+            disabled={isPending}
+            className="flex items-center gap-3 px-10 py-3.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:grayscale rounded-2xl font-black text-xs uppercase tracking-[0.1em] text-white transition-all shadow-2xl shadow-indigo-600/40 active:scale-[0.98]"
+          >
+            {isPending ? "Syncing..." : <>Save Evolution <Save size={18} /></>}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * ─── Main Management Workbench ──────────────────────────────────────────────
+ */
 export default function ProjectManagement({ 
   initialProjects, 
   teams 
@@ -43,82 +296,20 @@ export default function ProjectManagement({
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(initialProjects[0]?.id || null);
   const selectedProject = initialProjects.find(p => p.id === selectedProjectId);
 
-  const [formData, setFormData] = useState({
-    name: "",
-    code: "",
-    description: "",
-    status: "",
-    progress: 0,
-    teamIds: [] as string[]
-  });
-
-  const [isPending, setIsPending] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-
-  // Sync selection if projects list changes and current selection is missing
+  // Auto-select if first project is deleted/changed
   useEffect(() => {
     if (selectedProjectId && !initialProjects.some(p => p.id === selectedProjectId)) {
       setSelectedProjectId(initialProjects[0]?.id || null);
     }
   }, [initialProjects, selectedProjectId]);
 
-  // Sync form data when selection changes
-  useEffect(() => {
-    if (selectedProject) {
-      setFormData({
-        name: selectedProject.name,
-        code: selectedProject.code,
-        description: selectedProject.description || "",
-        status: selectedProject.status,
-        progress: selectedProject.progress,
-        teamIds: selectedProject.teams?.map(t => t.id) || []
-      });
-    }
-  }, [selectedProjectId, selectedProject]);
-
   const handleSelect = (p: Project) => {
     setSelectedProjectId(p.id);
-    setFormData({
-      name: p.name,
-      code: p.code,
-      description: p.description || "",
-      status: p.status,
-      progress: p.progress,
-      teamIds: p.teams?.map(t => t.id) || []
-    });
-    setShowDeleteConfirm(false);
-  };
-
-  const handleSave = async () => {
-    if (!selectedProjectId) return;
-    setIsPending(true);
-    const result = await updateProject(selectedProjectId, formData);
-    setIsPending(false);
-    
-    if (result?.error) {
-      alert(`System Conflict: ${result.error}`);
-    } else {
-      alert("Project architecture synchronized.");
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!selectedProjectId) return;
-    setIsPending(true);
-    const result = await deleteProject(selectedProjectId);
-    setIsPending(false);
-    
-    if (result?.error) {
-      alert(`Purge Interrupted: ${result.error}`);
-    } else {
-      alert("Project decommissioned successfully.");
-      setSelectedProjectId(initialProjects.find(p => p.id !== selectedProjectId)?.id || null);
-    }
   };
 
   return (
     <div className="flex flex-col lg:flex-row gap-8 mt-4">
-      {/* ─── Column 1: MASTER LIST ────────────────────────────────────────── */}
+      {/* MASTER LIST */}
       <div className="w-full lg:w-[350px] space-y-4">
         <div className="flex items-center justify-between px-2">
           <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest">Project Inventory</h3>
@@ -159,202 +350,38 @@ export default function ProjectManagement({
               </div>
             </div>
           ))}
+
+          {initialProjects.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-20 bg-white/[0.02] border border-dashed border-white/10 rounded-3xl">
+              <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4">
+                <Plus size={24} className="text-white/20" />
+              </div>
+              <p className="text-sm font-bold text-white/20">No active initiatives found</p>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* ─── Column 2: MAIN DETAIL/EDIT VIEW ─────────────────────────────── */}
-      <div className="flex-1 bg-white/[0.02] border border-white/5 rounded-[2rem] p-8 shadow-2xl flex flex-col gap-10 min-h-[800px]">
-        {!selectedProject ? (
-          <div className="flex flex-col items-center justify-center flex-1 text-white/20 gap-6">
-            <div className="p-8 rounded-full bg-white/[0.02] border border-white/5">
-              <Briefcase size={64} className="opacity-10" />
-            </div>
-            <p className="text-lg font-medium tracking-tight">Select an initiative to begin management</p>
+      {/* DETAIL WORKSPACE */}
+      {selectedProject ? (
+        <ProjectDetail 
+          key={selectedProject.id}
+          project={selectedProject} 
+          teams={teams}
+          onUpdate={() => {
+            // refresh happens via revalidatePath, 
+            // the prop initialProjects will change.
+          }}
+        />
+      ) : (
+        <div className="flex-1 flex flex-col items-center justify-center p-20 bg-white/[0.02] border border-white/5 rounded-[2.5rem] border-dashed">
+          <div className="w-24 h-24 bg-white/5 rounded-full flex items-center justify-center mb-6 animate-pulse">
+            <ChevronRight size={40} className="text-white/10" />
           </div>
-        ) : (
-          <>
-            {/* Header Section with Graphic */}
-            <div className="relative h-[300px] rounded-3xl overflow-hidden border border-white/10 shadow-3xl group">
-              <Image 
-                src="/Users/hbakesson/.gemini/antigravity/brain/eb76f46a-8eb0-4f3b-907d-43ad92740783/modern_project_dashboard_graphics_1775678772185.png"
-                alt="Project Illustration"
-                fill
-                className="object-cover opacity-90 group-hover:scale-105 transition-transform duration-1000"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/40 to-transparent" />
-              <div className="absolute bottom-8 left-8 right-8">
-                 <div className="flex items-end justify-between gap-4">
-                    <div className="space-y-2">
-                       <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400 bg-indigo-500/10 px-3 py-1 rounded-full border border-indigo-500/20">Initiative Detail</span>
-                       <h2 className="text-4xl font-black tracking-tighter text-white">{formData.name}</h2>
-                       <div className="flex items-center gap-3 text-white/40 font-medium text-xs">
-                         <span className="font-mono">{formData.code}</span>
-                         <span className="w-1 h-1 rounded-full bg-white/20" />
-                         <span>Updated {formatDate(selectedProject.updatedAt)}</span>
-                       </div>
-                    </div>
-                    <div className="flex items-center gap-3 bg-black/60 backdrop-blur-xl px-5 py-2.5 rounded-2xl border border-white/10 shadow-2xl">
-                       <div className={`w-2.5 h-2.5 rounded-full shadow-[0_0_10px_currentColor] animate-pulse ${formData.status === 'ACTIVE' ? 'text-green-500 bg-green-500' : 'text-amber-500 bg-amber-500'}`} />
-                       <span className="text-xs font-black uppercase tracking-widest text-white">{formData.status}</span>
-                    </div>
-                 </div>
-              </div>
-            </div>
-
-            {/* Editing Form Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              <div className="space-y-8">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.1em] ml-1">Core Identity</label>
-                  <div className="grid grid-cols-1 gap-4">
-                    <div className="form-group flex-1">
-                      <label className="text-xs opacity-60">Project Name</label>
-                      <input 
-                        className="w-full bg-white/[0.03] border-white/10 focus:border-indigo-500/50"
-                        value={formData.name} 
-                        onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                      />
-                    </div>
-                    <div className="form-group flex-1">
-                      <label className="text-xs opacity-60">System Code</label>
-                      <input 
-                        className="w-full font-mono bg-white/[0.03] border-white/10 focus:border-indigo-500/50"
-                        value={formData.code} 
-                        onChange={e => setFormData(prev => ({ ...prev, code: e.target.value }))}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.1em] ml-1">Status & Velocity</label>
-                  <div className="grid grid-cols-1 gap-4">
-                    <div className="form-group">
-                      <label className="text-xs opacity-60">Current Status</label>
-                      <select 
-                        value={formData.status}
-                        onChange={e => setFormData(prev => ({ ...prev, status: e.target.value }))}
-                        className="w-full p-3.5 bg-black/40 rounded-xl border border-white/10 text-white outline-none focus:border-indigo-500 transition-all cursor-pointer"
-                      >
-                        <option value="PLANNED">Planned</option>
-                        <option value="ACTIVE">Active</option>
-                        <option value="COMPLETED">Completed</option>
-                        <option value="ARCHIVED">Archived</option>
-                      </select>
-                    </div>
-                    <div className="form-group">
-                      <label className="text-xs opacity-60">Execution Progress ({formData.progress}%)</label>
-                      <div className="flex items-center gap-6 bg-white/[0.03] p-4 rounded-xl border border-white/5">
-                        <input 
-                          type="range"
-                          className="flex-1 accent-indigo-500 h-1.5"
-                          value={formData.progress}
-                          onChange={e => setFormData(prev => ({ ...prev, progress: parseInt(e.target.value) }))}
-                        />
-                        <span className="text-lg font-black text-indigo-400 font-mono">{formData.progress}%</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-8">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.1em] ml-1">Team Architecture</label>
-                  <div className="form-group">
-                    <label className="text-xs opacity-60">Assigned Collaborative Units</label>
-                    <div className="flex flex-wrap gap-2.5 p-5 bg-black/40 rounded-2xl border border-white/10 min-h-[140px]">
-                      {teams.map(t => {
-                        const isSelected = formData.teamIds.includes(t.id);
-                        return (
-                          <button
-                            key={t.id}
-                            type="button"
-                            onClick={() => {
-                              setFormData(prev => ({
-                                ...prev,
-                                teamIds: isSelected 
-                                  ? prev.teamIds.filter(id => id !== t.id)
-                                  : [...prev.teamIds, t.id]
-                              }))
-                            }}
-                            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all border ${
-                              isSelected 
-                                ? 'bg-indigo-500/20 border-indigo-500 text-indigo-300 shadow-lg shadow-indigo-500/10' 
-                                : 'bg-white/5 border-white/10 text-white/40 hover:bg-white/10'
-                            }`}
-                          >
-                            {t.name}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label className="text-[10px] font-bold text-white/30 uppercase tracking-[0.1em] ml-1">Strategic Description</label>
-                  <textarea 
-                    className="w-full h-[180px] p-5 bg-white/[0.03] rounded-2xl border border-white/10 text-white outline-none focus:border-indigo-500 transition-all resize-none text-sm leading-relaxed"
-                    value={formData.description}
-                    onChange={e => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                    placeholder="Describe the technical scope and strategic value..."
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Footer Actions */}
-            <div className="flex items-center justify-between pt-8 border-t border-white/5 mt-auto">
-              {!showDeleteConfirm ? (
-                <button 
-                  onClick={() => setShowDeleteConfirm(true)} 
-                  disabled={!selectedProjectId}
-                  className="flex items-center gap-2.5 px-6 py-3.5 bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-500 rounded-2xl font-black text-xs uppercase tracking-widest transition-all active:scale-95"
-                >
-                  <Trash2 size={16} /> Delete Initiative
-                </button>
-              ) : (
-                <div className="flex items-center gap-3 p-2 bg-red-500/10 border border-red-500/20 rounded-2xl">
-                  <div className="flex items-center gap-2 px-3 text-red-400">
-                    <AlertTriangle size={16} />
-                    <span className="text-[10px] font-black uppercase tracking-tight">System Purge?</span>
-                  </div>
-                  <button 
-                    onClick={handleDelete}
-                    disabled={isPending}
-                    className="px-6 py-2 bg-red-600 text-white text-xs font-black rounded-xl hover:bg-red-500 transition-all"
-                  >
-                    CONFIRM
-                  </button>
-                  <button 
-                    onClick={() => setShowDeleteConfirm(false)}
-                    className="px-6 py-2 bg-white/10 text-xs font-bold rounded-xl hover:bg-white/20 transition-all"
-                  >
-                    BACK
-                  </button>
-                </div>
-              )}
-
-              <div className="flex items-center gap-4">
-                <button 
-                  onClick={() => handleSelect(selectedProject)}
-                  className="px-8 py-3.5 bg-white/5 border border-white/10 rounded-2xl font-black text-xs uppercase tracking-widest text-white/60 hover:bg-white/10 transition-all"
-                >
-                  Discard
-                </button>
-                <button 
-                  onClick={handleSave} 
-                  disabled={isPending || !selectedProjectId}
-                  className="flex items-center gap-3 px-10 py-3.5 bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:grayscale rounded-2xl font-black text-xs uppercase tracking-[0.1em] text-white transition-all shadow-2xl shadow-indigo-600/40 active:scale-[0.98]"
-                >
-                  {isPending ? "Syncing..." : <>Save Evolution <Save size={18} /></>}
-                </button>
-              </div>
-            </div>
-          </>
-        )}
-      </div>
+          <h3 className="text-xl font-black text-white/20 uppercase tracking-widest">Select an Initiative</h3>
+          <p className="text-white/10 text-sm mt-2">Initialize the detail workbench by choosing a project from the inventory.</p>
+        </div>
+      )}
     </div>
   );
 }
