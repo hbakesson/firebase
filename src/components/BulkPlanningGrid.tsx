@@ -12,7 +12,6 @@ import {
   RowData,
 } from '@tanstack/react-table';
 import { upsertAllocation, upsertActual } from '@/lib/actions';
-import { Project, Period, Allocation } from '@/lib/mockData';
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -112,12 +111,12 @@ const ActualCell = React.memo(({ getValue, row, column, table }: CellContext<Bul
   }, [actualValue]);
 
   // Find corresponding planned value for health indicator
-  const plannedValue = useMemo(() => {
-    if (selectedTeamId !== 'all') {
+  const plannedValue: number = useMemo(() => {
+    if (selectedTeamId !== 'all' && selectedTeamId) {
       // Use allRelatedTeamIds from meta or external context if needed, 
       // but for ActualCell we can assume if selectedTeamId is set, 
       // we want the sum of that team and its subteams provided in meta
-      const relatedIds = (table.options.meta as any)?.allRelatedTeamIds || [selectedTeamId];
+      const relatedIds = table.options.meta?.allRelatedTeamIds || [selectedTeamId];
       return relatedIds.reduce((sum: number, tid: string) => sum + (allocations?.[`${row.original.id}-${periodId}-${tid}`] || 0), 0);
     }
     return (row.original.teams || []).reduce((sum: number, t: { id: string }) => sum + (allocations?.[`${row.original.id}-${periodId}-${t.id}`] || 0), 0);
@@ -163,7 +162,9 @@ ActualCell.displayName = "ActualCell";
 
 interface BulkPlanningGridProps {
   initialProjects: BulkProject[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initialAllocations: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   initialActuals: any[]; 
   initialPeriods: BulkPeriod[];
   initialTeams: BulkTeam[];
@@ -332,12 +333,10 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
     {
       id: "total",
       header: "Σ",
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       cell: ({ row }: CellContext<BulkProject, any>) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const totalPlanned = initialPeriods.reduce((acc: number, per: BulkPeriod) => {
           if (selectedTeamId !== 'all') {
-            return acc + allRelatedTeamIds.reduce((sum: number, tid: string) => sum + (allocations[`${row.original.id}-${per.id}-${tid}`] || 0), 0);
+            return acc + (allRelatedTeamIds || []).reduce((sum: number, tid: string) => sum + (allocations[`${row.original.id}-${per.id}-${tid}`] || 0), 0);
           }
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return acc + (row.original.teams || []).reduce((sum: number, t: any) => sum + (allocations[`${row.original.id}-${per.id}-${t.id}`] || 0), 0);
@@ -345,7 +344,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
 
         const totalActual = initialPeriods.reduce((acc: number, per: BulkPeriod) => {
           if (selectedTeamId !== 'all') {
-            return acc + allRelatedTeamIds.reduce((sum: number, tid: string) => sum + (actualsMap[`${row.original.id}-${per.id}-${tid}`] || 0), 0);
+            return acc + (allRelatedTeamIds || []).reduce((sum: number, tid: string) => sum + (actualsMap[`${row.original.id}-${per.id}-${tid}`] || 0), 0);
           }
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return acc + (row.original.teams || []).reduce((sum: number, t: any) => sum + (actualsMap[`${row.original.id}-${per.id}-${t.id}`] || 0), 0);
