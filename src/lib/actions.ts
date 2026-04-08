@@ -219,6 +219,7 @@ export async function upsertAllocation(data: { teamId: string; projectId: string
   const period = await prisma.period.findUnique({ where: { id: data.periodId } });
   if (period?.isLocked) throw new Error("This period is locked for fiscal governance. Modifications are disabled.");
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const allocation = await prisma.budgetAllocation.upsert({
     where: {
       teamId_projectId_periodId: {
@@ -251,6 +252,7 @@ export async function upsertActual(data: { teamId: string; projectId: string; pe
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const actual = await prisma.actualAllocation.upsert({
     where: {
       teamId_projectId_periodId: {

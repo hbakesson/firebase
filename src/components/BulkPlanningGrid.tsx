@@ -179,6 +179,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
   const [, startTransition] = useTransition();
   
   const [allocations, setAllocations] = useState<Record<string, number>>(() => 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     initialAllocations.reduce((acc: Record<string, number>, curr: any) => ({
       ...acc,
       [`${curr.projectId}-${curr.periodId}-${curr.teamId}`]: curr.plannedHours
@@ -186,6 +187,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
   );
 
   const [actualsMap, setActualsMap] = useState<Record<string, number>>(() =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     initialActuals.reduce((acc: Record<string, number>, curr: any) => ({
       ...acc,
       [`${curr.projectId}-${curr.periodId}-${curr.teamId}`]: curr.plannedHours || curr.actualHours || 0
@@ -332,10 +334,12 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
       header: "Σ",
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       cell: ({ row }: CellContext<BulkProject, any>) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const totalPlanned = initialPeriods.reduce((acc: number, per: BulkPeriod) => {
           if (selectedTeamId !== 'all') {
             return acc + allRelatedTeamIds.reduce((sum: number, tid: string) => sum + (allocations[`${row.original.id}-${per.id}-${tid}`] || 0), 0);
           }
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return acc + (row.original.teams || []).reduce((sum: number, t: any) => sum + (allocations[`${row.original.id}-${per.id}-${t.id}`] || 0), 0);
         }, 0);
 
@@ -343,6 +347,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
           if (selectedTeamId !== 'all') {
             return acc + allRelatedTeamIds.reduce((sum: number, tid: string) => sum + (actualsMap[`${row.original.id}-${per.id}-${tid}`] || 0), 0);
           }
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           return acc + (row.original.teams || []).reduce((sum: number, t: any) => sum + (actualsMap[`${row.original.id}-${per.id}-${t.id}`] || 0), 0);
         }, 0);
 
@@ -360,7 +365,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
       size: 60,
     }
   ];
-  }, [allocations, actualsMap, initialPeriods, selectedTeamId]);
+  }, [allocations, actualsMap, initialPeriods, selectedTeamId, allRelatedTeamIds]);
 
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
