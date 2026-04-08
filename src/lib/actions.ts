@@ -81,111 +81,131 @@ export async function createProject(data: { name: string; code: string; descript
   const session = await auth();
   if (!session?.user?.organizationId) throw new Error("Unauthorized");
 
-  const project = await prisma.project.create({
-    data: {
-      name: data.name,
-      code: data.code,
-      description: data.description,
-      teams: data.teamIds && data.teamIds.length > 0 ? {
-        connect: data.teamIds.map(id => ({ id }))
-      } : undefined,
-      organizationId: session.user.organizationId,
-      createdBy: session.user.id!,
-    },
-  });
+  try {
+    const project = await prisma.project.create({
+      data: {
+        name: data.name,
+        code: data.code,
+        description: data.description,
+        teams: data.teamIds && data.teamIds.length > 0 ? {
+          connect: data.teamIds.map(id => ({ id }))
+        } : undefined,
+        organizationId: session.user.organizationId,
+        createdBy: session.user.id!,
+      },
+    });
 
-  await prisma.auditLog.create({
-    data: {
-      organizationId: session.user.organizationId,
-      action: "CREATE",
-      entityType: "Project",
-      entityId: project.id,
-      projectName: project.name,
-      userId: session.user.id!,
-      userEmail: session.user.email!,
-      newValue: JSON.stringify(project),
-    },
-  });
+    await prisma.auditLog.create({
+      data: {
+        organizationId: session.user.organizationId,
+        action: "CREATE",
+        entityType: "Project",
+        entityId: project.id,
+        projectName: project.name,
+        userId: session.user.id!,
+        userEmail: session.user.email!,
+        newValue: JSON.stringify(sanitize(project)),
+      },
+    });
 
-  revalidatePath("/projects");
-  return null;
+    revalidatePath("/projects");
+    return { success: true, project: sanitize(project) };
+  } catch (error: any) {
+    console.error("[PROJECT_CREATE_ERROR]", error);
+    if (error.code === 'P2002') {
+      return { error: `Validation failure: A project with this ${error.meta?.target || 'name/code'} already exists.` };
+    }
+    return { error: error.message || "An unexpected error occurred during project genesis." };
+  }
 }
 
 export async function updateProject(id: string, data: Record<string, unknown>) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
 
-  const { teamIds, ...restData } = data;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const updateData: any = { ...restData };
-  
-  if (teamIds && Array.isArray(teamIds)) {
-    updateData.teams = {
-      set: teamIds.map((id: string) => ({ id }))
-    };
-  } else if (data.hasOwnProperty('teamIds') && (teamIds === null || (Array.isArray(teamIds) && teamIds.length === 0))) {
-    updateData.teams = { set: [] };
+  try {
+    const { teamIds, ...restData } = data;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const updateData: any = { ...restData };
+    
+    if (teamIds && Array.isArray(teamIds)) {
+      updateData.teams = {
+        set: teamIds.map((id: string) => ({ id }))
+      };
+    } else if (data.hasOwnProperty('teamIds') && (teamIds === null || (Array.isArray(teamIds) && teamIds.length === 0))) {
+      updateData.teams = { set: [] };
+    }
+
+    const previous = await prisma.project.findUnique({ where: { id } });
+    const project = await prisma.project.update({
+      where: { id },
+      data: updateData,
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        organizationId: session.user.organizationId,
+        action: "UPDATE",
+        entityType: "Project",
+        entityId: project.id,
+        projectName: project.name,
+        userId: session.user.id!,
+        userEmail: session.user.email!,
+        previousValue: JSON.stringify(sanitize(previous)),
+        newValue: JSON.stringify(sanitize(project)),
+      },
+    });
+
+    revalidatePath("/projects");
+    revalidatePath("/dashboard");
+    return { success: true, project: sanitize(project) };
+  } catch (error: any) {
+    console.error("[PROJECT_UPDATE_ERROR]", error);
+    return { error: error.message || "Transformation failed. The system rejected the evolution." };
   }
-
-  const previous = await prisma.project.findUnique({ where: { id } });
-  const project = await prisma.project.update({
-    where: { id },
-    data: updateData,
-  });
-
-  await prisma.auditLog.create({
-    data: {
-      organizationId: session.user.organizationId,
-      action: "UPDATE",
-      entityType: "Project",
-      entityId: project.id,
-      projectName: project.name,
-      userId: session.user.id!,
-      userEmail: session.user.email!,
-      previousValue: JSON.stringify(previous),
-      newValue: JSON.stringify(project),
-    },
-  });
-
-  revalidatePath("/projects");
-  revalidatePath("/dashboard");
-  return null;
 }
 
 export async function deleteProject(id: string) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Unauthorized");
 
-  const lockedData = await prisma.budgetAllocation.findFirst({
-    where: { projectId: id, period: { isLocked: true } }
-  }) || await prisma.actualAllocation.findFirst({
-    where: { projectId: id, period: { isLocked: true } }
-  });
+  try {
+    const lockedData = await prisma.budgetAllocation.findFirst({
+      where: { projectId: id, period: { isLocked: true } }
+    }) || await prisma.actualAllocation.findFirst({
+      where: { projectId: id, period: { isLocked: true } }
+    });
 
-  if (lockedData) {
-    throw new Error("Cannot delete project containing data in locked fiscal periods. Please unlock the periods first.");
+    if (lockedData) {
+      return { error: "Decommissioning blocked: Project contains data in locked fiscal periods. Unlock the periods first." };
+    }
+
+    const project = await prisma.project.delete({
+      where: { id },
+    });
+
+    if (session.user.organizationId) {
+      await prisma.auditLog.create({
+        data: {
+          organizationId: session.user.organizationId,
+          action: "DELETE",
+          entityType: "Project",
+          // Note: Omit entityId (FK) since the project is already deleted
+          projectName: project.name,
+          userId: session.user.id!,
+          userEmail: session.user.email!,
+          previousValue: JSON.stringify(sanitize(project)),
+        },
+      });
+    }
+
+    revalidatePath("/projects");
+    revalidatePath("/dashboard");
+    return { success: true };
+  } catch (error: any) {
+    console.error("[PROJECT_DELETE_ERROR]", error);
+    return { error: error.message || "Decommissioning failed. Ensure no dependent items exist." };
   }
-
-  const project = await prisma.project.delete({
-    where: { id },
-  });
-
-  await prisma.auditLog.create({
-    data: {
-      organizationId: session.user.organizationId,
-      action: "DELETE",
-      entityType: "Project",
-      entityId: project.id,
-      projectName: project.name,
-      userId: session.user.id!,
-      userEmail: session.user.email!,
-      previousValue: JSON.stringify(project),
-    },
-  });
-
-  revalidatePath("/projects");
-  revalidatePath("/dashboard");
-  return null;
 }
 
 // ─── Planning Actions ────────────────────────────────────────────────────────
@@ -503,41 +523,48 @@ export async function deleteTeam(teamId: string) {
   const session = await auth();
   if (session?.user?.role !== "admin") throw new Error("Unauthorized");
 
-  const team = await prisma.team.findUnique({ 
-    where: { id: teamId },
-    include: { allocations: true, actualAllocations: true }
-  });
+  try {
+    const team = await prisma.team.findUnique({ 
+      where: { id: teamId },
+      include: { allocations: true, actualAllocations: true }
+    });
 
-  if (!team) throw new Error("Team not found");
+    if (!team) return { error: "Team not found" };
 
-  const lockedData = await prisma.budgetAllocation.findFirst({
-    where: { teamId: teamId, period: { isLocked: true } }
-  }) || await prisma.actualAllocation.findFirst({
-    where: { teamId: teamId, period: { isLocked: true } }
-  });
+    const lockedData = await prisma.budgetAllocation.findFirst({
+      where: { teamId: teamId, period: { isLocked: true } }
+    }) || await prisma.actualAllocation.findFirst({
+      where: { teamId: teamId, period: { isLocked: true } }
+    });
 
-  if (lockedData) {
-    throw new Error("Cannot delete team with records in locked fiscal periods. Please unlock the periods first.");
+    if (lockedData) {
+      return { error: "Decommissioning blocked: Team contains records in locked fiscal periods. Unlock the periods first." };
+    }
+
+    await prisma.team.delete({
+      where: { id: teamId },
+    });
+
+    if (session.user.organizationId) {
+      await prisma.auditLog.create({
+        data: {
+          organizationId: session.user.organizationId!,
+          action: "DELETE",
+          entityType: "Team",
+          projectName: team.name || "Unknown Team",
+          userId: session.user.id!,
+          userEmail: session.user.email!,
+          previousValue: JSON.stringify(sanitize(team)),
+        },
+      });
+    }
+
+    revalidatePath("/teams");
+    return { success: true };
+  } catch (error: any) {
+    console.error("[TEAM_DELETE_ERROR]", error);
+    return { error: error.message || "Decommissioning failed. Ensure no dependent internal projects remain." };
   }
-
-  await prisma.team.delete({
-    where: { id: teamId },
-  });
-
-  await prisma.auditLog.create({
-    data: {
-      organizationId: session.user.organizationId!,
-      action: "DELETE",
-      entityType: "Team",
-      projectName: team.name,
-      userId: session.user.id!,
-      userEmail: session.user.email!,
-      previousValue: JSON.stringify(team),
-    },
-  });
-
-  revalidatePath("/teams");
-  return { success: true };
 }
 
 export async function inviteUser(data: { email: string; role: string }) {

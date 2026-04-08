@@ -6,7 +6,9 @@ import {
   Briefcase, 
   Plus
 } from "lucide-react";
-import ProjectList from "@/components/ProjectList";
+import ProjectFilters from "@/components/ProjectFilters";
+import ProjectManagement from "@/components/ProjectManagement";
+import CreateProjectForm from "@/components/CreateProjectForm";
 
 export default async function ProjectsPage({
   searchParams,
@@ -21,7 +23,12 @@ export default async function ProjectsPage({
   const projects = await prisma.project.findMany({
     where: {
       organizationId: session.user.organizationId,
-      ...(q ? { name: { contains: q, mode: 'insensitive' } } : {}),
+      ...(q ? {
+        OR: [
+          { name: { contains: q, mode: 'insensitive' } },
+          { code: { contains: q, mode: 'insensitive' } }
+        ]
+      } : {}),
       ...(team ? { teams: { some: { id: team } } } : {}),
       ...(status ? { status: status } : {}),
     },
@@ -34,7 +41,7 @@ export default async function ProjectsPage({
   });
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="header-row">
         <div>
           <h2 className="text-3xl font-extrabold flex items-center gap-3">
@@ -44,32 +51,12 @@ export default async function ProjectsPage({
           <p style={{ color: "var(--text-muted)" }}>Manage active initiatives and track cross-team project status.</p>
         </div>
         
-        <form action={async (formData: FormData) => {
-          "use server";
-          const name = formData.get("name") as string;
-          const code = formData.get("code") as string;
-          const teamId = formData.get("teamId") as string;
-          const teamIds = teamId ? [teamId] : undefined;
-          const description = formData.get("description") as string;
-          await createProject({ name, code, teamIds, description });
-        }}>
-          <div className="card" style={{ padding: '1rem', marginTop: '1rem', display: 'flex', gap: '1rem', alignItems: 'center', flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex', gap: '1rem', flex: 1 }}>
-              <input name="name" placeholder="Project Name" className="btn-sm" required style={{ flex: 2 }} />
-              <input name="code" placeholder="Code (e.g. PRJ001)" className="btn-sm" required style={{ flex: 1 }} />
-              <select name="teamId" className="btn-sm" style={{ background: 'rgba(0,0,0,0.2)', border: '1px solid var(--card-border)', borderRadius: '0.25rem', padding: '0.4rem' }}>
-                <option value="">No Team Assigned</option>
-                {teams.map((t: (typeof teams)[0]) => <option key={t.id} value={t.id}>{t.name}</option>)}
-              </select>
-            </div>
-            <button type="submit" className="btn-sm">
-              <Plus size={16} /> Create Project
-            </button>
-          </div>
-        </form>
+        <CreateProjectForm teams={teams} />
       </div>
 
-      <ProjectList initialProjects={projects} teams={teams} />
+      <ProjectFilters teams={teams} />
+
+      <ProjectManagement initialProjects={projects} teams={teams} />
     </div>
   );
 }
