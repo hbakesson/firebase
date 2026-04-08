@@ -333,6 +333,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
     {
       id: "total",
       header: "Σ",
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       cell: ({ row }: CellContext<BulkProject, any>) => {
         const totalPlanned = initialPeriods.reduce((acc: number, per: BulkPeriod) => {
           if (selectedTeamId !== 'all') {
