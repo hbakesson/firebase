@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Users, Edit2, CheckCircle2, PlayCircle, Briefcase } from "lucide-react";
+import { Users, Edit2, CheckCircle2, PlayCircle } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { updateProject } from "@/lib/actions";
 import EditProjectModal from "./EditProjectModal";
@@ -45,14 +45,8 @@ export default function ProjectList({ initialProjects, teams }: { initialProject
         <tbody>
           {initialProjects.length === 0 ? (
             <tr>
-              <td colSpan={5} style={{ textAlign: 'center', padding: '4rem', color: 'var(--text-muted)' }}>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
-                  <Briefcase size={40} style={{ opacity: 0.1 }} />
-                  <div>
-                    <div style={{ fontWeight: 600, color: 'var(--text-main)', fontSize: '1.1rem' }}>No projects found</div>
-                    <p style={{ fontSize: '0.9rem', marginTop: '0.25rem' }}>Try adjusting your search or filters to find what you&apos;re looking for.</p>
-                  </div>
-                </div>
+              <td colSpan={5} style={{ textAlign: 'center', padding: '3rem', color: 'var(--text-muted)' }}>
+                No projects found. Use the form above to add an initiative.
               </td>
             </tr>
           ) : (
