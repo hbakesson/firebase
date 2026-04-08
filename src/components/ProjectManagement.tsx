@@ -84,7 +84,7 @@ function ProjectDetail({ project, teams, onUpdate }: { project: Project, teams: 
   };
 
   return (
-    <div className="flex-1 min-w-0 bg-white/[0.03] border border-white/5 rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl backdrop-blur-3xl animate-in fade-in slide-in-from-right-4 duration-500">
+    <div className="flex-1 min-w-0 h-full bg-white/[0.03] border border-white/5 rounded-[2.5rem] overflow-hidden flex flex-col shadow-2xl backdrop-blur-3xl animate-in fade-in slide-in-from-right-4 duration-500">
       {/* Header with Generated Graphic */}
       <div className="relative h-64 w-full overflow-hidden">
         <Image 
@@ -120,7 +120,7 @@ function ProjectDetail({ project, teams, onUpdate }: { project: Project, teams: 
       </div>
 
       {/* Workspace Area */}
-      <div className="flex-1 overflow-y-auto p-10 space-y-12 scrollbar-hide">
+      <div className="flex-1 overflow-y-auto p-10 space-y-12">
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-12">
           
           {/* Left Block: Core Meta */}
@@ -305,15 +305,15 @@ export default function ProjectManagement({
   };
 
   return (
-    <div className="flex flex-col lg:flex-row gap-8 mt-4">
+    <div className="flex flex-col lg:flex-row gap-8 mt-4 h-[calc(100vh-280px)] min-h-[750px]">
       {/* MASTER LIST */}
-      <div className="w-full lg:w-[350px] space-y-4">
-        <div className="flex items-center justify-between px-2">
+      <div className="w-full lg:w-[350px] space-y-4 flex flex-col h-full">
+        <div className="flex items-center justify-between px-2 flex-shrink-0">
           <h3 className="text-xs font-bold text-white/40 uppercase tracking-widest">Project Inventory</h3>
           <span className="text-[10px] bg-white/10 px-2 py-0.5 rounded-full text-white/60">{initialProjects.length} Total</span>
         </div>
         
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 overflow-y-auto pr-2 flex-1">
           {initialProjects.map(p => (
             <div 
               key={p.id}
