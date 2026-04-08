@@ -280,12 +280,13 @@ export async function upsertActual(data: { teamId: string; projectId: string; pe
 }
 
 
-export async function getOrCreateWeeklyPeriods() {
+export async function getOrCreateWeeklyPeriods(offsetWeeks: number = 0) {
   const session = await auth();
   if (!session?.user?.organizationId) throw new Error("Unauthorized");
 
   const results = await Promise.all(
-    Array.from({ length: 9 }).map((_, i) => {
+    Array.from({ length: 8 }).map((_, idx) => {
+      const i = idx + offsetWeeks;
       const today = new Date();
       const diff = today.getDate() - today.getDay() + (today.getDay() === 0 ? -6 : 1);
       const monday = new Date(today.setDate(diff));
@@ -312,7 +313,7 @@ export async function getOrCreateWeeklyPeriods() {
           type: "WEEK",
           startDate,
           endDate,
-          label: `Week ${i === 0 ? "Current" : `+${i}`} (${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})`,
+          label: `Week ${i === 0 ? "Current" : i > 0 ? `+${i}` : i} (${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })})`,
         }
       });
     })

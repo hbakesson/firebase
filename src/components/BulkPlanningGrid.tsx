@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useMemo, useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -146,11 +148,13 @@ interface BulkPlanningGridProps {
   initialActuals: Allocation[]; // Repurposing Allocation interface as actuals follow same ID structure
   initialPeriods: Period[];
   initialTeams: { id: string; name: string }[];
+  offset?: number;
 }
 
 export type BulkViewMode = 'PLANNED' | 'ACTUAL' | 'COMPARE';
 
-export function BulkPlanningGrid({ initialProjects, initialAllocations, initialActuals, initialPeriods, initialTeams }: BulkPlanningGridProps) {
+export function BulkPlanningGrid({ initialProjects, initialAllocations, initialActuals, initialPeriods, initialTeams, offset = 0 }: BulkPlanningGridProps) {
+  const router = useRouter();
   const [search, setSearch] = useState('');
   const [selectedTeamId, setSelectedTeamId] = useState<string>('all');
   const [, startTransition] = useTransition();
@@ -437,7 +441,26 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
           </div>
         </div>
         
-        <div style={{ 
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1 bg-white/5 rounded-lg p-1 border border-white/10">
+            <button
+              onClick={() => router.push(`?offset=${offset - 8}`)}
+              className="p-1.5 rounded hover:bg-white/10 transition-colors text-white/70 hover:text-white"
+              title="Previous 8 weeks"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <span className="text-xs font-semibold px-2 text-white/50 cursor-pointer hover:text-white transition-colors" onClick={() => router.push(`?offset=0`)}>Timeline</span>
+            <button
+              onClick={() => router.push(`?offset=${offset + 8}`)}
+              className="p-1.5 rounded hover:bg-white/10 transition-colors text-white/70 hover:text-white"
+              title="Next 8 weeks"
+            >
+              <ChevronRight size={16} />
+            </button>
+          </div>
+          
+          <div style={{ 
           display: 'flex', 
           alignItems: 'center', 
           gap: '0.5rem', 
@@ -447,6 +470,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
           {savingStatus === 'saving' && <div className="animate-pulse">Saving...</div>}
           {savingStatus === 'saved' && <span>Changes saved</span>}
           {savingStatus === 'error' && <span>Save failed</span>}
+        </div>
         </div>
       </div>
 

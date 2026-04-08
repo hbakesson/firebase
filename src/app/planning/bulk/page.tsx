@@ -5,7 +5,11 @@ import { getOrCreateWeeklyPeriods } from "@/lib/actions";
 import { BulkPlanningGrid } from "@/components/BulkPlanningGrid";
 import { Zap } from "lucide-react";
 
-export default async function BulkPlanningPage() {
+type Props = {
+  searchParams: Promise<{ offset?: string }>
+}
+
+export default async function BulkPlanningPage({ searchParams }: Props) {
   const session = await auth();
   if (!session?.user?.organizationId) {
     redirect("/login");
@@ -13,8 +17,11 @@ export default async function BulkPlanningPage() {
 
   const orgId = session.user.organizationId;
 
-  // 1. Ensure/Fetch Weekly Periods (9-week rolling window)
-  const periods = await getOrCreateWeeklyPeriods();
+  const { offset } = await searchParams;
+  const parsedOffset = parseInt(offset || "0", 10) || 0;
+
+  // 1. Ensure/Fetch Weekly Periods (8-week rolling window via offset)
+  const periods = await getOrCreateWeeklyPeriods(parsedOffset);
   const periodIds = periods.map(p => p.id);
 
   // 2. Fetch Active Projects for the Org
@@ -76,6 +83,7 @@ export default async function BulkPlanningPage() {
           initialAllocations={allocations}
           initialActuals={actuals}
           initialTeams={teams}
+          offset={parsedOffset}
         />
       </div>
     </main>
