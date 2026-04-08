@@ -441,26 +441,7 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
           </div>
         </div>
         
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-1 bg-white/5 rounded-lg p-1 border border-white/10">
-            <button
-              onClick={() => router.push(`?offset=${offset - 8}`)}
-              className="p-1.5 rounded hover:bg-white/10 transition-colors text-white/70 hover:text-white"
-              title="Previous 8 weeks"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <span className="text-xs font-semibold px-2 text-white/50 cursor-pointer hover:text-white transition-colors" onClick={() => router.push(`?offset=0`)}>Timeline</span>
-            <button
-              onClick={() => router.push(`?offset=${offset + 8}`)}
-              className="p-1.5 rounded hover:bg-white/10 transition-colors text-white/70 hover:text-white"
-              title="Next 8 weeks"
-            >
-              <ChevronRight size={16} />
-            </button>
-          </div>
-          
-          <div style={{ 
+        <div style={{ 
           display: 'flex', 
           alignItems: 'center', 
           gap: '0.5rem', 
@@ -470,7 +451,6 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
           {savingStatus === 'saving' && <div className="animate-pulse">Saving...</div>}
           {savingStatus === 'saved' && <span>Changes saved</span>}
           {savingStatus === 'error' && <span>Save failed</span>}
-        </div>
         </div>
       </div>
 
@@ -527,21 +507,47 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialA
           </tbody>
         </table>
       </div>
-      <div style={{ marginTop: '0.75rem', fontSize: '0.6rem', color: 'var(--text-muted)', display: 'flex', gap: '1.5rem', padding: '0.75rem' }}>
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-primary" />
-          <span>Planned Effort</span>
+      <div className="flex flex-col items-center justify-center p-6 border-t border-white/5 bg-gradient-to-b from-transparent to-black/20">
+        <div className="flex items-center gap-2 bg-[#1A1D27] rounded-full p-1.5 shadow-[0_8px_30px_rgb(0,0,0,0.3)] border border-white/10 mb-6">
+          <button
+            onClick={() => router.push(`?offset=${offset - 8}`)}
+            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/10 text-white/40 hover:text-white transition-all transform hover:scale-105 active:scale-95"
+            title="Previous 8 weeks"
+          >
+            <ChevronLeft size={18} />
+          </button>
+          <button
+            onClick={() => router.push(`?offset=0`)}
+            className="px-5 text-[0.65rem] font-bold tracking-[0.15em] text-white/50 hover:text-white transition-colors uppercase"
+            title="Jump to current week"
+          >
+            Timeline
+          </button>
+          <button
+            onClick={() => router.push(`?offset=${offset + 8}`)}
+            className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-white/10 text-white/40 hover:text-white transition-all transform hover:scale-105 active:scale-95"
+            title="Next 8 weeks"
+          >
+            <ChevronRight size={18} />
+          </button>
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-white/20" />
-          <span>Reported Actuals</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-[#fbbf24] font-bold">!</span>
-          <span>Alert: Actuals exceed plan</span>
-        </div>
-        <div className="ml-auto opacity-50 italic">
-          * Editing updates {selectedTeamId === 'all' ? 'primary team allocation' : `allocation for ${initialTeams?.find(t => t.id === selectedTeamId)?.name}`}
+
+        <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-3 text-[0.6rem] text-white/40">
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+            <span>Planned Effort</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-1.5 h-1.5 rounded-full bg-white/20" />
+            <span>Reported Actuals</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-[#fbbf24] font-bold text-[10px]">!</span>
+            <span>Actuals Exceed Plan</span>
+          </div>
+          <div className="italic opacity-60 ml-4">
+            * Editing updates {selectedTeamId === 'all' ? 'primary team allocation' : `allocation for ${initialTeams?.find(t => t.id === selectedTeamId)?.name}`}
+          </div>
         </div>
       </div>
     </div>
