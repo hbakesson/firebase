@@ -32,7 +32,7 @@ export default function CreateProjectForm({ teams }: { teams: Team[] }) {
         // Form will be reset naturally on revalidation or we can clear it
         (document.getElementById("create-project-form") as HTMLFormElement)?.reset();
       }
-    } catch (err: unknown) {
+    } catch {
       setError("Critical system failure. Connectivity disrupted.");
     } finally {
       setIsPending(false);

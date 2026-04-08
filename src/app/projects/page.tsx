@@ -1,10 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { createProject } from "@/lib/actions";
 import { 
-  Briefcase, 
-  Plus
+  Briefcase
 } from "lucide-react";
 import ProjectFilters from "@/components/ProjectFilters";
 import ProjectManagement from "@/components/ProjectManagement";

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { 
   Users, 
@@ -9,7 +9,8 @@ import {
   Trash2, 
   AlertTriangle,
   ChevronRight,
-  Plus
+  Plus,
+  Briefcase
 } from "lucide-react";
 import { formatDate } from "@/lib/utils";
 import { updateProject, deleteProject } from "@/lib/actions";
