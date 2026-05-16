@@ -10,7 +10,7 @@ import {
   RowData,
 } from '@tanstack/react-table';
 import { upsertAllocation } from '@/lib/actions';
-import { Project, Period, Allocation } from '@/lib/mockData';
+import { Project, Period, Allocation } from "@prisma/client";
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -66,7 +66,7 @@ export function PlanningGrid({ teamId, initialProjects, initialAllocations, init
   const [allocations, setAllocations] = useState<Record<string, number>>(() => 
     initialAllocations.reduce((acc, curr) => ({
       ...acc,
-      [`${curr.projectId}-${curr.periodId}`]: curr.plannedHours
+      [`${curr.projectId}-${curr.periodId}`]: curr.allocatedHours
     }), {})
   );
 
@@ -135,7 +135,7 @@ export function PlanningGrid({ teamId, initialProjects, initialAllocations, init
               teamId,
               projectId: prj.id,
               periodId: columnId,
-              plannedHours: val,
+              allocatedHours: val,
             });
             setSavingStatus('saved');
             setTimeout(() => setSavingStatus('idle'), 2000);

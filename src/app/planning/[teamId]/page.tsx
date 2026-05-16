@@ -44,7 +44,7 @@ export default async function PlanningPage({
       where: { organizationId: session.user.organizationId },
       orderBy: { startDate: 'asc' }
     }),
-    prisma.budgetAllocation.findMany({
+    prisma.allocation.findMany({
       where: { teamId: teamId }
     })
   ]);

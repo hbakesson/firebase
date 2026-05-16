@@ -80,7 +80,6 @@ export default async function BulkPlanningPage({ searchParams }: Props) {
           initialPeriods={periods}
           initialAllocations={allocations}
           initialTeams={teams}
-          initialUsers={users}
           offset={parsedOffset}
         />
       </div>

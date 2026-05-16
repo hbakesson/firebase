@@ -17,9 +17,9 @@ interface AuditActivity {
   id: string;
   action: string;
   entityType: string;
-  entityId: string;
-  timestamp: string | Date;
-  projectName?: string;
+  entityId: string | null;
+  timestamp: Date;
+  projectName: string;
 }
 
 export default async function DashboardPage() {

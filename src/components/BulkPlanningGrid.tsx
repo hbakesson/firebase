@@ -59,6 +59,7 @@ interface BulkPlanningGridProps {
     projectId: string;
     teamId: string;
     periodId: string;
+    type?: string;
     requestedHours: number;
     allocatedHours: number;
     actualHours: number;
@@ -101,13 +102,14 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
   const [, startTransition] = useTransition();
   
   // Single map for all buckets
-  const [allocationMap, setAllocationMap] = useState<Record<string, { req: number; alloc: number; act: number }>>(() => 
+  const [allocationMap, setAllocationMap] = useState<Record<string, { req: number; alloc: number; act: number; type: string }>>(() => 
     initialAllocations.reduce((acc, curr) => ({
       ...acc,
       [`${curr.projectId}-${curr.periodId}-${curr.teamId}`]: {
         req: curr.requestedHours || 0,
         alloc: curr.allocatedHours || 0,
-        act: curr.actualHours || 0
+        act: curr.actualHours || 0,
+        type: curr.type || 'WORK'
       }
     }), {})
   );
@@ -154,12 +156,12 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
   // --- Capacity Cell Renderer: Shows Requested, Allocated, and Actual buckets ---
   const CapacityCellRenderer = (params: ICellRendererParams) => {
     const row = params.data as FlatAllocationRow;
-    const periodId = params.colDef.field;
+    const periodId = params.colDef?.field;
     if (!row || !periodId) return null;
 
     const data = allocationMap[`${row.projectId}-${periodId}-${row.teamId}`] || { req: 0, alloc: 0, act: 0, type: 'WORK' };
     
-    // Scoro Visual Logic: Utilization vs Capacity
+    // Visual Logic: Utilization vs Capacity
     const utilization = (data.alloc / 40) * 100;
     const isFull = utilization >= 95 && utilization <= 105;
 

@@ -257,8 +257,8 @@ export async function upsertAllocation(data: {
       projectId_teamId_userId_roleId_periodId: {
         projectId,
         teamId,
-        userId: userId || null,
-        roleId: roleId || null,
+        userId: (userId || null) as any,
+        roleId: (roleId || null) as any,
         periodId,
       },
     },
@@ -269,8 +269,8 @@ export async function upsertAllocation(data: {
     create: {
       projectId,
       teamId,
-      userId: userId || null,
-      roleId: roleId || null,
+      userId: (userId || null) as any,
+      roleId: (roleId || null) as any,
       periodId,
       type: type || "WORK",
       ...hours,
@@ -384,8 +384,8 @@ export async function importActuals(rows: ImportRow[]) {
         projectId_teamId_userId_roleId_periodId: {
           teamId,
           projectId: project.id,
-          userId: null,
-          roleId: null,
+          userId: null as any,
+          roleId: null as any,
           periodId: row.periodId,
         },
       },
@@ -403,7 +403,7 @@ export async function importActuals(rows: ImportRow[]) {
         data: {
           organizationId: orgId,
           action: "IMPORT_WARNING",
-          entityType: "ActualAllocation",
+          entityType: "Allocation",
           entityId: project.id,
           projectName: project.name,
           userId: session.user.id!,
@@ -521,8 +521,7 @@ export async function deleteTeam(teamId: string) {
 
   try {
     const team = await prisma.team.findUnique({ 
-      where: { id: teamId },
-      include: { allocations: true, actualAllocations: true }
+      where: { id: teamId }
     });
 
     if (!team) return { error: "Team not found" };

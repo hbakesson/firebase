@@ -47,8 +47,8 @@ export async function getProjects(search?: string, status?: string): Promise<Pro
       AND: [
         search ? {
           OR: [
-            { name: { contains: search, mode: "insensitive" } },
-            { description: { contains: search, mode: "insensitive" } },
+            { name: { contains: search } },
+            { description: { contains: search } },
           ],
         } : {},
         status && status !== "ALL" ? { status } : {},
@@ -158,6 +158,7 @@ export async function updateAllocation(data: {
   projectId: string;
   teamId: string;
   userId?: string;
+  roleId?: string;
   periodId: string;
   requestedHours?: number;
   allocatedHours?: number;
@@ -167,7 +168,7 @@ export async function updateAllocation(data: {
   if (!session?.user?.id) return { error: "Not authenticated" };
 
   try {
-    const { projectId, teamId, userId, periodId, ...hours } = data;
+    const { projectId, teamId, userId, roleId, periodId, ...hours } = data;
     
     // Convert undefined to undefined (don't update) or use existing values
     // Prisma's upsert handles this well if we only pass fields that are present
@@ -178,10 +179,11 @@ export async function updateAllocation(data: {
 
     await prisma.allocation.upsert({
       where: {
-        projectId_teamId_userId_periodId: {
+        projectId_teamId_userId_roleId_periodId: {
           projectId,
           teamId,
-          userId: userId || null, // Note: In Prisma/SQLite, null in unique index can be tricky, but we handled it in schema
+          userId: (userId || null) as any,
+          roleId: (roleId || null) as any,
           periodId,
         }
       },

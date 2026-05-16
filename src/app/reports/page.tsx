@@ -35,51 +35,38 @@ export default async function ReportsPage({
   const activePeriod = allPeriods.find((p: { id: string; label: string; isLocked: boolean; endDate: Date }) => p.id === activePeriodId);
 
   // 2. Fetch Aggregates for Active Period
+  // 2. Fetch Aggregates for Active Period
   const projects = await prisma.project.findMany({
     where: { organizationId: orgId },
     include: { 
       allocations: { where: { periodId: activePeriodId } }, 
-      actualAllocations: { where: { periodId: activePeriodId } },
       teams: true 
     }
   });
 
-  interface ProjectWithData {
-    name: string;
-    allocations: { plannedHours: number | null }[];
-    actualAllocations: { actualHours: number | null }[];
-    teams: { name: string }[];
-  }
-
-  const comparisonData = (projects as unknown as ProjectWithData[]).map((p: ProjectWithData) => {
-    const planned = p.allocations.reduce((acc: number, curr: { plannedHours: number | null }) => acc + (curr.plannedHours || 0), 0);
-    const actual = p.actualAllocations.reduce((acc: number, curr: { actualHours: number | null }) => acc + (curr.actualHours || 0), 0);
+  const comparisonData = projects.map(p => {
+    const planned = p.allocations.reduce((acc, curr) => acc + (curr.allocatedHours || 0), 0);
+    const actual = p.allocations.reduce((acc, curr) => acc + (curr.actualHours || 0), 0);
     return { 
       name: p.name, 
       planned, 
       actual,
-      teams: p.teams.map((t: { name: string }) => t.name)
+      teams: p.teams.map(t => t.name)
     };
-  }).filter((d: { planned: number; actual: number }) => d.planned > 0 || d.actual > 0);
+  }).filter(d => d.planned > 0 || d.actual > 0);
 
   // 3. Historical Trend (Last 6 Periods)
   const trendPeriods = [...allPeriods].slice(0, 6).reverse();
   const trendData = await Promise.all(trendPeriods.map(async (p: { id: string; label: string }) => {
-    const budgetAgg = await prisma.budgetAllocation.aggregate({
+    const agg = await prisma.allocation.aggregate({
       where: { periodId: p.id },
-      _sum: { plannedHours: true }
+      _sum: { allocatedHours: true, actualHours: true }
     });
     
-    // Correction: ActualAllocation uses actualHours
-    const actualSum = await prisma.actualAllocation.aggregate({
-      where: { periodId: p.id },
-      _sum: { actualHours: true }
-    });
-
     return {
       period: p.label.split(' (')[0],
-      planned: budgetAgg._sum.plannedHours || 0,
-      actual: actualSum._sum.actualHours || 0
+      planned: agg._sum.allocatedHours || 0,
+      actual: agg._sum.actualHours || 0
     };
   }));
 
@@ -87,8 +74,8 @@ export default async function ReportsPage({
   const now = new Date();
   const atRiskPeriods = allPeriods.filter((p: { isLocked: boolean; endDate: Date }) => !p.isLocked && p.endDate < now);
 
-  const totalPlanned = comparisonData.reduce((acc: number, curr: { planned: number }) => acc + curr.planned, 0);
-  const totalActual = comparisonData.reduce((acc: number, curr: { actual: number }) => acc + curr.actual, 0);
+  const totalPlanned = comparisonData.reduce((acc, curr) => acc + curr.planned, 0);
+  const totalActual = comparisonData.reduce((acc, curr) => acc + curr.actual, 0);
   const variance = totalActual - totalPlanned;
 
   const teamBreakdownData = await prisma.team.findMany({
@@ -98,10 +85,10 @@ export default async function ReportsPage({
     }
   });
 
-  const teamBreakdown = teamBreakdownData.map((t: { name: string; allocations: { plannedHours: number | null }[] }) => ({
+  const teamBreakdown = teamBreakdownData.map(t => ({
     name: t.name,
-    value: t.allocations.reduce((acc: number, curr: { plannedHours: number | null }) => acc + (curr.plannedHours || 0), 0)
-  })).filter((t: { value: number }) => t.value > 0);
+    value: t.allocations.reduce((acc, curr) => acc + (curr.allocatedHours || 0), 0)
+  })).filter(t => t.value > 0);
 
   return (
     <div className="space-y-8">

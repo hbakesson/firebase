@@ -1,6 +1,5 @@
 import { prisma } from '@/lib/prisma';
-import { ProjectPlanningGrid } from '@/components/ProjectPlanningGrid';
-import { PlanningSidebar } from '@/components/PlanningSidebar';
+import { ProjectPlanningContainer } from "@/components/ProjectPlanningContainer";
 import { auth } from '@/auth';
 import { redirect } from 'next/navigation';
 
@@ -12,22 +11,20 @@ export const metadata = {
 export default async function ProjectPlanningPage() {
   const session = await auth();
 
-  if (!session?.user) {
+  if (!session?.user?.organizationId) {
     redirect('/login');
   }
 
   const orgId = session.user.organizationId as string;
 
-  // 1. Fetch Projects with their assigned Teams
+  // 1. Fetch all Projects
   const projects = await prisma.project.findMany({
-    where: { organizationId: orgId },
-    include: {
-      teams: true,
-    },
+    where: { organizationId: orgId, status: { in: ["ACTIVE", "PLANNED"] } },
+    include: { teams: true },
     orderBy: { name: 'asc' },
   });
 
-  // 2. Fetch all Teams in the organization
+  // 2. Fetch all Teams
   const allTeams = await prisma.team.findMany({
     where: { organizationId: orgId },
     orderBy: { name: 'asc' },
@@ -45,69 +42,44 @@ export default async function ProjectPlanningPage() {
     orderBy: { name: 'asc' },
   });
 
-  // 5. Fetch all Allocations
-  const allocations = await prisma.allocation.findMany({
-    where: { project: { organizationId: orgId } },
-    include: {
-      project: true,
-      team: true,
-      period: true
-    }
-  });
-
-  // 6. Fetch Periods
+  // 5. Fetch all Active Periods
   const periods = await prisma.period.findMany({
     where: { organizationId: orgId },
     orderBy: { startDate: 'asc' },
+    take: 6, // View next 6 periods
   });
 
-  // 7. Extract Waiting List Items (Allocations where userId AND roleId are NULL)
+  // 6. Fetch Allocations for these periods
+  const periodIds = periods.map(p => p.id);
+  const allocations = await prisma.allocation.findMany({
+    where: { 
+      periodId: { in: periodIds }
+    }
+  });
+
+  // 7. Calculate Waiting List Items (unassigned allocations)
   const waitingListItems = allocations
-    .filter(a => a.userId === null && a.roleId === null)
+    .filter(a => !a.userId && !a.roleId && a.requestedHours > 0)
     .map(a => ({
       id: a.id,
-      projectName: a.project.name,
-      teamName: a.team.name,
+      projectName: projects.find(p => p.id === a.projectId)?.name || "Unknown Project",
+      teamName: allTeams.find(t => t.id === a.teamId)?.name || "Unknown Team",
       hours: a.requestedHours,
-      periodLabel: a.period.label,
+      periodLabel: periods.find(p => p.id === a.periodId)?.label || "Unknown Period",
       projectId: a.projectId,
       teamId: a.teamId,
-      periodId: a.periodId
+      periodId: a.periodId,
     }));
 
   return (
-    <div className="flex h-screen bg-slate-50 overflow-hidden">
-      <main className="flex-1 flex flex-col p-6 gap-6 overflow-hidden">
-        <header className="flex-shrink-0">
-          <h1 className="text-xl font-black text-slate-900 tracking-tight uppercase">Hierarchical Capacity</h1>
-          <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Tactical Resource Alignment</p>
-        </header>
-
-        <section className="flex-1 overflow-hidden bg-white rounded-3xl border border-slate-200 shadow-sm relative">
-          <ProjectPlanningGrid 
-            projects={projects}
-            teams={allTeams}
-            users={users}
-            roles={roles}
-            allocations={allocations}
-            periods={periods}
-          />
-        </section>
-        
-        <div className="bg-white border border-slate-200 p-4 rounded-2xl shadow-sm flex-shrink-0">
-          <h3 className="text-[0.6rem] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Architecture Compliance</h3>
-          <p className="text-[0.6rem] text-slate-500 font-medium leading-relaxed">
-            Unifying 3-level hierarchy (Project &gt; Team &gt; Individual) with Scoro-inspired heatmap and waiting list logic.
-          </p>
-        </div>
-      </main>
-
-      <PlanningSidebar 
-        items={waitingListItems}
-        onAssign={(item) => {
-          console.log("Assigning item:", item);
-        }}
-      />
-    </div>
+    <ProjectPlanningContainer 
+      projects={projects}
+      teams={allTeams}
+      users={users}
+      roles={roles}
+      allocations={allocations}
+      periods={periods}
+      waitingListItems={waitingListItems}
+    />
   );
 }

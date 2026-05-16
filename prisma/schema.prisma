@@ -98,7 +98,7 @@ model Allocation {
   projectId      String
   teamId         String
   userId         String?  // Linked to a specific resource
-  roleId         String?  // Linked to a placeholder role (Scoro)
+  roleId         String?  // Linked to a placeholder role
   periodId       String
   date           DateTime? 
 
@@ -147,7 +147,7 @@ model User {
   image          String?
   password       String?
   isGuest        Boolean       @default(false)
-  isPlaceholder  Boolean       @default(false) // Scoro placeholder resource
+  isPlaceholder  Boolean       @default(false) // Placeholder resource
   role           String        @default("user")
   
   // Capacity planning

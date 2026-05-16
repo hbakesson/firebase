@@ -26,9 +26,9 @@ export default async function AuditPage({ searchParams }: { searchParams: Promis
       ...(action ? { action } : {}),
       ...(q ? {
         OR: [
-          { projectName: { contains: q, mode: 'insensitive' } },
-          { userEmail: { contains: q, mode: 'insensitive' } },
-          { newValue: { contains: q, mode: 'insensitive' } },
+          { projectName: { contains: q } },
+          { userEmail: { contains: q } },
+          { newValue: { contains: q } },
           { entityId: { contains: q } },
         ]
       } : {})

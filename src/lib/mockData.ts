@@ -24,8 +24,12 @@ export interface Allocation {
   id: string;
   projectId: string;
   periodId: string;
-  plannedHours: number;
-  teamId: string;
+  allocatedHours: number;
+  actualHours?: number;
+  teamId?: string;
+  userId?: string;
+  roleId?: string;
+  type?: "WORK" | "TIME_OFF" | "PIPELINE";
 }
 
 /**
@@ -48,15 +52,14 @@ const mockTeams = [
 ];
 
 const mockProjects: any[] = [
-  { id: "p1", name: "Nebula Infrastructure", code: "NEB-01", status: "ACTIVE", organizationId: "mock-org", teamIds: ["t1"], allocations: [], actualAllocations: [], createdAt: "2026-03-27T10:00:00.000Z", updatedAt: "2026-03-27T10:00:00.000Z", progress: 45 },
-  { id: "p2", name: "Solaris Portal v2", code: "SOL-02", status: "ACTIVE", organizationId: "mock-org", teamIds: ["t1"], allocations: [], actualAllocations: [], createdAt: "2026-03-27T11:00:00.000Z", updatedAt: "2026-03-27T11:00:00.000Z", progress: 78 },
-  { id: "p3", name: "Quantum Analytics", code: "QUA-03", status: "ACTIVE", organizationId: "mock-org", teamIds: ["t2"], allocations: [], actualAllocations: [], createdAt: "2026-03-27T12:00:00.000Z", updatedAt: "2026-03-27T12:00:00.000Z", progress: 12 },
-  { id: "p4", name: "Titan Core", code: "TIT-04", status: "ACTIVE", organizationId: "mock-org", teamIds: ["t2"], allocations: [], actualAllocations: [], createdAt: "2026-03-27T13:00:00.000Z", updatedAt: "2026-03-27T13:00:00.000Z", progress: 92 },
-  { id: "p5", name: "Legacy Cleanup", code: "LEG-99", status: "COMPLETED", organizationId: "mock-org", teamIds: ["t1"], allocations: [], actualAllocations: [], createdAt: "2025-12-01T08:00:00.000Z", updatedAt: "2026-01-15T16:00:00.000Z", progress: 100 },
+  { id: "p1", name: "Nebula Infrastructure", code: "NEB-01", status: "ACTIVE", organizationId: "mock-org", teamIds: ["t1"], allocations: [], createdAt: "2026-03-27T10:00:00.000Z", updatedAt: "2026-03-27T10:00:00.000Z", progress: 45 },
+  { id: "p2", name: "Solaris Portal v2", code: "SOL-02", status: "ACTIVE", organizationId: "mock-org", teamIds: ["t1"], allocations: [], createdAt: "2026-03-27T11:00:00.000Z", updatedAt: "2026-03-27T11:00:00.000Z", progress: 78 },
+  { id: "p3", name: "Quantum Analytics", code: "QUA-03", status: "ACTIVE", organizationId: "mock-org", teamIds: ["t2"], allocations: [], createdAt: "2026-03-27T12:00:00.000Z", updatedAt: "2026-03-27T12:00:00.000Z", progress: 12 },
+  { id: "p4", name: "Titan Core", code: "TIT-04", status: "ACTIVE", organizationId: "mock-org", teamIds: ["t2"], allocations: [], createdAt: "2026-03-27T13:00:00.000Z", updatedAt: "2026-03-27T13:00:00.000Z", progress: 92 },
+  { id: "p5", name: "Legacy Cleanup", code: "LEG-99", status: "COMPLETED", organizationId: "mock-org", teamIds: ["t1"], allocations: [], createdAt: "2025-12-01T08:00:00.000Z", updatedAt: "2026-01-15T16:00:00.000Z", progress: 100 },
 ];
 
 const mockAllocations: Allocation[] = [];
-const mockActualAllocations: any[] = [];
 
 export const createMockPrisma = () => {
   console.log("🛠️ [MOCK] Initializing High-Fidelity Prisma Mock...");
@@ -79,7 +82,7 @@ export const createMockPrisma = () => {
             ...t, 
             isActive: true, 
             parentTeam,
-            allocations: (t as any).allocations || []
+            allocations: mockAllocations.filter(a => a.teamId === t.id)
           };
           if (include?.projects) {
             (team as any).projects = mockProjects.filter(p => p.teamIds?.includes(t.id));
@@ -134,7 +137,7 @@ export const createMockPrisma = () => {
         if (t) {
           const team = { 
             ...t,
-            allocations: (t as any).allocations || []
+            allocations: mockAllocations.filter(a => a.teamId === t.id)
           };
           if (include?.projects) {
             (team as any).projects = mockProjects.filter(p => p.teamIds?.includes(t.id));
@@ -152,13 +155,9 @@ export const createMockPrisma = () => {
           results = results.map(p => {
             const extended: any = { 
               ...p,
-              allocations: p.allocations || [],
-              actualAllocations: p.actualAllocations || [],
-              teams: p.teams || []
+              allocations: mockAllocations.filter(a => a.projectId === p.id),
+              teams: (p.teamIds || []).map((id: string) => mockTeams.find(t => t.id === id)).filter(Boolean)
             };
-            if (include.teams) {
-              extended.teams = (p.teamIds || []).map((id: string) => mockTeams.find(t => t.id === id)).filter(Boolean);
-            }
             return extended;
           });
         }
@@ -167,7 +166,10 @@ export const createMockPrisma = () => {
       findUnique: async ({ where, include }: any) => {
         const p = mockProjects.find(project => project.id === where.id);
         if (p) {
-          const project = { ...p };
+          const project = { 
+            ...p,
+            allocations: mockAllocations.filter(a => a.projectId === p.id)
+          };
           if (include?.teams) {
             (project as any).teams = (p.teamIds || []).map((id: string) => mockTeams.find(t => t.id === id)).filter(Boolean);
           }
@@ -227,24 +229,34 @@ export const createMockPrisma = () => {
         };
       },
     },
-    budgetAllocation: {
+    allocation: {
       findMany: async ({ where }: any) => {
+        let results = mockAllocations;
         if (where?.projectId?.in) {
-          return mockAllocations.filter(a => where.projectId.in.includes(a.projectId));
+          results = results.filter(a => where.projectId.in.includes(a.projectId));
         }
-        return mockAllocations;
+        if (where?.periodId?.in) {
+          results = results.filter(a => where.periodId.in.includes(a.periodId));
+        }
+        if (where?.teamId) {
+          results = results.filter(a => a.teamId === where.teamId);
+        }
+        return results;
       },
       upsert: async ({ create, update, where }: any) => {
-        console.log("🛠️ [MOCK] budgetAllocation.upsert", where);
+        console.log("🛠️ [MOCK] allocation.upsert", where);
         
-        // Handle composite unique key logic from prisma call: 
-        // where: { teamId_projectId_periodId: { teamId, projectId, periodId } }
-        const { teamId, projectId, periodId } = where.teamId_projectId_periodId || where;
+        // Handle composite unique key logic
+        const compositeKey = where.teamId_projectId_periodId_userId_roleId_type;
+        const { teamId, projectId, periodId, userId, roleId, type } = compositeKey || where;
 
         const existingIdx = mockAllocations.findIndex(a => 
-          a.teamId === teamId &&
           a.projectId === projectId && 
-          a.periodId === periodId
+          a.periodId === periodId &&
+          a.teamId === teamId &&
+          a.userId === userId &&
+          a.roleId === roleId &&
+          a.type === type
         );
 
         if (existingIdx >= 0) {
@@ -256,50 +268,27 @@ export const createMockPrisma = () => {
             teamId, 
             projectId, 
             periodId, 
+            userId,
+            roleId,
+            type,
             ...create 
           };
           mockAllocations.push(newAlloc);
           return newAlloc;
         }
+      },
+      aggregate: async ({ where }: any) => {
+        const filtered = mockAllocations.filter(a => !where?.periodId || a.periodId === where.periodId);
+        return {
+          _sum: {
+            allocatedHours: filtered.reduce((acc, curr) => acc + (curr.allocatedHours || 0), 0),
+            actualHours: filtered.reduce((acc, curr) => acc + (curr.actualHours || 0), 0),
+          }
+        };
       }
     },
-    actualAllocation: {
-      findMany: async ({ where }: any) => {
-        let results = mockActualAllocations;
-        if (where?.projectId?.in) {
-          results = results.filter(a => where.projectId.in.includes(a.projectId));
-        }
-        if (where?.periodId?.in) {
-          results = results.filter(a => where.periodId.in.includes(a.periodId));
-        }
-        return results;
-      },
-      upsert: async ({ create, update, where }: any) => {
-        console.log("🛠️ [MOCK] actualAllocation.upsert", where);
-        
-        const { teamId, projectId, periodId } = where.teamId_projectId_periodId || where;
-
-        const existingIdx = mockActualAllocations.findIndex(a => 
-          a.teamId === teamId &&
-          a.projectId === projectId && 
-          a.periodId === periodId
-        );
-
-        if (existingIdx >= 0) {
-          mockActualAllocations[existingIdx] = { ...mockActualAllocations[existingIdx], ...update };
-          return mockActualAllocations[existingIdx];
-        } else {
-          const newAlloc = { 
-            id: `actual-${Date.now()}`, 
-            teamId, 
-            projectId, 
-            periodId, 
-            ...create 
-          };
-          mockActualAllocations.push(newAlloc);
-          return newAlloc;
-        }
-      },
+    role: {
+      findMany: async () => [],
     },
     auditLog: {
       create: async ({ data }: any) => {

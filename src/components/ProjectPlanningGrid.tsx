@@ -27,6 +27,12 @@ interface Project {
   teams: Team[];
 }
 
+interface Role {
+  id: string;
+  name: string;
+  organizationId: string;
+}
+
 interface Team {
   id: string;
   name: string;
@@ -44,7 +50,9 @@ interface Allocation {
   projectId: string;
   teamId: string;
   userId: string | null;
+  roleId: string | null;
   periodId: string;
+  type: string;
   requestedHours: number;
   allocatedHours: number;
   actualHours: number;
@@ -61,24 +69,26 @@ interface ProjectPlanningGridProps {
   projects: Project[];
   teams: Team[];
   users: User[];
+  roles: Role[];
   allocations: Allocation[];
   periods: Period[];
 }
 
 interface HierarchicalRow {
   id: string;
-  type: 'project' | 'team' | 'user';
+  type: 'project' | 'team' | 'role' | 'user';
   name: string;
   code?: string;
   projectId: string;
   teamId?: string;
   userId?: string;
+  roleId?: string;
   indent: number;
   isExpanded?: boolean;
 }
 
 /**
- * Identity Cell Renderer: Handles hierarchy indentation and icons with Scoro Availability Rings
+ * Identity Cell Renderer: Handles hierarchy indentation and icons with Availability Rings
  */
 const IdentityCellRenderer = (params: ICellRendererParams & { context: { userUtilization: Record<string, number> } }) => {
   const row = params.data as HierarchicalRow;
@@ -131,7 +141,7 @@ const IdentityCellRenderer = (params: ICellRendererParams & { context: { userUti
   );
 };
 
-export function ProjectPlanningGrid({ projects, teams, users, roles, allocations, periods }: { projects: (Project & { teams: Team[] })[]; teams: Team[]; users: User[]; roles: Role[]; allocations: Allocation[]; periods: Period[] }) {
+export function ProjectPlanningGrid({ projects, teams, users, roles, allocations, periods }: ProjectPlanningGridProps) {
   const gridRef = useRef<AgGridReact>(null);
   const [search, setSearch] = useState('');
   const [rows, setRows] = useState<HierarchicalRow[]>([]);
@@ -231,16 +241,27 @@ export function ProjectPlanningGrid({ projects, teams, users, roles, allocations
     return map;
   }, [users, allocations, periods]);
 
+  const handleValueChange = (periodId: string, row: HierarchicalRow, values: { req?: number; alloc?: number; act?: number }) => {
+    upsertAllocation({
+      projectId: row.projectId,
+      teamId: row.teamId || '',
+      userId: row.userId,
+      roleId: row.roleId,
+      periodId,
+      ...values
+    });
+  };
+
   // --- 4. Capacity Cell Renderer: Shows Requested, Allocated, and Actual buckets ---
   const CapacityCellRenderer = (params: ICellRendererParams) => {
     const row = params.data as HierarchicalRow;
-    const periodId = params.colDef.field;
+    const periodId = params.colDef?.field;
     if (!row || !periodId) return null;
 
     const key = `${row.projectId}-${row.teamId || 'team'}-${row.userId || 'team'}-${periodId}`;
     const val = allocationMap[key] || { req: 0, alloc: 0, act: 0, type: 'WORK' };
 
-    // Scoro Visual Logic: Utilization vs Capacity
+    // Visual Logic: Utilization vs Capacity
     const isUser = row.type === 'user';
     const user = users.find(u => u.id === row.userId);
     const capacity = isUser && user ? user.capacityPerDay * 5 : 40; 
@@ -248,7 +269,7 @@ export function ProjectPlanningGrid({ projects, teams, users, roles, allocations
     const utilization = (val.alloc / capacity) * 100;
     const isFull = utilization >= 95 && utilization <= 105;
 
-    // Colors based on Scoro research
+    // Colors based on high-density capacity research
     let statusClass = 'text-slate-200';
     let bgClass = 'bg-transparent';
     let dotClass = '';
@@ -272,7 +293,7 @@ export function ProjectPlanningGrid({ projects, teams, users, roles, allocations
 
     return (
       <div className={`flex flex-col items-center justify-center h-full w-full py-1 leading-none group border-r border-slate-50 relative transition-all duration-200 ${bgClass}`}>
-        {/* Requested (Top) - Scoro uses this for tentative/pipeline if needed */}
+        {/* Requested (Top) - Used for tentative/pipeline if needed */}
         <div className="text-[0.6rem] text-slate-300 font-black mb-0.5 transition-colors group-hover:text-slate-400">
           {val.req > 0 ? val.req : ''}
         </div>
@@ -336,7 +357,7 @@ export function ProjectPlanningGrid({ projects, teams, users, roles, allocations
           const key = `${row.projectId}-${row.teamId || 'team'}-${row.userId || 'team'}-${period.id}`;
           return allocationMap[key]?.alloc || 0;
         },
-        valueSetter: (params) => {
+        valueSetter: (params: any) => {
           const row = params.data as HierarchicalRow;
           const val = parseFloat(params.newValue);
           if (isNaN(val)) return false;
@@ -358,10 +379,10 @@ export function ProjectPlanningGrid({ projects, teams, users, roles, allocations
 
   // --- 5. Filtering ---
   const filteredRows = useMemo(() => {
-    if (!search) return rowData;
+    if (!search) return rows;
     const s = search.toLowerCase();
-    return rowData.filter(r => r.name.toLowerCase().includes(s));
-  }, [rowData, search]);
+    return rows.filter((r: HierarchicalRow) => r.name.toLowerCase().includes(s));
+  }, [rows, search]);
 
   return (
     <div className="flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-500">

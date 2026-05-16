@@ -8,7 +8,7 @@ import {
 } from "lucide-react";
 import { sanitize } from "@/lib/utils";
 import TeamRow from "@/components/TeamRow";
-import { Team as PrismaTeam, Project as PrismaProject } from "@/generated/client";
+import { Team as PrismaTeam, Project as PrismaProject } from "@prisma/client";
 
 interface Team extends PrismaTeam {
   parentTeam?: PrismaTeam | null;
@@ -25,7 +25,7 @@ export default async function TeamsPage() {
   // 1. Fetch main teams list with parent and projects inclusion
   const rawTeams = await prisma.team.findMany({
     where: { organizationId: orgId },
-    include: { parentTeam: true, projects: true, _count: { select: { allocations: true, actualAllocations: true } } },
+    include: { parentTeam: true, projects: true, _count: { select: { allocations: true } } },
     orderBy: { name: 'asc' }
   });
 

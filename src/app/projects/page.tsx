@@ -21,7 +21,7 @@ export default async function ProjectsPage({
   const projects = await prisma.project.findMany({
     where: {
       organizationId: session.user.organizationId,
-      ...(q ? { name: { contains: q, mode: 'insensitive' } } : {}),
+      ...(q ? { name: { contains: q } } : {}),
       ...(team ? { teams: { some: { id: team } } } : {}),
       ...(status ? { status: status } : {}),
     },
