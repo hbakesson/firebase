@@ -153,3 +153,55 @@ export async function updateProgress(id: string, progress: number) {
     return { error: "Failed to update progress" };
   }
 }
+
+export async function updateAllocation(data: {
+  projectId: string;
+  teamId: string;
+  userId?: string;
+  periodId: string;
+  requestedHours?: number;
+  allocatedHours?: number;
+  actualHours?: number;
+}) {
+  const session = await auth();
+  if (!session?.user?.id) return { error: "Not authenticated" };
+
+  try {
+    const { projectId, teamId, userId, periodId, ...hours } = data;
+    
+    // Convert undefined to undefined (don't update) or use existing values
+    // Prisma's upsert handles this well if we only pass fields that are present
+    const updateData: any = {};
+    if (hours.requestedHours !== undefined) updateData.requestedHours = hours.requestedHours;
+    if (hours.allocatedHours !== undefined) updateData.allocatedHours = hours.allocatedHours;
+    if (hours.actualHours !== undefined) updateData.actualHours = hours.actualHours;
+
+    await prisma.allocation.upsert({
+      where: {
+        projectId_teamId_userId_periodId: {
+          projectId,
+          teamId,
+          userId: userId || null, // Note: In Prisma/SQLite, null in unique index can be tricky, but we handled it in schema
+          periodId,
+        }
+      },
+      create: {
+        projectId,
+        teamId,
+        userId: userId || null,
+        periodId,
+        requestedHours: hours.requestedHours || 0,
+        allocatedHours: hours.allocatedHours || 0,
+        actualHours: hours.actualHours || 0,
+      },
+      update: updateData
+    });
+
+    revalidatePath("/project-planning");
+    revalidatePath("/planning/bulk");
+    return { success: true };
+  } catch (error) {
+    console.error("Failed to update allocation:", error);
+    return { error: "Failed to update allocation" };
+  }
+}

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useMemo, useState, useRef } from 'react';
-import { Search, LayoutGrid, Calendar, Target, Info } from 'lucide-react';
+import { Search, LayoutGrid, Calendar, Target, Info, ChevronRight, ChevronDown, Users, User, Briefcase } from 'lucide-react';
 import { AgGridReact } from 'ag-grid-react';
 import { 
   ColDef, 
@@ -9,8 +9,10 @@ import {
   ValueGetterParams,
   ICellRendererParams,
   ModuleRegistry,
-  AllCommunityModule
+  AllCommunityModule,
+  CellValueChangedEvent
 } from 'ag-grid-community';
+import { upsertAllocation } from '@/lib/actions';
 
 ModuleRegistry.registerModules([AllCommunityModule]);
 
@@ -18,17 +20,34 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 
+interface Project {
+  id: string;
+  name: string;
+  code: string;
+  teams: Team[];
+}
+
 interface Team {
   id: string;
   name: string;
   code: string;
 }
 
+interface User {
+  id: string;
+  name: string;
+  email: string | null;
+  capacityPerDay: number;
+}
+
 interface Allocation {
-  teamId: string;
   projectId: string;
+  teamId: string;
+  userId: string | null;
   periodId: string;
-  plannedHours: number;
+  requestedHours: number;
+  allocatedHours: number;
+  actualHours: number;
 }
 
 interface Period {
@@ -39,195 +58,265 @@ interface Period {
 }
 
 interface ProjectPlanningGridProps {
+  projects: Project[];
   teams: Team[];
+  users: User[];
   allocations: Allocation[];
   periods: Period[];
 }
 
+interface HierarchicalRow {
+  id: string;
+  type: 'project' | 'team' | 'user';
+  name: string;
+  code?: string;
+  projectId: string;
+  teamId?: string;
+  userId?: string;
+  indent: number;
+  isExpanded?: boolean;
+}
+
 /**
- * Custom Cell Renderer for Teams
+ * Identity Cell Renderer: Handles hierarchy indentation and icons
  */
-const TeamCellRenderer = (params: ICellRendererParams) => {
-  const row = params.data as Team;
+const IdentityCellRenderer = (params: ICellRendererParams) => {
+  const row = params.data as HierarchicalRow;
   if (!row) return null;
+
+  const Icon = row.type === 'project' ? Briefcase : row.type === 'team' ? Users : User;
+  const iconColor = row.type === 'project' ? 'text-indigo-600' : row.type === 'team' ? 'text-emerald-600' : 'text-slate-500';
+  const textColor = row.type === 'project' ? 'text-slate-900 font-extrabold' : row.type === 'team' ? 'text-slate-700 font-bold' : 'text-slate-600';
+
   return (
-    <div className="flex flex-col justify-center h-full py-1">
-      <div className="font-black text-[0.7rem] leading-tight text-white uppercase tracking-tighter">
-        {row.name}
+    <div className="flex items-center h-full gap-3" style={{ paddingLeft: `${row.indent * 20}px` }}>
+      <div className={`p-1.5 rounded-lg ${row.type === 'project' ? 'bg-indigo-50' : row.type === 'team' ? 'bg-emerald-50' : 'bg-slate-100'}`}>
+        <Icon className={iconColor} size={14} />
       </div>
-      <div className="text-[0.6rem] text-indigo-400 font-mono">
-        CODE: {row.code}
+      <div className="flex flex-col justify-center leading-tight overflow-hidden">
+        <span className={`text-[0.75rem] uppercase tracking-tight truncate ${textColor}`}>
+          {row.name}
+        </span>
+        {row.code && (
+          <span className="text-[0.6rem] text-slate-400 font-mono font-bold tracking-wider">{row.code}</span>
+        )}
       </div>
     </div>
   );
 };
 
-export function ProjectPlanningGrid({ teams, allocations, periods }: ProjectPlanningGridProps) {
+
+
+export function ProjectPlanningGrid({ projects, teams, users, allocations, periods }: ProjectPlanningGridProps) {
   const gridRef = useRef<AgGridReact>(null);
   const [search, setSearch] = useState('');
 
-  // --- Process Timeline ---
-  // We want to create "Day" columns even though data is weekly.
-  // We'll use the periods to define the bounds.
-  const timeline = useMemo(() => {
-    if (!periods.length) return [];
+  // --- 1. Flatten Data to 3-level Hierarchy ---
+  const rowData = useMemo(() => {
+    const rows: HierarchicalRow[] = [];
     
-    // Sort periods by start date
-    const sorted = [...periods].sort((a, b) => 
-      new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-    );
+    projects.forEach(project => {
+      // Level 1: Project
+      rows.push({
+        id: `p-${project.id}`,
+        type: 'project',
+        name: project.name,
+        code: project.code,
+        projectId: project.id,
+        indent: 0
+      });
 
-    const firstDate = new Date(sorted[0].startDate);
-    const lastDate = new Date(sorted[sorted.length - 1].endDate);
-    
-    const days: Date[] = [];
-    const current = new Date(firstDate);
-    while (current <= lastDate) {
-      days.push(new Date(current));
-      current.setDate(current.getDate() + 1);
-    }
-    return days;
-  }, [periods]);
+      // Level 2: Teams assigned to this project
+      project.teams.forEach(team => {
+        rows.push({
+          id: `p-${project.id}-t-${team.id}`,
+          type: 'team',
+          name: team.name,
+          code: team.code,
+          projectId: project.id,
+          teamId: team.id,
+          indent: 1
+        });
 
-  // --- Map Allocations for easy lookup ---
+        // Level 3: Users (simplified: all users show under each team for now, or you could filter by membership)
+        // For the demo, we'll show a few resources per team to keep it clean
+        users.slice(0, 3).forEach(user => {
+          rows.push({
+            id: `p-${project.id}-t-${team.id}-u-${user.id}`,
+            type: 'user',
+            name: user.name || user.email?.split('@')[0] || 'Unknown',
+            projectId: project.id,
+            teamId: team.id,
+            userId: user.id,
+            indent: 2
+          });
+        });
+      });
+    });
+
+    return rows;
+  }, [projects, users]);
+
+  // --- 2. Map Allocations for rapid lookup ---
   const allocationMap = useMemo(() => {
-    const map: Record<string, number> = {};
+    const map: Record<string, { req: number; alloc: number; act: number }> = {};
     allocations.forEach(a => {
-      const key = `${a.teamId}-${a.periodId}`;
-      map[key] = (map[key] || 0) + a.plannedHours;
+      const key = `${a.projectId}-${a.teamId}-${a.userId || 'team'}-${a.periodId}`;
+      map[key] = {
+        req: a.requestedHours,
+        alloc: a.allocatedHours,
+        act: a.actualHours
+      };
     });
     return map;
   }, [allocations]);
 
-  // --- AG Grid Column Definitions ---
+  // --- Capacity Cell Renderer: Shows Requested, Allocated, and Actual buckets ---
+  const CapacityCellRenderer = (params: ICellRendererParams) => {
+    const row = params.data as HierarchicalRow;
+    const periodId = params.colDef.field;
+    if (!row || !periodId) return null;
+
+    const key = `${row.projectId}-${row.teamId || 'team'}-${row.userId || 'team'}-${periodId}`;
+    const val = allocationMap[key] || { req: 0, alloc: 0, act: 0 };
+
+    const hasAlloc = val.alloc > 0;
+    const isOver = val.alloc > val.req && val.req > 0;
+
+    return (
+      <div className="flex flex-col items-center justify-center h-full w-full py-1 leading-none group border-r border-slate-50">
+        <div className="text-[0.6rem] text-slate-300 font-black mb-0.5 transition-colors group-hover:text-slate-400">
+          {val.req > 0 ? val.req : ''}
+        </div>
+        <div className={`text-[0.9rem] font-black tracking-tighter capacity-value ${hasAlloc ? (isOver ? 'text-rose-600' : 'text-indigo-600') : 'text-slate-200'}`}>
+          {val.alloc || '0'}
+        </div>
+        <div className="text-[0.6rem] text-emerald-600/60 font-black mt-0.5">
+          {val.act > 0 ? val.act : ''}
+        </div>
+        {isOver && (
+          <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-rose-500 rounded-full shadow-[0_0_8px_rgba(244,63,94,0.4)]" title="Over Requested" />
+        )}
+      </div>
+    );
+  };
+
+  // --- Column Definitions with Grouping ---
   const columnDefs = useMemo<(ColDef | ColGroupDef)[]>(() => {
-    const monthGroups: Record<string, ColGroupDef> = {};
-
-    timeline.forEach(day => {
-      const monthLabel = day.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-      const weekNum = Math.ceil(day.getDate() / 7);
-      const weekLabel = `Week ${weekNum}`;
-      const dayLabel = day.toLocaleDateString('en-US', { weekday: 'short' }).charAt(0);
-      const dateKey = day.toISOString().split('T')[0];
-
-      // Find which period this day belongs to
-      const period = periods.find(p => {
-        const start = new Date(p.startDate);
-        const end = new Date(p.endDate);
-        return day >= start && day <= end;
-      });
-
-      if (!monthGroups[monthLabel]) {
-        monthGroups[monthLabel] = {
-          headerName: monthLabel,
-          headerClass: 'ag-header-month-group',
-          children: []
-        };
-      }
-
-      // Check if week group exists in this month
-      let weekGroup = (monthGroups[monthLabel].children as ColGroupDef[]).find(c => c.headerName === weekLabel);
-      if (!weekGroup) {
-        weekGroup = {
-          headerName: weekLabel,
-          headerClass: 'ag-header-week-group',
-          children: []
-        };
-        (monthGroups[monthLabel].children as ColGroupDef[]).push(weekGroup);
-      }
-
-      (weekGroup.children as ColDef[]).push({
-        headerName: `${dayLabel}\n${day.getDate()}`,
-        field: dateKey,
-        width: 35,
-        cellClass: 'ag-cell-daily',
-        headerClass: 'ag-header-day',
-        valueGetter: (params: ValueGetterParams) => {
-          if (!period) return 0;
-          const row = params.data as Team;
-          const weeklyTotal = allocationMap[`${row.id}-${period.id}`] || 0;
-          // Distribute across 5 working days (simplified)
-          const isWeekend = day.getDay() === 0 || day.getDay() === 6;
-          return isWeekend ? 0 : (weeklyTotal / 5).toFixed(1);
-        },
-        cellClassRules: {
-          'ag-cell-has-value': 'params.value > 0',
-          'ag-cell-weekend': (params) => {
-            const d = new Date(params.colDef.field!);
-            return d.getDay() === 0 || d.getDay() === 6;
-          }
-        }
-      });
-    });
-
-    return [
+    const baseCols: (ColDef | ColGroupDef)[] = [
       {
-        headerName: 'Team Entity',
+        headerName: 'Capacity Entity',
+        field: 'name',
         pinned: 'left',
-        width: 160,
-        cellRenderer: TeamCellRenderer,
+        width: 280,
+        cellRenderer: IdentityCellRenderer,
         lockPinned: true,
         suppressMovable: true,
-        headerClass: 'ag-header-team-main'
-      },
-      ...Object.values(monthGroups)
+        headerClass: 'ag-header-main-entity'
+      }
     ];
-  }, [timeline, periods, allocationMap]);
 
-  // --- Filtering ---
+    // Group periods by Month/Year
+    const groups: Record<string, Period[]> = {};
+    periods.forEach(p => {
+      const d = new Date(p.startDate);
+      const groupKey = d.toLocaleString('default', { month: 'long', year: 'numeric' });
+      if (!groups[groupKey]) groups[groupKey] = [];
+      groups[groupKey].push(p);
+    });
+
+    // Create group definitions
+    const periodGroups = Object.entries(groups).map(([groupName, groupPeriods]) => ({
+      headerName: groupName,
+      headerClass: 'ag-header-month-group',
+      children: groupPeriods.map(period => ({
+        headerName: period.label,
+        field: period.id,
+        width: 80,
+        editable: (params: any) => params.data.type !== 'project',
+        cellRenderer: CapacityCellRenderer,
+        cellClass: 'ag-cell-capacity',
+        headerClass: 'ag-header-period',
+        valueGetter: (params: ValueGetterParams) => {
+          const row = params.data as HierarchicalRow;
+          const key = `${row.projectId}-${row.teamId || 'team'}-${row.userId || 'team'}-${period.id}`;
+          return allocationMap[key]?.alloc || 0;
+        },
+        valueSetter: (params) => {
+          const row = params.data as HierarchicalRow;
+          const val = parseFloat(params.newValue);
+          if (isNaN(val)) return false;
+          
+          upsertAllocation({
+            projectId: row.projectId,
+            teamId: row.teamId || '',
+            userId: row.userId,
+            periodId: period.id,
+            allocatedHours: val
+          });
+          return true;
+        }
+      }))
+    }));
+
+    return [...baseCols, ...periodGroups];
+  }, [periods, allocationMap]);
+
+  // --- 5. Filtering ---
   const filteredRows = useMemo(() => {
-    if (!search) return teams;
+    if (!search) return rowData;
     const s = search.toLowerCase();
-    return teams.filter(t => t.name.toLowerCase().includes(s) || t.code.toLowerCase().includes(s));
-  }, [teams, search]);
+    return rowData.filter(r => r.name.toLowerCase().includes(s));
+  }, [rowData, search]);
 
   return (
-    <div className="flex flex-col gap-4 animate-in fade-in duration-500">
-      {/* --- Control Bar --- */}
-      <div className="flex items-center justify-between bg-slate-900/50 border border-white/5 rounded-2xl p-4 backdrop-blur-xl shadow-2xl">
+    <div className="flex flex-col gap-4 animate-in fade-in zoom-in-95 duration-500">
+      {/* Control Bar */}
+      <div className="flex items-center justify-between bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
         <div className="flex items-center gap-6">
           <div className="flex flex-col">
-            <h1 className="text-xl font-black text-white tracking-tighter flex items-center gap-2 uppercase">
-              <Target className="text-indigo-500" size={24} />
-              Project Planning
+            <h1 className="text-xl font-black text-slate-900 tracking-tighter flex items-center gap-2 uppercase">
+              <Target className="text-indigo-600" size={24} />
+              Hierarchical Capacity Planning
             </h1>
-            <p className="text-[0.6rem] text-slate-500 font-bold uppercase tracking-[0.2em] mt-0.5">
-              Team Resource Allocation Matrix
+            <p className="text-[0.6rem] text-slate-400 font-bold uppercase tracking-[0.2em] mt-0.5">
+              3-Level Hierarchy • Project &gt; Team &gt; Individual
             </p>
           </div>
 
-          <div className="h-8 w-px bg-white/10" />
+          <div className="h-8 w-px bg-slate-200" />
 
           <div className="relative group">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-indigo-400 transition-colors" size={16} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-indigo-600 transition-colors" size={16} />
             <input
               type="text"
-              placeholder="Search teams..."
+              placeholder="Filter roadmap..."
               value={search}
               onChange={e => setSearch(e.target.value)}
-              className="bg-black/20 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-1 focus:ring-indigo-500 outline-none transition-all w-64 text-white placeholder:text-slate-600"
+              className="bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all w-64 text-slate-900 placeholder:text-slate-400"
             />
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/20 px-4 py-2 rounded-xl">
-            <Calendar size={14} className="text-indigo-400" />
-            <span className="text-[0.65rem] font-black text-indigo-300 uppercase tracking-widest">
-              Daily Distribution View
-            </span>
+        <div className="flex items-center gap-3">
+          <div className="flex flex-col items-end mr-4">
+             <span className="text-[0.55rem] font-black text-slate-400 uppercase tracking-widest">Cell Legend</span>
+             <div className="flex gap-3 mt-1">
+                <span className="text-[0.6rem] font-bold text-slate-400"><span className="text-slate-300 mr-0.5">R:</span>REQ</span>
+                <span className="text-[0.6rem] font-bold text-indigo-600">ALLOC</span>
+                <span className="text-[0.6rem] font-bold text-emerald-600"><span className="text-emerald-300 mr-0.5">A:</span>ACT</span>
+             </div>
           </div>
-          <div className="flex items-center gap-2 bg-slate-800 border border-white/5 px-4 py-2 rounded-xl text-slate-400 text-[0.65rem] font-bold">
-            <Info size={14} />
-            READ ONLY
+          <div className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-[0.7rem] font-black uppercase tracking-widest hover:bg-indigo-700 transition-all cursor-pointer shadow-md shadow-indigo-500/20 active:scale-95">
+            Publish Changes
           </div>
         </div>
       </div>
 
-      {/* --- AG Grid --- */}
+      {/* AG Grid Container */}
       <div 
-        className="ag-theme-quartz-dark ag-grid-planning rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)]"
-        style={{ height: 'calc(100vh - 200px)', width: '100%' }}
+        className="ag-theme-quartz ag-grid-hierarchy rounded-2xl overflow-hidden border border-slate-200 shadow-xl bg-white"
+        style={{ height: 'calc(100vh - 250px)', width: '100%' }}
       >
         <AgGridReact
           ref={gridRef}
@@ -235,91 +324,108 @@ export function ProjectPlanningGrid({ teams, allocations, periods }: ProjectPlan
           rowData={filteredRows}
           columnDefs={columnDefs}
           defaultColDef={{
-            resizable: false,
-            sortable: true,
+            resizable: true,
+            sortable: false,
             filter: false,
             suppressHeaderMenuButton: true,
           }}
           headerHeight={32}
-          groupHeaderHeight={32}
-          rowHeight={48}
+          groupHeaderHeight={40}
+          rowHeight={64}
           suppressMovableColumns={true}
+          onGridReady={(params) => {
+            params.api.sizeColumnsToFit();
+          }}
+          singleClickEdit={true}
         />
       </div>
 
       <style jsx global>{`
-        .ag-grid-planning {
-          --ag-background-color: #020617;
-          --ag-header-background-color: #0f172a;
-          --ag-header-foreground-color: #64748b;
-          --ag-foreground-color: #94a3b8;
-          --ag-border-color: rgba(255, 255, 255, 0.03);
-          --ag-row-hover-color: rgba(99, 102, 241, 0.08);
-          --ag-selected-row-background-color: rgba(99, 102, 241, 0.15);
-          --ag-font-size: 10px;
-          --ag-font-family: 'JetBrains Mono', monospace;
+        .ag-grid-hierarchy {
+          --ag-background-color: #ffffff;
+          --ag-header-background-color: #f8fafc;
+          --ag-header-foreground-color: #475569;
+          --ag-foreground-color: #1e293b;
+          --ag-border-color: #f1f5f9;
+          --ag-row-hover-color: #f1f5f9;
+          --ag-selected-row-background-color: #eef2ff;
+          --ag-font-size: 13px;
+          --ag-font-family: 'Inter', system-ui, sans-serif;
         }
 
         .ag-header-month-group {
-          font-weight: 900 !important;
-          color: #818cf8 !important;
+          background: #f1f5f9 !important;
+          border-bottom: 1px solid #e2e8f0 !important;
+          border-left: 1px solid #e2e8f0 !important;
+          font-weight: 800 !important;
+          color: #0f172a !important;
           text-transform: uppercase;
           letter-spacing: 0.1em;
-          background: rgba(99, 102, 241, 0.05) !important;
+          font-size: 10px !important;
+          text-align: center;
         }
 
-        .ag-header-week-group {
-          font-size: 8px !important;
-          color: #475569 !important;
-          background: transparent !important;
-        }
-
-        .ag-header-day {
-          font-size: 8px !important;
-          white-space: pre-line !important;
-          line-height: 1.2 !important;
-          text-align: center !important;
-        }
-
-        .ag-cell-daily {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-right: 1px solid rgba(255, 255, 255, 0.02) !important;
-          font-family: 'JetBrains Mono', monospace;
-          color: #334155;
-          font-size: 9px;
-        }
-
-        .ag-cell-has-value {
-          color: #818cf8 !important;
-          font-weight: 900 !important;
-          background: rgba(99, 102, 241, 0.03);
-        }
-
-        .ag-cell-weekend {
-          background: rgba(0, 0, 0, 0.2);
-          opacity: 0.5;
-        }
-
-        .ag-header-team-main {
-          background: #0f172a !important;
-          font-weight: 900 !important;
+        .ag-header-main-entity {
+          font-weight: 800 !important;
           text-transform: uppercase;
           letter-spacing: 0.05em;
+          font-size: 11px !important;
+          color: #1e293b !important;
+          background: #f8fafc !important;
         }
 
-        .ag-theme-quartz-dark .ag-header-cell-label {
-          justify-content: center;
+        .ag-header-period {
+          font-size: 10px !important;
+          font-weight: 800 !important;
+          color: #64748b !important;
+          border-left: 1px solid #f1f5f9 !important;
+          background: #ffffff !important;
         }
 
-        .ag-theme-quartz-dark .ag-pinned-left-header {
-          border-right: 2px solid rgba(99, 102, 241, 0.3) !important;
+        .ag-cell {
+          display: flex !important;
+          align-items: center !important;
+          border-bottom: 1px solid #f1f5f9 !important;
         }
 
-        .ag-theme-quartz-dark .ag-pinned-left-cols-container {
-          border-right: 2px solid rgba(99, 102, 241, 0.3) !important;
-          background: #020617 !important;
+        .ag-cell-capacity {
+          padding: 0 !important;
+          background: white;
+          transition: background 0.2s;
+        }
+
+        .ag-cell-capacity:hover {
+          background: #f8fafc !important;
+        }
+
+        .ag-cell-inline-editing {
+          background: #ffffff !important;
+          border: 2px solid #6366f1 !important;
+          box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+          z-index: 100;
+          font-weight: 800 !important;
+          color: #4f46e5 !important;
+          text-align: center;
+        }
+
+        .ag-pinned-left-header {
+          border-right: 1px solid #e2e8f0 !important;
+        }
+
+        .ag-pinned-left-cols-container {
+          border-right: 1px solid #e2e8f0 !important;
+          background: #fcfcfd !important;
+        }
+
+        /* Mono for numbers only */
+        .capacity-value {
+          font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Project Row Styling */
+        .ag-row-level-0 {
+          background-color: #fcfcfd !important;
+          font-weight: 700;
         }
       `}</style>
     </div>

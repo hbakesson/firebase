@@ -235,72 +235,59 @@ export async function createYearPeriods(year: number) {
   return sanitize(result) as typeof result;
 }
 
-export async function upsertAllocation(data: { teamId: string; projectId: string; periodId: string; plannedHours: number }) {
+export async function upsertAllocation(data: { 
+  teamId: string; 
+  projectId: string; 
+  periodId: string; 
+  userId?: string;
+  requestedHours?: number;
+  allocatedHours?: number;
+  actualHours?: number;
+}) {
   const session = await auth();
-  if (!session?.user?.id) throw new Error("Unauthorized");
+  if (!session?.user?.organizationId) throw new Error("Unauthorized");
 
   const period = await prisma.period.findUnique({ where: { id: data.periodId } });
   if (period?.isLocked) throw new Error("This period is locked for fiscal governance. Modifications are disabled.");
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const allocation = await prisma.budgetAllocation.upsert({
+  const { teamId, projectId, periodId, userId, ...hours } = data;
+
+  await prisma.allocation.upsert({
     where: {
-      teamId_projectId_periodId: {
-        teamId: data.teamId,
-        projectId: data.projectId,
-        periodId: data.periodId,
+      projectId_teamId_userId_periodId: {
+        projectId,
+        teamId,
+        userId: userId || null,
+        periodId,
       },
     },
-    update: { plannedHours: data.plannedHours },
-    create: data,
+    update: {
+      ...hours,
+    },
+    create: {
+      projectId,
+      teamId,
+      userId: userId || null,
+      periodId,
+      ...hours,
+    },
   });
 
   await prisma.auditLog.create({
     data: {
       organizationId: session.user.organizationId,
       action: "UPDATE",
-      entityType: "BudgetAllocation",
-      entityId: data.projectId,
+      entityType: "Allocation",
+      entityId: projectId,
       projectName: "Grid Update",
       userId: session.user.id!,
       userEmail: session.user.email!,
-      newValue: `Planned: ${data.plannedHours}`,
+      newValue: JSON.stringify(hours),
     },
   });
 
-  return null;
-}
-
-export async function upsertActual(data: { teamId: string; projectId: string; periodId: string; actualHours: number }) {
-  const session = await auth();
-  if (!session?.user?.id) throw new Error("Unauthorized");
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const actual = await prisma.actualAllocation.upsert({
-    where: {
-      teamId_projectId_periodId: {
-        teamId: data.teamId,
-        projectId: data.projectId,
-        periodId: data.periodId,
-      },
-    },
-    update: { actualHours: data.actualHours },
-    create: data,
-  });
-
-  await prisma.auditLog.create({
-    data: {
-      organizationId: session.user.organizationId,
-      action: "UPDATE",
-      entityType: "ActualAllocation",
-      entityId: data.projectId,
-      projectName: "Grid Update",
-      userId: session.user.id!,
-      userEmail: session.user.email!,
-      newValue: `Actual: ${data.actualHours}`,
-    },
-  });
-
+  revalidatePath("/planning/bulk");
+  revalidatePath("/project-planning");
   return null;
 }
 

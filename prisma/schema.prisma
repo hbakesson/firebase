@@ -1,9 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
@@ -45,8 +42,7 @@ model Team {
   parentTeam     Team?         @relation("TeamHierarchy", fields: [parentTeamId], references: [id], onDelete: SetNull)
   childTeams     Team[]        @relation("TeamHierarchy")
   projects       Project[]
-  allocations    BudgetAllocation[]
-  actualAllocations ActualAllocation[]
+  allocations    Allocation[]
 }
 
 model Project {
@@ -65,8 +61,7 @@ model Project {
 
   organization   Organization? @relation(fields: [organizationId], references: [id])
   logs           AuditLog[]
-  allocations    BudgetAllocation[]
-  actualAllocations ActualAllocation[]
+  allocations    Allocation[]
 }
 
 model Period {
@@ -78,40 +73,33 @@ model Period {
   label          String
   isLocked       Boolean       @default(false)
   organization   Organization  @relation(fields: [organizationId], references: [id])
-  allocations    BudgetAllocation[]
-  actualAllocations ActualAllocation[]
+  allocations    Allocation[]
 
   @@unique([organizationId, type, startDate, endDate])
 }
 
-model BudgetAllocation {
-  id           String   @id @default(cuid())
-  teamId       String
-  projectId    String
-  periodId     String
-  plannedHours Float    @default(0)
-  updatedAt    DateTime @updatedAt
+// ─── Resource & Capacity Core ────────────────────────────────────────────────
 
-  team         Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  period       Period   @relation(fields: [periodId], references: [id])
+model Allocation {
+  id             String   @id @default(cuid())
+  projectId      String
+  teamId         String
+  userId         String?  // Optional for high-level team planning
+  periodId       String
+  date           DateTime? // For granular daily planning if needed
+  
+  requestedHours Float    @default(0)
+  allocatedHours Float    @default(0)
+  actualHours    Float    @default(0)
+  
+  updatedAt      DateTime @updatedAt
 
-  @@unique([teamId, projectId, periodId])
-}
+  project        Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  team           Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user           User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  period         Period   @relation(fields: [periodId], references: [id])
 
-model ActualAllocation {
-  id           String   @id @default(cuid())
-  teamId       String
-  projectId    String
-  periodId     String
-  actualHours  Float    @default(0)
-  updatedAt    DateTime @updatedAt
-
-  team         Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
-  project      Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  period       Period   @relation(fields: [periodId], references: [id])
-
-  @@unique([teamId, projectId, periodId])
+  @@unique([projectId, teamId, userId, periodId])
 }
 
 model AuditLog {
@@ -143,9 +131,14 @@ model User {
   password       String?
   isGuest        Boolean       @default(false)
   role           String        @default("user")
+  
+  // Capacity planning
+  capacityPerDay Float         @default(8.0)
+  
   organization   Organization? @relation(fields: [organizationId], references: [id])
   accounts       Account[]
   sessions       Session[]
+  allocations    Allocation[]
 
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @default(now()) @updatedAt

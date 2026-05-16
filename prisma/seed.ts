@@ -4,11 +4,10 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Starting database seed...');
+  console.log('🌱 Starting database seed (Capacity Architecture)...');
 
   // 1. Clean existing data
-  await prisma.actualAllocation.deleteMany();
-  await prisma.budgetAllocation.deleteMany();
+  await prisma.allocation.deleteMany();
   await prisma.auditLog.deleteMany();
   await prisma.period.deleteMany();
   await prisma.project.deleteMany();
@@ -19,8 +18,11 @@ async function main() {
   console.log('🧹 Cleaned existing data.');
 
   // 2. Create Organization
-  const org = await prisma.organization.create({
-    data: {
+  const org = await prisma.organization.upsert({
+    where: { id: 'dev-org-id' },
+    update: {},
+    create: {
+      id: 'dev-org-id',
       name: 'Global Innovation Lab',
       fiscalYearStartMonth: 1,
       defaultCurrency: 'USD',
@@ -54,15 +56,6 @@ async function main() {
     },
   });
 
-  const mobile = await prisma.team.create({
-    data: {
-      name: 'Mobile Core',
-      code: 'MOB-CORE',
-      parentTeamId: eng.id,
-      organizationId: org.id,
-    },
-  });
-
   const product = await prisma.team.create({
     data: {
       name: 'Product Design',
@@ -73,35 +66,45 @@ async function main() {
 
   console.log('👥 Teams created.');
 
-  // 4. Create Users
+  // 4. Create Users with Capacity
   const hashedPassword = await bcrypt.hash('password123', 10);
 
   const usersData = [
-    { name: 'Admin User', email: 'admin@example.com', role: 'admin' },
-    { name: 'Guest User', email: 'guest@example.com', role: 'user', isGuest: true },
-    { name: 'Alice Chen', email: 'alice@example.com', role: 'user' },
-    { name: 'Bob Smith', email: 'bob@example.com', role: 'user' },
-    { name: 'Charlie Davis', email: 'charlie@example.com', role: 'user' },
-    { name: 'Diana Prince', email: 'diana@example.com', role: 'user' },
-    { name: 'Erik Lensherr', email: 'erik@example.com', role: 'user' },
-    { name: 'Fiona Gallagher', email: 'fiona@example.com', role: 'user' },
-    { name: 'George Miller', email: 'george@example.com', role: 'user' },
-    { name: 'Hannah Abbott', email: 'hannah@example.com', role: 'user' },
-    { name: 'Ivan Vanko', email: 'ivan@example.com', role: 'user' },
-    { name: 'Julia Roberts', email: 'julia@example.com', role: 'user' },
+    { name: 'Admin User', email: 'admin@example.com', role: 'admin', capacity: 8.0 },
+    { name: 'Guest User', email: 'guest@example.com', role: 'user', isGuest: true, capacity: 8.0 },
+    { name: 'Alice Chen', email: 'alice@example.com', role: 'user', capacity: 8.0 },
+    { name: 'Bob Smith', email: 'bob@example.com', role: 'user', capacity: 6.0 }, // Part-time
+    { name: 'Charlie Davis', email: 'charlie@example.com', role: 'user', capacity: 8.0 },
+    { name: 'Diana Prince', email: 'diana@example.com', role: 'user', capacity: 8.0 },
+    { name: 'Erik Lensherr', email: 'erik@example.com', role: 'user', capacity: 4.0 }, // 50%
   ];
 
+  const createdUsers = [];
   for (const u of usersData) {
-    await prisma.user.create({
-      data: {
-        ...u,
+    const user = await prisma.user.upsert({
+      where: { email: u.email },
+      update: {
+        name: u.name,
+        role: u.role,
+        isGuest: u.isGuest || false,
+        organizationId: org.id,
+        capacityPerDay: u.capacity,
+      },
+      create: {
+        id: u.email === 'guest@example.com' ? 'guest-user-id' : undefined,
+        name: u.name,
+        email: u.email,
+        role: u.role,
+        isGuest: u.isGuest || false,
         password: hashedPassword,
         organizationId: org.id,
+        capacityPerDay: u.capacity,
       },
     });
+    createdUsers.push(user);
   }
 
-  console.log('👤 Additional users created.');
+  console.log('👤 Users created with capacity metrics.');
 
   // 5. Create Projects
   const projects = await Promise.all([
@@ -129,28 +132,6 @@ async function main() {
     }),
     prisma.project.create({
       data: {
-        name: 'Deep Data API',
-        code: 'DDP-API',
-        status: 'ACTIVE',
-        priority: 1,
-        organizationId: org.id,
-        createdBy: 'system',
-        teams: { connect: [{ id: backend.id }] }
-      }
-    }),
-    prisma.project.create({
-      data: {
-        name: 'Mobile Revamp',
-        code: 'MOB-RVP',
-        status: 'ACTIVE',
-        priority: 3,
-        organizationId: org.id,
-        createdBy: 'system',
-        teams: { connect: [{ id: mobile.id }] }
-      }
-    }),
-    prisma.project.create({
-      data: {
         name: 'Legacy Migration',
         code: 'LEG-MIG',
         status: 'ACTIVE',
@@ -167,11 +148,11 @@ async function main() {
   // 6. Create Weekly Periods
   const periods = [];
   const today = new Date();
-  // Start from 4 weeks ago to show some historical actuals
   const startDate = new Date(today);
-  startDate.setDate(today.getDate() - today.getDay() - 28); 
+  // Start from 2 weeks ago
+  startDate.setDate(today.getDate() - today.getDay() - 14); 
 
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 8; i++) {
     const pStart = new Date(startDate);
     pStart.setDate(startDate.getDate() + (i * 7));
     
@@ -191,38 +172,44 @@ async function main() {
     periods.push(period);
   }
 
-  console.log('📅 Periods created.');
+  console.log('📅 Weekly periods created.');
 
-  // 7. Create Some Allocations and Actuals
+  // 7. Create Triple-Bucket Allocations
   for (const prj of projects) {
-    const relatedTeams = [frontend, backend, mobile, product].filter(t => 
-      // Simplified: if project has teams relation, we just use those
-      true // We'll just seed a bit for everyone for the demo
-    );
-
-    for (const team of relatedTeams) {
+    // Each project gets some high-level team "Requested" hours
+    for (const team of [frontend, backend, product]) {
       for (const per of periods) {
-        // Random hours
-        const planned = Math.floor(Math.random() * 40);
-        const actual = Math.floor(Math.random() * 45);
+        const requested = 20 + Math.floor(Math.random() * 40);
+        const allocated = requested - Math.floor(Math.random() * 10);
+        const actual = (new Date(per.startDate) <= today) ? (allocated + (Math.random() > 0.5 ? 5 : -5)) : 0;
 
-        await prisma.budgetAllocation.create({
+        await prisma.allocation.create({
           data: {
-            teamId: team.id,
             projectId: prj.id,
+            teamId: team.id,
             periodId: per.id,
-            plannedHours: planned,
+            requestedHours: requested,
+            allocatedHours: allocated,
+            actualHours: actual,
           }
         });
+      }
+    }
 
-        // Only add actuals for past or current periods
-        if (new Date(per.startDate) <= today) {
-          await prisma.actualAllocation.create({
+    // Assign specific users to Project Phoenix
+    if (prj.name === 'Project Phoenix') {
+      const assignedUsers = createdUsers.slice(2, 5); // Alice, Bob, Charlie
+      for (const user of assignedUsers) {
+        for (const per of periods) {
+          await prisma.allocation.create({
             data: {
-              teamId: team.id,
               projectId: prj.id,
+              teamId: frontend.id,
+              userId: user.id,
               periodId: per.id,
-              actualHours: actual,
+              requestedHours: 0, // Individual usually don't have "requested" at this level in this model
+              allocatedHours: 15 + Math.floor(Math.random() * 10),
+              actualHours: (new Date(per.startDate) <= today) ? 15 + Math.floor(Math.random() * 15) : 0,
             }
           });
         }
@@ -230,7 +217,7 @@ async function main() {
     }
   }
 
-  console.log('📊 Allocation data seeded.');
+  console.log('📊 Allocation data seeded with Triple-Bucket values.');
   console.log('✅ Seed complete!');
 }
 

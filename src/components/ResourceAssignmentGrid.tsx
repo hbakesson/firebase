@@ -151,7 +151,7 @@ export function ResourceAssignmentGrid({ projects, users }: ResourceAssignmentGr
           return assignments[`${row.id}-${dateKey}`] || 0;
         },
         cellClassRules: {
-          'ag-cell-assigned': 'params.value > 0',
+          'ag-cell-assigned': (params) => Number(params.value) > 0,
           'ag-cell-weekend-assign': (params) => {
             const d = new Date(params.colDef.field!);
             return d.getDay() === 0 || d.getDay() === 6;
