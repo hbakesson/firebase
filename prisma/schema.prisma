@@ -24,6 +24,7 @@ model Organization {
   users     User[]
   projects  Project[]
   teams     Team[]
+  roles     Role[]
   periods   Period[]
   auditLogs AuditLog[]
 }
@@ -43,6 +44,18 @@ model Team {
   childTeams     Team[]        @relation("TeamHierarchy")
   projects       Project[]
   allocations    Allocation[]
+}
+
+model Role {
+  id             String        @id @default(cuid())
+  organizationId String
+  name           String
+  baseRate       Float         @default(0)
+  
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  allocations    Allocation[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
 model Project {
@@ -67,7 +80,7 @@ model Project {
 model Period {
   id             String        @id @default(cuid())
   organizationId String
-  type           String        // MONTH | QUARTER
+  type           String        // MONTH | QUARTER | WEEK
   startDate      DateTime
   endDate        DateTime
   label          String
@@ -84,9 +97,12 @@ model Allocation {
   id             String   @id @default(cuid())
   projectId      String
   teamId         String
-  userId         String?  // Optional for high-level team planning
+  userId         String?  // Linked to a specific resource
+  roleId         String?  // Linked to a placeholder role (Scoro)
   periodId       String
-  date           DateTime? // For granular daily planning if needed
+  date           DateTime? 
+
+  type           String   @default("WORK") // WORK | PIPELINE | TIME_OFF
   
   requestedHours Float    @default(0)
   allocatedHours Float    @default(0)
@@ -97,9 +113,10 @@ model Allocation {
   project        Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
   team           Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
   user           User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  role           Role?    @relation(fields: [roleId], references: [id], onDelete: SetNull)
   period         Period   @relation(fields: [periodId], references: [id])
 
-  @@unique([projectId, teamId, userId, periodId])
+  @@unique([projectId, teamId, userId, roleId, periodId])
 }
 
 model AuditLog {
@@ -130,6 +147,7 @@ model User {
   image          String?
   password       String?
   isGuest        Boolean       @default(false)
+  isPlaceholder  Boolean       @default(false) // Scoro placeholder resource
   role           String        @default("user")
   
   // Capacity planning

@@ -172,9 +172,7 @@ export async function deleteProject(id: string) {
   if (!session?.user?.id) throw new Error("Unauthorized");
 
   try {
-    const lockedData = await prisma.budgetAllocation.findFirst({
-      where: { projectId: id, period: { isLocked: true } }
-    }) || await prisma.actualAllocation.findFirst({
+    const lockedData = await prisma.allocation.findFirst({
       where: { projectId: id, period: { isLocked: true } }
     });
 
@@ -239,7 +237,9 @@ export async function upsertAllocation(data: {
   teamId: string; 
   projectId: string; 
   periodId: string; 
-  userId?: string;
+  userId?: string | null;
+  roleId?: string | null;
+  type?: string;
   requestedHours?: number;
   allocatedHours?: number;
   actualHours?: number;
@@ -250,25 +250,29 @@ export async function upsertAllocation(data: {
   const period = await prisma.period.findUnique({ where: { id: data.periodId } });
   if (period?.isLocked) throw new Error("This period is locked for fiscal governance. Modifications are disabled.");
 
-  const { teamId, projectId, periodId, userId, ...hours } = data;
+  const { teamId, projectId, periodId, userId, roleId, type, ...hours } = data;
 
   await prisma.allocation.upsert({
     where: {
-      projectId_teamId_userId_periodId: {
+      projectId_teamId_userId_roleId_periodId: {
         projectId,
         teamId,
         userId: userId || null,
+        roleId: roleId || null,
         periodId,
       },
     },
     update: {
       ...hours,
+      type: type || "WORK",
     },
     create: {
       projectId,
       teamId,
       userId: userId || null,
+      roleId: roleId || null,
       periodId,
+      type: type || "WORK",
       ...hours,
     },
   });
@@ -375,11 +379,13 @@ export async function importActuals(rows: ImportRow[]) {
 
     const teamId = targetTeam.id;
 
-    const allocation = await prisma.actualAllocation.upsert({
+    const allocation = await prisma.allocation.upsert({
       where: {
-        teamId_projectId_periodId: {
+        projectId_teamId_userId_roleId_periodId: {
           teamId,
           projectId: project.id,
+          userId: null,
+          roleId: null,
           periodId: row.periodId,
         },
       },
@@ -521,9 +527,7 @@ export async function deleteTeam(teamId: string) {
 
     if (!team) return { error: "Team not found" };
 
-    const lockedData = await prisma.budgetAllocation.findFirst({
-      where: { teamId: teamId, period: { isLocked: true } }
-    }) || await prisma.actualAllocation.findFirst({
+    const lockedData = await prisma.allocation.findFirst({
       where: { teamId: teamId, period: { isLocked: true } }
     });
 

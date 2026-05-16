@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useMemo, useState, useRef } from 'react';
-import { Search, LayoutGrid, Calendar, Target, Info, ChevronRight, ChevronDown, Users, User, Briefcase } from 'lucide-react';
+import React, { useMemo, useState, useRef, useEffect } from 'react';
+import { Search, LayoutGrid, Calendar, Target, Info, ChevronRight, ChevronDown, Users, User, Briefcase, Shield } from 'lucide-react';
 import { AgGridReact } from 'ag-grid-react';
 import { 
   ColDef, 
@@ -78,46 +78,70 @@ interface HierarchicalRow {
 }
 
 /**
- * Identity Cell Renderer: Handles hierarchy indentation and icons
+ * Identity Cell Renderer: Handles hierarchy indentation and icons with Scoro Availability Rings
  */
-const IdentityCellRenderer = (params: ICellRendererParams) => {
+const IdentityCellRenderer = (params: ICellRendererParams & { context: { userUtilization: Record<string, number> } }) => {
   const row = params.data as HierarchicalRow;
   if (!row) return null;
 
-  const Icon = row.type === 'project' ? Briefcase : row.type === 'team' ? Users : User;
-  const iconColor = row.type === 'project' ? 'text-indigo-600' : row.type === 'team' ? 'text-emerald-600' : 'text-slate-500';
-  const textColor = row.type === 'project' ? 'text-slate-900 font-extrabold' : row.type === 'team' ? 'text-slate-700 font-bold' : 'text-slate-600';
+  const Icon = row.type === 'project' ? Briefcase : row.type === 'team' ? Users : row.type === 'role' ? Shield : User;
+  const iconColor = row.type === 'project' ? 'text-indigo-600' : row.type === 'team' ? 'text-emerald-600' : row.type === 'role' ? 'text-amber-600' : 'text-slate-500';
+  const bgClass = row.type === 'project' ? 'bg-indigo-50' : row.type === 'team' ? 'bg-emerald-50' : row.type === 'role' ? 'bg-amber-50' : 'bg-slate-100';
+  const textColor = row.type === 'project' ? 'text-slate-900 font-extrabold' : row.type === 'team' ? 'text-slate-700 font-bold' : row.type === 'role' ? 'text-slate-800 font-black' : 'text-slate-600';
+
+  // Availability Ring Logic (for Users)
+  const util = row.type === 'user' ? (params.context?.userUtilization?.[row.userId!] || 0) : 0;
+  const strokeDash = Math.min(100, util) * 0.44; 
 
   return (
-    <div className="flex items-center h-full gap-3" style={{ paddingLeft: `${row.indent * 20}px` }}>
-      <div className={`p-1.5 rounded-lg ${row.type === 'project' ? 'bg-indigo-50' : row.type === 'team' ? 'bg-emerald-50' : 'bg-slate-100'}`}>
-        <Icon className={iconColor} size={14} />
+    <div className="flex items-center h-full gap-3" style={{ paddingLeft: `${row.indent * 16}px` }}>
+      <div className="relative flex-shrink-0 group/avatar">
+        {row.type === 'user' && (
+          <svg className="absolute -inset-1 w-[calc(100%+8px)] h-[calc(100%+8px)] -rotate-90 pointer-events-none">
+            <circle cx="50%" cy="50%" r="45%" fill="none" stroke="#e2e8f0" strokeWidth="2" />
+            <circle
+              cx="50%" cy="50%" r="45%" fill="none"
+              stroke={util > 100 ? '#f43f5e' : '#6366f1'}
+              strokeWidth="2" strokeDasharray="44" strokeDashoffset={44 - strokeDash}
+              className="transition-all duration-700 ease-out"
+            />
+          </svg>
+        )}
+        
+        <div className={`p-1.5 rounded-lg relative z-10 ${bgClass}`}>
+          <Icon className={iconColor} size={14} />
+        </div>
+
+        {row.type === 'user' && (
+          <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-slate-900 text-white text-[0.6rem] px-2 py-1 rounded opacity-0 group-hover/avatar:opacity-100 transition-opacity whitespace-nowrap z-50">
+            {Math.round(util)}% Utilized
+          </div>
+        )}
       </div>
+
       <div className="flex flex-col justify-center leading-tight overflow-hidden">
-        <span className={`text-[0.75rem] uppercase tracking-tight truncate ${textColor}`}>
+        <span className={`text-[0.7rem] uppercase tracking-tight truncate ${textColor}`}>
           {row.name}
         </span>
-        {row.code && (
-          <span className="text-[0.6rem] text-slate-400 font-mono font-bold tracking-wider">{row.code}</span>
+        {row.type !== 'user' && row.code && (
+          <span className="text-[0.55rem] text-slate-400 font-mono font-bold tracking-wider">{row.code}</span>
         )}
       </div>
     </div>
   );
 };
 
-
-
-export function ProjectPlanningGrid({ projects, teams, users, allocations, periods }: ProjectPlanningGridProps) {
+export function ProjectPlanningGrid({ projects, teams, users, roles, allocations, periods }: { projects: (Project & { teams: Team[] })[]; teams: Team[]; users: User[]; roles: Role[]; allocations: Allocation[]; periods: Period[] }) {
   const gridRef = useRef<AgGridReact>(null);
   const [search, setSearch] = useState('');
+  const [rows, setRows] = useState<HierarchicalRow[]>([]);
 
-  // --- 1. Flatten Data to 3-level Hierarchy ---
-  const rowData = useMemo(() => {
-    const rows: HierarchicalRow[] = [];
+  // --- 1. Hierarchy Engine: Builds Project > Team > Role > User tree ---
+  useEffect(() => {
+    const newRows: HierarchicalRow[] = [];
     
     projects.forEach(project => {
-      // Level 1: Project
-      rows.push({
+      newRows.push({
         id: `p-${project.id}`,
         type: 'project',
         name: project.name,
@@ -126,9 +150,8 @@ export function ProjectPlanningGrid({ projects, teams, users, allocations, perio
         indent: 0
       });
 
-      // Level 2: Teams assigned to this project
       project.teams.forEach(team => {
-        rows.push({
+        newRows.push({
           id: `p-${project.id}-t-${team.id}`,
           type: 'team',
           name: team.name,
@@ -138,64 +161,135 @@ export function ProjectPlanningGrid({ projects, teams, users, allocations, perio
           indent: 1
         });
 
-        // Level 3: Users (simplified: all users show under each team for now, or you could filter by membership)
-        // For the demo, we'll show a few resources per team to keep it clean
-        users.slice(0, 3).forEach(user => {
-          rows.push({
+        // Add Role Placeholders assigned to this project/team
+        const projectTeamRoles = roles.filter(r => 
+          allocations.some(a => a.projectId === project.id && a.teamId === team.id && a.roleId === r.id)
+        );
+
+        projectTeamRoles.forEach(role => {
+          newRows.push({
+            id: `p-${project.id}-t-${team.id}-r-${role.id}`,
+            type: 'role',
+            name: role.name,
+            projectId: project.id,
+            teamId: team.id,
+            roleId: role.id,
+            indent: 2
+          });
+        });
+
+        // Add Users
+        users.forEach(user => {
+          newRows.push({
             id: `p-${project.id}-t-${team.id}-u-${user.id}`,
             type: 'user',
-            name: user.name || user.email?.split('@')[0] || 'Unknown',
+            name: user.name || user.email || 'Unknown',
             projectId: project.id,
             teamId: team.id,
             userId: user.id,
-            indent: 2
+            indent: 3
           });
         });
       });
     });
-
-    return rows;
-  }, [projects, users]);
+    setRows(newRows);
+  }, [projects, teams, users, roles, allocations]);
 
   // --- 2. Map Allocations for rapid lookup ---
   const allocationMap = useMemo(() => {
-    const map: Record<string, { req: number; alloc: number; act: number }> = {};
+    const map: Record<string, { req: number; alloc: number; act: number; type: string }> = {};
     allocations.forEach(a => {
       const key = `${a.projectId}-${a.teamId}-${a.userId || 'team'}-${a.periodId}`;
       map[key] = {
         req: a.requestedHours,
         alloc: a.allocatedHours,
-        act: a.actualHours
+        act: a.actualHours,
+        type: a.type || 'WORK'
       };
     });
     return map;
   }, [allocations]);
 
-  // --- Capacity Cell Renderer: Shows Requested, Allocated, and Actual buckets ---
+  // --- 3. Compute Aggregate User Utilization for Rings ---
+  const userUtilization = useMemo(() => {
+    const map: Record<string, number> = {};
+    users.forEach(user => {
+      const totalCapacity = user.capacityPerDay * 5 * periods.length;
+      
+      let totalAllocated = 0;
+      allocations.forEach(a => {
+        if (a.userId === user.id && periods.some(p => p.id === a.periodId)) {
+          // Only count WORK or PIPELINE towards utilization, not TIME_OFF
+          if (a.type !== 'TIME_OFF') {
+            totalAllocated += a.allocatedHours;
+          }
+        }
+      });
+
+      map[user.id] = totalCapacity > 0 ? (totalAllocated / totalCapacity) * 100 : 0;
+    });
+    return map;
+  }, [users, allocations, periods]);
+
+  // --- 4. Capacity Cell Renderer: Shows Requested, Allocated, and Actual buckets ---
   const CapacityCellRenderer = (params: ICellRendererParams) => {
     const row = params.data as HierarchicalRow;
     const periodId = params.colDef.field;
     if (!row || !periodId) return null;
 
     const key = `${row.projectId}-${row.teamId || 'team'}-${row.userId || 'team'}-${periodId}`;
-    const val = allocationMap[key] || { req: 0, alloc: 0, act: 0 };
+    const val = allocationMap[key] || { req: 0, alloc: 0, act: 0, type: 'WORK' };
 
-    const hasAlloc = val.alloc > 0;
-    const isOver = val.alloc > val.req && val.req > 0;
+    // Scoro Visual Logic: Utilization vs Capacity
+    const isUser = row.type === 'user';
+    const user = users.find(u => u.id === row.userId);
+    const capacity = isUser && user ? user.capacityPerDay * 5 : 40; 
+    
+    const utilization = (val.alloc / capacity) * 100;
+    const isFull = utilization >= 95 && utilization <= 105;
+
+    // Colors based on Scoro research
+    let statusClass = 'text-slate-200';
+    let bgClass = 'bg-transparent';
+    let dotClass = '';
+
+    if (val.type === 'TIME_OFF') {
+      statusClass = 'text-amber-700 font-black';
+      bgClass = 'bg-amber-100/50';
+    } else if (val.alloc > 0) {
+      if (utilization > 100) {
+        statusClass = 'text-rose-700 font-black';
+        bgClass = 'bg-rose-50/50';
+        dotClass = 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]';
+      } else if (isFull) {
+        statusClass = 'text-indigo-700 font-black';
+        bgClass = 'bg-indigo-50/50';
+      } else {
+        statusClass = 'text-emerald-700 font-black';
+        bgClass = 'bg-emerald-50/50';
+      }
+    }
 
     return (
-      <div className="flex flex-col items-center justify-center h-full w-full py-1 leading-none group border-r border-slate-50">
+      <div className={`flex flex-col items-center justify-center h-full w-full py-1 leading-none group border-r border-slate-50 relative transition-all duration-200 ${bgClass}`}>
+        {/* Requested (Top) - Scoro uses this for tentative/pipeline if needed */}
         <div className="text-[0.6rem] text-slate-300 font-black mb-0.5 transition-colors group-hover:text-slate-400">
           {val.req > 0 ? val.req : ''}
         </div>
-        <div className={`text-[0.9rem] font-black tracking-tighter capacity-value ${hasAlloc ? (isOver ? 'text-rose-600' : 'text-indigo-600') : 'text-slate-200'}`}>
+        
+        {/* Allocated (Main) */}
+        <div className={`text-[0.95rem] tracking-tighter capacity-value transition-transform group-hover:scale-110 ${statusClass}`}>
           {val.alloc || '0'}
         </div>
-        <div className="text-[0.6rem] text-emerald-600/60 font-black mt-0.5">
+        
+        {/* Actual (Bottom) */}
+        <div className="text-[0.6rem] text-slate-400/60 font-bold mt-0.5">
           {val.act > 0 ? val.act : ''}
         </div>
-        {isOver && (
-          <div className="absolute top-1 right-1 w-1.5 h-1.5 bg-rose-500 rounded-full shadow-[0_0_8px_rgba(244,63,94,0.4)]" title="Over Requested" />
+
+        {/* Status Dot (Burnout / Overbooked indicator) */}
+        {utilization > 100 && (
+          <div className={`absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full ${dotClass}`} title="Over Capacity (Burnout Risk)" />
         )}
       </div>
     );
@@ -333,6 +427,30 @@ export function ProjectPlanningGrid({ projects, teams, users, allocations, perio
           groupHeaderHeight={40}
           rowHeight={64}
           suppressMovableColumns={true}
+          context={{ userUtilization }}
+          onCellContextMenu={(params) => {
+            params.event?.preventDefault();
+            // Simple logic to trigger a distribution or fill
+            const field = params.colDef.field;
+            const row = params.data as HierarchicalRow;
+            if (!field || !row || row.type !== 'user') return;
+
+            const action = window.confirm(`Plan Time for ${row.name}?\n\n[OK] to Distribute 40h over next 4 weeks\n[Cancel] to skip`);
+            if (action) {
+              // Logic for "Distribute"
+              const currentPeriodIdx = periods.findIndex(p => p.id === field);
+              if (currentPeriodIdx === -1) return;
+              
+              const targetPeriods = periods.slice(currentPeriodIdx, currentPeriodIdx + 4);
+              const hoursPerPeriod = 40 / targetPeriods.length;
+
+              targetPeriods.forEach(p => {
+                const key = `${row.projectId}-${row.teamId}-${row.userId}-${p.id}`;
+                const current = allocationMap[key] || { req: 0, alloc: 0, act: 0 };
+                handleValueChange(p.id, row, { ...current, alloc: hoursPerPeriod });
+              });
+            }
+          }}
           onGridReady={(params) => {
             params.api.sizeColumnsToFit();
           }}

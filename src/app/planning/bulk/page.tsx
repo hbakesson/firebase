@@ -46,7 +46,13 @@ export default async function BulkPlanningPage({ searchParams }: Props) {
     }
   });
 
-  // 4. Fetch Teams to populate the filter dropdown
+  // 4. Fetch Users for capacity context
+  const users = await prisma.user.findMany({
+    where: { organizationId: orgId },
+    orderBy: { name: 'asc' }
+  });
+
+  // 5. Fetch Teams to populate the filter dropdown
   const teams = await prisma.team.findMany({
     where: {
       organizationId: orgId
@@ -74,6 +80,7 @@ export default async function BulkPlanningPage({ searchParams }: Props) {
           initialPeriods={periods}
           initialAllocations={allocations}
           initialTeams={teams}
+          initialUsers={users}
           offset={parsedOffset}
         />
       </div>

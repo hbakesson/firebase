@@ -157,23 +157,46 @@ export function BulkPlanningGrid({ initialProjects, initialAllocations, initialP
     const periodId = params.colDef.field;
     if (!row || !periodId) return null;
 
-    const data = allocationMap[`${row.projectId}-${periodId}-${row.teamId}`] || { req: 0, alloc: 0, act: 0 };
-    const hasAlloc = data.alloc > 0;
-    const isOver = data.alloc > data.req && data.req > 0;
+    const data = allocationMap[`${row.projectId}-${periodId}-${row.teamId}`] || { req: 0, alloc: 0, act: 0, type: 'WORK' };
+    
+    // Scoro Visual Logic: Utilization vs Capacity
+    const utilization = (data.alloc / 40) * 100;
+    const isFull = utilization >= 95 && utilization <= 105;
+
+    let statusClass = 'text-slate-200';
+    let bgClass = 'bg-transparent';
+    let dotClass = '';
+
+    if (data.type === 'TIME_OFF') {
+      statusClass = 'text-amber-700 font-black';
+      bgClass = 'bg-amber-100/50';
+    } else if (data.alloc > 0) {
+      if (utilization > 100) {
+        statusClass = 'text-rose-700 font-black';
+        bgClass = 'bg-rose-50/50';
+        dotClass = 'bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.6)]';
+      } else if (isFull) {
+        statusClass = 'text-indigo-700 font-black';
+        bgClass = 'bg-indigo-50/50';
+      } else {
+        statusClass = 'text-emerald-700 font-black';
+        bgClass = 'bg-emerald-50/50';
+      }
+    }
 
     return (
-      <div className="flex flex-col items-center justify-center h-full w-full py-1 leading-none group border-r border-slate-50 relative">
+      <div className={`flex flex-col items-center justify-center h-full w-full py-1 leading-none group border-r border-slate-50 relative transition-all duration-200 ${bgClass}`}>
         <div className="text-[0.55rem] text-slate-300 font-black mb-0.5 transition-colors group-hover:text-slate-400">
           {data.req > 0 ? data.req : ''}
         </div>
-        <div className={`text-[0.85rem] font-black tracking-tighter ${hasAlloc ? (isOver ? 'text-rose-600' : 'text-indigo-600') : 'text-slate-200'}`}>
+        <div className={`text-[0.85rem] tracking-tighter transition-transform group-hover:scale-110 ${statusClass}`}>
           {data.alloc || '0'}
         </div>
-        <div className="text-[0.55rem] text-emerald-600/60 font-black mt-0.5">
+        <div className="text-[0.55rem] text-slate-400/60 font-bold mt-0.5">
           {data.act > 0 ? data.act : ''}
         </div>
-        {isOver && (
-          <div className="absolute top-1 right-1 w-1 h-1 bg-rose-500 rounded-full" title="Over Requested" />
+        {utilization > 100 && (
+          <div className={`absolute top-1 right-1 w-1 h-1 rounded-full ${dotClass}`} title="Over Commitment" />
         )}
       </div>
     );
