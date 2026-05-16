@@ -1,6 +1,6 @@
-# Technical Architecture - Project Tracker
+# Technical Architecture - Project Tracker & Capacity Tool
 
-This document outlines the technical architecture, design patterns, and technology stack for the Project Tracker application.
+This document outlines the technical architecture, design patterns, and technology stack for the Project Tracker application, with a specialized focus on high-performance resource and capacity planning.
 
 ## 1. Technology Stack
 
@@ -12,79 +12,86 @@ This document outlines the technical architecture, design patterns, and technolo
 ### Data & Storage
 - **Prisma 6.4.1 (ORM)**: Typed database access with support for preview features like `driverAdapters`.
 - **SQLite (Development)**: Local file-based storage (`dev.db`).
-- **LibSQL (Production Ready)**: Configured for potential migration to distributed SQLite providers (e.g., Turso).
+- **PostgreSQL / LibSQL**: Configured for high-concurrency production environments and distributed SQLite providers.
 
 ### Authentication & Security
-- **NextAuth.js (v5 Beta)**: Complete authentication solution.
-- **Providers**:
-  - **Google OAuth**: Primary social login.
-  - **Credentials**: Email/Password for registered users.
-  - **Guest Access**: Seamless entry for trial/temporary users.
-- **Role-Based Access Control (RBAC)**: Defined roles (`admin`, `user`) with specific permissions for destructive actions (e.g., project deletion).
+- **NextAuth.js (v5 Beta)**: Complete authentication solution supporting Google OAuth, Credentials, and Guest access.
+- **RBAC**: Role-Based Access Control (Admin/User) to secure destructive and sensitive planning actions.
 
 ### User Interface (UI)
-- **AG Grid Community v35.3.0**: High-performance spreadsheet-like grids for complex resource planning and bulk editing.
-- **Vanilla CSS**: Custom styling system using CSS variables for maximum flexibility, avoiding external CSS frameworks.
+- **AG Grid Community v35.3.0**: Primary engine for the "Excel-like" planning matrix. Chosen for its native support for virtualization, column pinning, and complex cell editing.
+- **Vanilla CSS**: Custom styling system using CSS variables for maximum flexibility and performance.
 - **Lucide React**: Minimalist, consistent icon set.
-- **Recharts**: Dynamic data visualization for reports and analytics.
+- **Recharts**: Data visualization for resource load and project progress reporting.
 
 ---
 
 ## 2. System Architecture
 
-### Frontend Layer
-- **Client Components**: Used for interactive elements (grids, forms, theme toggling).
-- **Server Components**: Used for data fetching to minimize client-side JavaScript and improve SEO/TTFB.
-- **ThemeContext**: A React Context provider managing global Light/Dark mode state and persistence via `localStorage`.
+### Frontend Layer (The Capacity Matrix)
+The user experience is centered around a high-density, interactive matrix:
+- **X-Axis (Time)**: Dynamic timeline columns (Day/Week/Month granularity).
+- **Y-Axis (Hierarchy)**: Expandable 3-level tree structure:
+    1. **Project** (Top level)
+    2. **Team** (Allocated to the project)
+    3. **Developer/Resource** (Individuals within the team)
+- **Cell Interaction**: Seamless "Tab & Enter" navigation. Every cell entry triggers an background auto-save (Optimistic UI updates) via Server Actions.
 
 ### Logic Layer (Server Actions)
-Business logic is centralized in `src/app/actions.ts`:
-- **Transactional Integrity**: Database operations are wrapped in logic that ensures audit logs are written alongside mutations.
-- **Revalidation**: `revalidatePath` is used to provide instant UI updates without manual state management.
+- **Transactional Mutation**: Mutations (e.g., updating allocation hours) are atomic and include automatic `AuditLog` generation.
+- **Cache Invalidation**: Uses `revalidatePath` to synchronize state across the dashboard instantly.
 
-### Data Layer (Prisma)
-The schema (`schema.prisma`) is organized into several key domains:
-- **Tenancy**: `Organization` model acts as the root for all data.
-- **Planning**: `Project`, `Team`, `Period`, `BudgetAllocation`, and `ActualAllocation` models.
-- **Audit**: `AuditLog` captures granular changes (CREATE/UPDATE/DELETE) with user attribution.
-- **Identity**: Standard NextAuth models (`User`, `Account`, `Session`).
-
----
-
-## 3. Design Patterns & Conventions
-
-### Theming System
-The application uses a **Variable-First CSS strategy**:
-- **Root Variables**: Defined in `globals.css` for light mode (default).
-- **Dark Class**: Overrides variables when the `.dark` class is present on the `html` element.
-- **Legacy Grid Themes**: AG Grid is configured with `theme="legacy"` to allow custom CSS variables to control grid aesthetics directly.
-
-### Data Fetching
-- **Flattened Row Models**: For AG Grid, complex relational data is flattened client-side or in actions to optimize grid performance.
-- **Absolute Paths**: The Prisma client uses `process.cwd()` to ensure reliable database access across different execution environments (Docker vs. Local).
-
-### Audit Trail
-Every destructive or planning-related action must call `writeAuditLog`. This helper captures:
-- Action type (CREATE/UPDATE/DELETE).
-- User identification (ID and Email).
-- Previous vs. New values (JSON serialized).
-- Project/Entity context.
+### Data Layer (Core Entities)
+The schema is optimized for rapid aggregation of time-series data:
+- **Organization**: Root tenant.
+- **Team & Membership**: Includes `capacity_per_day` (e.g., 8h) for calculating over/under-utilization.
+- **Planning Entities**:
+    - `Requested`: Hours required by the project.
+    - `Allocated`: Hours assigned by the resource manager.
+    - `Actual`: Verified hours (time tracking/follow-up).
 
 ---
 
-## 4. Infrastructure & Deployment
+## 3. Resource & Capacity Planning Logic
+
+### The "Triple-Bucket" Cell
+Every intersection of a Resource and a Date manages three distinct values:
+- **Requested Hours**: The "Demand" signal from project leads.
+- **Allocated Hours**: The "Supply" decision from team leads.
+- **Actual Hours**: The "Reality" reported by developers.
+
+### Virtualization & Performance
+To support 100+ resources over a 12-month timeline, the system implements:
+- **Row Virtualization**: Only rendering visible rows to maintain 60fps scrolling.
+- **Cell Buffering**: Pre-loading adjacent time periods to prevent flicker during horizontal scrolling.
+- **Debounced Persistence**: Local state is updated instantly; database sync is debounced to handle rapid typing (Excel-style).
+
+---
+
+## 4. Design Patterns & Conventions
+
+### Theming System (Variable-First)
+- **Dual-Theme Support**: Light Mode (default) and Dark Mode controlled via CSS variables in `globals.css`.
+- **Legacy Theming**: AG Grid uses `theme="legacy"` to ensure grid headers, borders, and rows react perfectly to CSS variable changes.
+
+### Audit & Traceability
+- **Entity Tracking**: Every change to an allocation is logged with `previousValue` and `newValue` for historical reconciliation.
+- **User Attribution**: Logs include the authenticated user's ID and email at the time of the change.
+
+---
+
+## 5. Infrastructure & Deployment
 
 ### Local Development
-- **Docker Compose**: Orchestrates the local environment.
-- **SQLite**: No external database setup required for development.
-- **TSX**: Used for robust database seeding (`prisma/seed.ts`).
+- **Docker Compose**: Standardizes the development environment.
+- **TSX Seeding**: Generates realistic organizational hierarchies and dense allocation datasets for stress-testing the grid.
 
 ### Directory Structure
 ```text
 src/
 ├── app/          # Routes, Pages, and Server Actions
-├── components/   # Reusable UI components (Grids, Sidebar, Contexts)
-├── lib/          # Utilities and shared instances (Prisma, etc.)
-├── types/        # Global TypeScript definitions
-prisma/           # Schema definition and seeding scripts
+├── components/   # UI Modules (Grids, Sidebar, Contexts)
+├── lib/          # Core utilities (Prisma, Auth)
+├── types/        # TypeScript interfaces
+prisma/           # Data models and seed scripts
 ```
