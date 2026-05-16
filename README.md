@@ -132,6 +132,9 @@ npx prisma generate
 
 # Run development server
 npm run dev
+
+# Inspect Data
+# You can use npx prisma studio to view and edit your local data in the browser.
 ```
 
 ## 🏗️ Deployment

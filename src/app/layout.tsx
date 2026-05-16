@@ -15,6 +15,8 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
+import { ThemeProvider } from "@/components/ThemeContext";
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -26,25 +28,27 @@ export default async function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} ${outfit.variable}`}>
         <SessionProvider>
-          {!session?.user ? (
-            <main className="container">{children}</main>
-          ) : (
-            <div className="app-shell">
-              <Sidebar 
-                user={{
-                  name: session.user.name,
-                  email: session.user.email,
-                  role: session.user.role,
-                  organizationId: session.user.organizationId
-                }} 
-              />
-              <main className="main-content">
-                <div className="container">
-                  {children}
-                </div>
-              </main>
-            </div>
-          )}
+          <ThemeProvider>
+            {!session?.user ? (
+              <main>{children}</main>
+            ) : (
+              <div className="app-shell">
+                <Sidebar 
+                  user={{
+                    name: session.user.name,
+                    email: session.user.email,
+                    role: session.user.role,
+                    organizationId: session.user.organizationId
+                  }} 
+                />
+                <main className="main-content">
+                  <div className="container">
+                    {children}
+                  </div>
+                </main>
+              </div>
+            )}
+          </ThemeProvider>
         </SessionProvider>
       </body>
     </html>
